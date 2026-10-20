@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ege Erenler</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Ege Erenler, software engineer and data scientist based in London.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: full-bleed dark hero over a live data-surface canvas, then alternating project showcases built as real UI mockups. */
+:root{
+  --navy:#0F1B33;        /* hero and contact band, always dark */
+  --navy-2:#16264A;
+  --on-navy:#EAF0FF;
+  --on-navy-muted:#9DB0D6;
+  --bg:#F4F6FA;          /* page */
+  --surface:#FFFFFF;
+  --ink:#121A2C;
+  --muted:#5B6680;
+  --line:#DCE2EC;
+  --accent:#3B5BFF;      /* cobalt */
+  --accent-2:#3FD0E0;    /* data cyan */
+  --accent-soft:#E3E8FF;
+  --display:"Schibsted Grotesk","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,system-ui,sans-serif;
+  --mono:"JetBrains Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  --code-bg:#0B1222; --code-line:#1E2B48; --code-fg:#D6DEF0; --code-dim:#5D6E94;
+  --k:#C792EA; --s:#A5E07A; --f:#82AAFF; --c:#FFCB6B; --n:#F78C6C;
+  --shadow:0 30px 60px -30px rgba(15,27,51,.35),0 12px 24px -16px rgba(15,27,51,.25);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1426; --surface:#13203B; --ink:#E6ECF8; --muted:#97A5C3; --line:#24345A;
+    --accent:#7C92FF; --accent-soft:#1D2B57; --navy:#0A1428; --navy-2:#13213F;
+    --shadow:0 30px 60px -30px rgba(0,0,0,.7),0 12px 24px -16px rgba(0,0,0,.5); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1426; --surface:#13203B; --ink:#E6ECF8; --muted:#97A5C3; --line:#24345A;
+  --accent:#7C92FF; --accent-soft:#1D2B57; --navy:#0A1428; --navy-2:#13213F;
+  --shadow:0 30px 60px -30px rgba(0,0,0,.7),0 12px 24px -16px rgba(0,0,0,.5); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--navy)}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left,0px));padding-right:max(20px, env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;transition:background .25s, box-shadow .25s}
+.nav.solid{background:color-mix(in srgb,var(--navy) 92%,transparent);backdrop-filter:blur(10px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--on-navy);font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em}
+.logo b{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--on-navy);color:var(--navy);font-size:15px}
+.nav ul{display:flex;align-items:center;gap:28px;list-style:none;margin:0;padding:0;font-size:15px;font-weight:500}
+.nav ul a{text-decoration:none;color:var(--on-navy-muted);transition:color .15s}
+.nav ul a:hover{color:var(--on-navy)}
+.nav .cta{color:var(--navy);background:var(--on-navy);padding:9px 16px;border-radius:999px;font-weight:600}
+.nav .cta:hover{color:var(--navy);background:#fff}
+@media (max-width:760px){.nav li.opt{display:none}.nav ul{gap:16px}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:var(--navy);color:var(--on-navy);margin-top:-70px;padding-top:70px;overflow:hidden;isolation:isolate}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(70% 60% at 15% 35%, color-mix(in srgb,var(--navy) 92%,transparent) 0%, transparent 70%),
+  linear-gradient(180deg, transparent 60%, var(--navy) 100%)}
+.hero-inner{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:48px;align-items:end;padding-block:110px 72px}
+@media (max-width:900px){.hero-inner{grid-template-columns:1fr;padding-block:80px 56px}}
+.avail{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;color:var(--on-navy-muted);border:1px solid rgba(255,255,255,.14);padding:7px 14px 7px 12px;border-radius:999px;background:rgba(255,255,255,.04);margin-bottom:28px}
+.avail i{width:8px;height:8px;border-radius:50%;background:#35D08A;box-shadow:0 0 0 4px rgba(53,208,138,.18)}
+.hero h1{font-weight:800;font-size:clamp(52px,9.2vw,118px);line-height:.92;letter-spacing:-.045em;margin:0 0 26px}
+.hero .role{font-size:clamp(19px,2.2vw,23px);line-height:1.45;max-width:30ch;margin:0 0 34px;color:var(--on-navy)}
+.hero .role span{color:var(--on-navy-muted)}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:9px;font:600 15.5px/1 var(--body);padding:15px 22px;border-radius:999px;text-decoration:none;border:1.5px solid transparent;transition:background .15s,color .15s,border-color .15s}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.light{background:var(--on-navy);color:var(--navy)}
+.btn.light:hover{background:#fff}
+.btn.outline{border-color:rgba(255,255,255,.28);color:var(--on-navy)}
+.btn.outline:hover{border-color:var(--on-navy);background:rgba(255,255,255,.06)}
+.hero-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:24px;backdrop-filter:blur(6px)}
+.hero-card .who{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.avatar{width:64px;height:64px;border-radius:16px;flex:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:24px;color:#fff;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.who strong{display:block;font-size:17px}
+.who span{color:var(--on-navy-muted);font-size:14.5px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.1);border-radius:12px;overflow:hidden}
+.facts div{background:var(--navy-2);padding:14px 16px}
+.facts dt{font-size:13px;color:var(--on-navy-muted)}
+.facts dd{margin:2px 0 0;font-weight:600;font-size:15.5px}
+.trust{border-top:1px solid rgba(255,255,255,.1)}
+.trust .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 44px;padding-block:26px}
+.trust p{margin:0;color:var(--on-navy-muted);font-size:14.5px}
+.trust ul{display:flex;flex-wrap:wrap;gap:12px 40px;list-style:none;margin:0;padding:0;font-family:var(--display);font-weight:700;font-size:19px;color:rgba(234,240,255,.78);letter-spacing:-.01em}
+
+/* ---------- sections ---------- */
+section{padding-block:104px}
+@media (max-width:700px){section{padding-block:72px}}
+.head{max-width:680px;margin-bottom:56px}
+.head h2{font-weight:800;font-size:clamp(36px,5vw,56px);line-height:1.02;letter-spacing:-.035em;margin:0 0 16px}
+.head p{color:var(--muted);font-size:19px;margin:0;max-width:56ch}
+
+/* what I do */
+.pillars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+@media (max-width:900px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:30px;min-width:0}
+.pillar .ic{width:52px;height:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-bottom:22px}
+.pillar .ic svg{width:26px;height:26px}
+.pillar h3{font-size:23px;letter-spacing:-.02em;margin:0 0 10px}
+.pillar p{color:var(--muted);margin:0 0 16px}
+.pillar ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px}
+.pillar li{font-size:13.5px;font-weight:500;padding:5px 11px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+
+/* projects */
+#projects{background:var(--surface);border-block:1px solid var(--line)}
+.showcase{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:64px;align-items:center}
+.showcase + .showcase{margin-top:120px}
+.showcase.flip .copy{order:2}
+@media (max-width:900px){.showcase,.showcase.flip{grid-template-columns:1fr;gap:36px}.showcase.flip .copy{order:0}.showcase + .showcase{margin-top:88px}}
+.copy .tag{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;padding:6px 12px;border-radius:999px;margin-bottom:18px}
+.tag.live{background:rgba(53,208,138,.14);color:#14935A}
+.tag.dev{background:var(--accent-soft);color:var(--accent)}
+.tag.ms{background:color-mix(in srgb,var(--muted) 14%,transparent);color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.live{color:#5DDBA2}}
+:root[data-theme="dark"] .tag.live{color:#5DDBA2}
+.copy h3{font-weight:800;font-size:clamp(32px,4vw,46px);letter-spacing:-.035em;line-height:1;margin:0 0 16px}
+.copy p{margin:0 0 18px;max-width:52ch;font-size:18px}
+.copy dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:0 0 24px;font-size:15.5px}
+.copy dt{color:var(--muted)}
+.copy dd{margin:0;font-weight:500}
+.plinks{display:flex;flex-wrap:wrap;gap:12px}
+.btn.dark{background:var(--ink);color:var(--bg)}
+.btn.dark:hover{background:var(--accent);color:#fff}
+.btn.line{border-color:var(--line);color:var(--ink)}
+.btn.line:hover{border-color:var(--ink)}
+
+.stage{position:relative;border-radius:28px;padding:clamp(22px,4vw,44px);min-width:0;overflow:hidden}
+.stage.s1{background:linear-gradient(140deg,#DDE8FF 0%,#C9F1F5 100%)}
+.stage.s2{background:linear-gradient(140deg,#2A1458 0%,#4B1E8F 100%)}
+.stage.s3{background:linear-gradient(140deg,#E9EEF7 0%,#D7E0F0 100%)}
+.stage.s4{background:linear-gradient(140deg,#FFE9D6 0%,#F6D7C3 100%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stage.s1{background:linear-gradient(140deg,#1A2B55,#123E4A)}:root:not([data-theme="light"]) .stage.s3{background:linear-gradient(140deg,#17233F,#1D2C4E)}:root:not([data-theme="light"]) .stage.s4{background:linear-gradient(140deg,#3A2618,#2E2030)}}
+:root[data-theme="dark"] .stage.s1{background:linear-gradient(140deg,#1A2B55,#123E4A)}
+:root[data-theme="dark"] .stage.s3{background:linear-gradient(140deg,#17233F,#1D2C4E)}
+:root[data-theme="dark"] .stage.s4{background:linear-gradient(140deg,#3A2618,#2E2030)}
+.caption{font-size:13px;color:var(--muted);margin-top:12px}
+
+/* mockup: browser (always light UI inside, like a real screenshot) */
+.browser{background:#fff;border-radius:14px;box-shadow:var(--shadow);overflow:hidden;color:#16213A;font-size:14px}
+.browser .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#F1F3F8;border-bottom:1px solid #E2E6EF}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:#D5DAE5}
+.browser .bar span{margin-left:10px;flex:1;background:#fff;border:1px solid #E2E6EF;border-radius:7px;padding:4px 10px;font-size:12px;color:#6A7590;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat{padding:20px;display:grid;gap:12px;background:#FBFCFE}
+.chat .app-title{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;margin-bottom:4px}
+.chat .app-title b{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#E5484D,#FF8A65);display:grid;place-items:center;color:#fff}
+.chat .app-title b svg{width:15px;height:15px}
+.msg{max-width:84%;padding:11px 14px;border-radius:14px;line-height:1.45}
+.msg.user{justify-self:end;background:#3B5BFF;color:#fff;border-bottom-right-radius:4px}
+.msg.bot{background:#fff;border:1px solid #E5E9F2;border-bottom-left-radius:4px}
+.triage{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.triage .lvl{font-weight:700;font-size:12.5px;padding:3px 9px;border-radius:999px;background:#FFF1D6;color:#9A5B00}
+.meter{display:flex;gap:4px;flex:1}
+.meter i{height:6px;flex:1;border-radius:3px;background:#E7EAF1}
+.meter i.on{background:#F2A93B}
+.chat .input{display:flex;align-items:center;gap:8px;border:1px solid #E2E6EF;border-radius:12px;padding:10px 12px;color:#8A93AA;background:#fff}
+.chat .input span{flex:1}
+.chat .input b{width:28px;height:28px;border-radius:8px;background:#3B5BFF;display:grid;place-items:center}
+.chat .input b svg{width:14px;height:14px;color:#fff}
+
+/* mockup: phone */
+.phones{display:flex;justify-content:center;gap:22px;align-items:flex-end}
+.phone{width:min(258px,100%);aspect-ratio:9/19;max-width:100%;background:#0D0A1A;border-radius:38px;padding:9px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);flex:none}
+.phone.back{width:min(220px,40%);transform:translateY(-26px) rotate(-4deg);opacity:.9}
+@media (max-width:520px){.phone.back{display:none}}
+.screen{height:100%;border-radius:30px;overflow:hidden;background:#F6F3FC;color:#1B1030;font-size:12px;display:flex;flex-direction:column}
+.scr-top{background:#37003C;color:#fff;padding:14px 14px 12px}
+.scr-top .row{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;opacity:.75;margin-bottom:10px}
+.scr-top h4{margin:0;font-family:var(--display);font-size:17px;letter-spacing:-.02em}
+.tabs{display:flex;gap:6px;margin-top:10px;overflow:hidden}
+.tabs span{font-size:10.5px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.12);white-space:nowrap}
+.tabs span.on{background:#00FF87;color:#37003C;font-weight:700}
+.league{padding:10px 12px 2px;font-weight:700;font-size:11px;color:#6B5A86;display:flex;justify-content:space-between}
+.match{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:8px;margin:0 10px 6px;background:#fff;border-radius:12px;padding:9px 10px;box-shadow:0 1px 0 #ECE6F5}
+.match .min{font-size:10px;font-weight:700;color:#C2185B}
+.match .min.ft{color:#8C7DA6}
+.match .teams{display:grid;gap:3px;font-weight:500}
+.match .score{display:grid;gap:3px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#E91E63;margin-right:3px;vertical-align:middle}
+.screen.table{background:#fff}
+.tbl{padding:8px 10px;display:grid;gap:2px}
+.tbl div{display:grid;grid-template-columns:14px 1fr 22px 26px;gap:6px;padding:6px 4px;border-bottom:1px solid #F0ECF6;font-variant-numeric:tabular-nums}
+.tbl div:first-child{color:#8C7DA6;font-weight:600}
+.tbl div span:last-child{font-weight:800;text-align:right}
+
+/* mockup: app window with chart */
+.window{background:#fff;border-radius:16px;box-shadow:var(--shadow);color:#16213A;padding:20px;display:grid;gap:16px;font-size:13.5px}
+.window .wtop{display:flex;justify-content:space-between;align-items:center}
+.window .wtop strong{font-size:15px}
+.window .wtop span{font-size:12px;color:#6A7590;background:#F1F3F8;padding:4px 10px;border-radius:999px}
+.split{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+@media (max-width:460px){.split{grid-template-columns:1fr}}
+.donut{width:150px;height:150px;border-radius:50%;background:conic-gradient(#3B5BFF 0 34%,#3FD0E0 34% 56%,#F2A93B 56% 72%,#E5484D 72% 84%,#B7C1D6 84% 100%);display:grid;place-items:center;margin:auto}
+.donut div{width:96px;height:96px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center;line-height:1.2}
+.donut b{font-size:18px;font-variant-numeric:tabular-nums}
+.donut small{font-size:11px;color:#6A7590}
+.cats{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.cats li{display:grid;grid-template-columns:10px 1fr auto;gap:8px;align-items:center;font-variant-numeric:tabular-nums}
+.cats i{width:10px;height:10px;border-radius:3px}
+.tx{display:grid;gap:0;border-top:1px solid #EEF1F6}
+.tx div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #EEF1F6;font-variant-numeric:tabular-nums}
+.tx div span:first-child{color:#4B5670}
+
+.report{background:#fff;border-radius:16px;box-shadow:var(--shadow);color:#16213A;padding:22px;font-size:13.5px}
+.report h4{font-family:var(--display);font-size:17px;margin:0 0 2px;letter-spacing:-.01em}
+.report .sub{color:#6A7590;font-size:12.5px;margin-bottom:16px}
+.chart{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;height:150px;padding-bottom:4px;border-bottom:1px solid #E5E9F2}
+.chart div{background:#E7C9B0;border-radius:6px 6px 0 0;position:relative}
+.chart div.hi{background:#C2410C}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;text-align:center;color:#6A7590;font-size:11.5px;margin-top:6px}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.insights div{background:#FBF4EE;border-radius:10px;padding:10px 12px}
+.insights b{display:block;font-size:12px;color:#9A3412;margin-bottom:2px}
+
+/* career */
+.career{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px}
+@media (max-width:900px){.career{grid-template-columns:1fr}}
+.steps{list-style:none;margin:0;padding:0;position:relative}
+.steps::before{content:"";position:absolute;left:7px;top:8px;bottom:8px;border-left:2px solid var(--line)}
+.steps li{position:relative;padding-left:36px;padding-bottom:34px}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:"";position:absolute;left:0;top:7px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--accent)}
+.steps li.edu::before{border-color:var(--muted)}
+.steps .when{font-size:14.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.steps h3{font-size:21px;letter-spacing:-.015em;margin:2px 0 4px}
+.steps .org{font-weight:600;margin:0 0 6px}
+.steps p{margin:0;color:var(--muted);max-width:52ch}
+.col-title{font-family:var(--display);font-size:15px;font-weight:700;color:var(--muted);margin:0 0 24px}
+
+.skills{display:grid;gap:22px}
+.skill h3{font-size:16px;margin:0 0 10px;font-family:var(--body);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.chips li{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 13px;font-weight:500;font-size:15px}
+
+/* contact */
+.contact{background:var(--navy);color:var(--on-navy);position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;width:620px;height:620px;right:-180px;top:-260px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 45%,transparent),transparent 65%);opacity:.6}
+.contact .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:48px;align-items:end}
+@media (max-width:900px){.contact .wrap{grid-template-columns:1fr}}
+.contact h2{font-weight:800;font-size:clamp(44px,7vw,88px);letter-spacing:-.045em;line-height:.95;margin:0 0 20px}
+.contact p{color:var(--on-navy-muted);font-size:19px;max-width:44ch;margin:0 0 30px}
+.channels{display:grid;gap:10px}
+.channel{display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;padding:18px 20px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);transition:background .15s,border-color .15s}
+.channel:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3)}
+.channel small{display:block;color:var(--on-navy-muted);font-size:13px}
+.channel strong{font-size:16.5px;word-break:break-all}
+.channel svg{width:20px;height:20px;flex:none;opacity:.7}
+footer{background:var(--navy);color:var(--on-navy-muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-block:22px;border-top:1px solid rgba(255,255,255,.08)}
+
+/* ---------- developer layer ---------- */
+.logo b{font-family:var(--mono);font-size:13px}
+.hero-inner{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+.hero h1{font-size:clamp(48px,7.4vw,98px)}
+.hero .prompt{font-family:var(--mono);font-size:14px;color:var(--accent-2);margin:0 0 18px}
+.hero .prompt span{color:var(--on-navy-muted)}
+.editor{background:var(--code-bg);border:1px solid rgba(255,255,255,.1);border-radius:16px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);overflow:hidden;font-family:var(--mono);font-size:13.5px;color:var(--code-fg);min-width:0}
+.ed-top{display:flex;align-items:center;gap:7px;padding:0 12px;background:#0E1730;border-bottom:1px solid var(--code-line)}
+.ed-top > i{width:10px;height:10px;border-radius:50%;background:#2A3858;flex:none}
+.ed-tabs{display:flex;margin-left:10px;overflow-x:auto}
+.ed-tabs button{all:unset;cursor:pointer;padding:12px 14px;font:500 12.5px var(--mono);color:var(--code-dim);border-bottom:2px solid transparent;white-space:nowrap}
+.ed-tabs button[aria-selected="true"]{color:var(--code-fg);border-color:var(--accent-2);background:var(--code-bg)}
+.ed-tabs button:focus-visible{outline:2px solid var(--accent-2);outline-offset:-2px}
+.ed-body{overflow-x:auto}
+.code{margin:0;padding:16px 0;line-height:1.75;counter-reset:ln;white-space:pre}
+.code span.l{display:block;padding:0 18px 0 0}
+.code span.l::before{counter-increment:ln;content:counter(ln);display:inline-block;width:2.4em;margin-right:14px;text-align:right;color:#34436A}
+.k{color:var(--k)}.s{color:var(--s)}.f{color:var(--f)}.c{color:var(--c)}.n{color:var(--n)}.cm{color:var(--code-dim);font-style:italic}
+.caret{display:inline-block;width:8px;height:1.1em;background:var(--accent-2);vertical-align:-3px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ed-run{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-top:1px solid var(--code-line);background:#0E1730;font-size:12px;color:var(--code-dim)}
+.ed-run button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font:700 12px var(--mono);color:#0B1222;background:var(--accent-2);padding:7px 12px;border-radius:7px}
+.ed-run button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.ed-run svg{width:11px;height:11px}
+.result{border-top:1px solid var(--code-line);overflow-x:auto}
+.result table{border-collapse:collapse;width:100%;font-size:12.5px;white-space:nowrap}
+.result th,.result td{text-align:left;padding:8px 16px;border-bottom:1px solid var(--code-line)}
+.result th{color:var(--code-dim);font-weight:500}
+.result td.st-live{color:#5DDBA2}.result td.st-dev{color:var(--c)}.result td.st-done{color:var(--f)}
+.result tr.flash td{animation:rowin .45s ease both}
+@keyframes rowin{from{background:rgba(63,208,224,.18);opacity:.2}to{background:transparent;opacity:1}}
+.result .meta{padding:8px 16px;color:var(--code-dim);font-size:12px}
+.panel[hidden]{display:none}
+
+.path{font-family:var(--mono);font-size:14px;color:var(--accent);margin:0 0 14px}
+.pillar .snippet{margin-top:20px;padding:12px 14px;border-radius:10px;background:var(--code-bg);color:var(--code-fg);font:13px/1.6 var(--mono);overflow-x:auto;white-space:pre}
+
+.langs{display:flex;flex-wrap:wrap;gap:8px 18px;list-style:none;margin:0 0 24px;padding:0;font-size:14.5px;font-weight:500}
+.langs li{display:inline-flex;align-items:center;gap:7px}
+.langs li::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--dot,#8A94AA)}
+
+.nb{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;font-family:var(--mono);font-size:13.5px}
+.cell{display:grid;grid-template-columns:70px 1fr;border-bottom:1px solid var(--line)}
+.cell:last-child{border-bottom:0}
+.cell .pr{padding:14px 0 14px 14px;color:var(--accent);font-size:12.5px}
+.cell.out .pr{color:var(--n)}
+.cell .src{padding:14px 16px 14px 0;min-width:0;overflow-x:auto;white-space:pre}
+.cell.in .src{background:color-mix(in srgb,var(--bg) 70%,transparent)}
+.nbt{border-collapse:collapse;font-size:13px;white-space:nowrap}
+.nbt th,.nbt td{text-align:left;padding:6px 18px 6px 0;border-bottom:1px solid var(--line)}
+.nbt th{color:var(--muted);font-weight:500}
+.nbt td:first-child{color:var(--muted)}
+.nb .k{color:#8B3FD1}.nb .s{color:#2F8A2F}.nb .f{color:#2747E8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .nb .k{color:var(--k)}:root:not([data-theme="light"]) .nb .s{color:var(--s)}:root:not([data-theme="light"]) .nb .f{color:var(--f)}}
+:root[data-theme="dark"] .nb .k{color:var(--k)}:root[data-theme="dark"] .nb .s{color:var(--s)}:root[data-theme="dark"] .nb .f{color:var(--f)}
+@media (max-width:520px){.cell{grid-template-columns:1fr}.cell .pr{padding:10px 14px 0}.cell .src{padding:6px 14px 14px}}
+
+/* ---------- responsive fixes ---------- */
+.logo{white-space:nowrap}
+@media (max-width:900px){
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .editor{max-width:640px}
+}
+@media (max-width:560px){
+  .nav .wrap{padding-block:14px}
+  .nav ul{gap:12px;font-size:14px}
+  .nav .cta{padding:8px 14px}
+  .hero{margin-top:-64px;padding-top:64px}
+  .hero-inner{padding-block:56px 44px}
+  .hero h1{font-size:clamp(40px,12vw,56px)}
+  .editor{font-size:12px}
+  .code span.l::before{width:1.8em;margin-right:10px}
+  .actions .btn{flex:1 1 auto;justify-content:center}
+  .trust ul{font-size:16px;gap:8px 24px}
+  .head h2{font-size:clamp(32px,9vw,40px)}
+  .pillar{padding:24px}
+  .stage{border-radius:20px}
+  .copy p{font-size:17px}
+  .contact h2{font-size:clamp(38px,11vw,52px)}
+  .channel{padding:16px}
+}
+@media (max-width:380px){
+  .nav li:not(:last-child){display:none}
+}
+.stage .caption{color:rgba(255,255,255,.65)}
+html,body{margin:0}
+</style>
+</head>
+<body>
+
+
+<nav class="nav" id="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="logo" href="#top"><b>EE</b>Ege Erenler</a>
+    <ul>
+      <li class="opt"><a href="#services">What I do</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li class="opt"><a href="#career">Career</a></li>
+      <li><a class="cta" href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div>
+      <div class="avail"><i aria-hidden="true"></i>Available for roles in London</div>
+      <p class="prompt">$ whoami <span>ege-erenler</span></p>
+      <h1>Software engineer.<br>Data scientist.</h1>
+      <p class="role">I'm Ege. I turn data into products people can use. <span>Python, SQL, cloud and AI, from first query to live app.</span></p>
+      <div class="actions">
+        <a class="btn light" href="#projects">View my work</a>
+        <a class="btn outline" href="https://github.com/EgeErenler" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a10.9 10.9 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="editor" aria-label="Code editor showing Ege's profile as Python and his projects as a SQL query">
+      <div class="ed-top"><i></i><i></i><i></i>
+        <div class="ed-tabs" role="tablist">
+          <button role="tab" id="t-py" aria-selected="true" aria-controls="p-py">profile.py</button>
+          <button role="tab" id="t-sql" aria-selected="false" aria-controls="p-sql">projects.sql</button>
+        </div>
+      </div>
+      <div class="panel" id="p-py" role="tabpanel" aria-labelledby="t-py"><div class="ed-body"><pre class="code"><span class="l"><span class="k">class</span> <span class="c">Engineer</span>:</span><span class="l">    name      = <span class="s">"Ege Erenler"</span></span><span class="l">    based_in  = <span class="s">"London, UK"</span></span><span class="l">    education = [<span class="s">"MSc Data Science in Business"</span>,</span><span class="l">                 <span class="s">"BSc Software Engineering"</span>]</span><span class="l">    stack     = [<span class="s">"Python"</span>, <span class="s">"SQL"</span>, <span class="s">"AWS"</span>,</span><span class="l">                 <span class="s">"Azure"</span>, <span class="s">"LLM APIs"</span>]</span><span class="l"></span><span class="l">    <span class="k">def</span> <span class="f">open_to</span>(self):</span><span class="l">        <span class="cm"># roles I am looking for</span></span><span class="l">        <span class="k">return</span> [<span class="s">"Data Analyst"</span>, <span class="s">"BI"</span>,</span><span class="l">                <span class="s">"Data Engineer"</span>, <span class="s">"Software Engineer"</span>]<span class="caret" aria-hidden="true"></span></span></pre></div>
+        <div class="ed-run"><span>Python 3.12</span><button type="button" data-go="sql"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg>Open projects.sql</button></div>
+      </div>
+      <div class="panel" id="p-sql" role="tabpanel" aria-labelledby="t-sql" hidden><div class="ed-body"><pre class="code"><span class="l"><span class="k">SELECT</span> name, stack, status</span><span class="l"><span class="k">FROM</span>   projects</span><span class="l"><span class="k">WHERE</span>  author = <span class="s">'Ege Erenler'</span></span><span class="l"><span class="k">ORDER BY</span> year <span class="k">DESC</span>;</span></pre></div>
+        <div class="ed-run"><span>projects.db</span><button type="button" id="run"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg>Run query</button></div>
+        <div class="result"><table><thead><tr><th>name</th><th>stack</th><th>status</th></tr></thead><tbody id="rows"><tr><td>MediPulse AI</td><td>Python, Streamlit, Groq</td><td class="st-live">live</td></tr><tr><td>fulltime</td><td>React Native, Expo</td><td class="st-dev">in_dev</td></tr><tr><td>Pub growth plan</td><td>Python, survey data</td><td class="st-done">done</td></tr><tr><td>Finance Tracker</td><td>Python, SQLite</td><td class="st-done">done</td></tr></tbody></table><div class="meta">4 rows returned</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="trust">
+    <div class="wrap">
+      <p>Experience and study with</p>
+      <ul>
+        <li>Orion Innovation</li>
+        <li>Mikrogrup</li>
+        <li>Regent's University London</li>
+        <li>Bahçeşehir University</li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="services">
+    <div class="wrap">
+      <div class="head">
+        <p class="path">~/ege/services</p>
+        <h2>What I do</h2>
+        <p>I work across the full path from raw data to a finished product. These are the three areas I bring to a team.</p>
+      </div>
+      <div class="pillars">
+        <article class="pillar">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+          <h3>Data analysis and BI</h3>
+          <p>I clean, query and model data, then present it so a business can act on it.</p>
+          <ul><li>SQL</li><li>Python</li><li>Survey analysis</li><li>Reporting</li></ul>
+          <div class="snippet"><span class="k">SELECT</span> day, <span class="f">SUM</span>(sales)
+<span class="k">FROM</span> orders <span class="k">GROUP BY</span> day;</div>
+        </article>
+        <article class="pillar">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13.5 5l-3 14"/></svg></div>
+          <h3>Software engineering</h3>
+          <p>I build backend features and databases and deploy them to the cloud.</p>
+          <ul><li>Python</li><li>MySQL</li><li>AWS</li><li>Azure</li></ul>
+          <div class="snippet"><span class="k">def</span> <span class="f">save</span>(record):
+    db.<span class="f">insert</span>(<span class="s">"payments"</span>, record)</div>
+        </article>
+        <article class="pillar">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></div>
+          <h3>AI and app products</h3>
+          <p>I take ideas to working apps, including LLM tools and mobile apps.</p>
+          <ul><li>LLM APIs</li><li>Streamlit</li><li>React Native</li><li>Expo</li></ul>
+          <div class="snippet">reply = client.chat.<span class="f">create</span>(
+    messages=history)</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="head">
+        <p class="path">~/ege/projects</p>
+        <h2>Selected projects</h2>
+        <p>Products I designed and built myself, from a live AI app to a sports app in development.</p>
+      </div>
+
+      <div class="showcase">
+        <div class="copy">
+          <span class="tag live">Live app</span>
+          <h3>MediPulse AI</h3>
+          <p>A health triage assistant. People describe their symptoms in plain language, and a large language model rates how urgent they are and suggests the next step.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li style="--dot:#FF4B4B">Streamlit</li><li>Groq API</li></ul>
+          <dl><dt>Role</dt><dd>Solo build, design to deployment</dd></dl>
+          <div class="plinks">
+            <a class="btn dark" href="https://medipulse-ai.streamlit.app" target="_blank" rel="noopener">Open the app</a>
+            <a class="btn line" href="https://github.com/EgeErenler/Medipulse" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div class="stage s1">
+          <div class="browser" role="img" aria-label="MediPulse AI chat screen showing a symptom message and a triage result">
+            <div class="bar"><i></i><i></i><i></i><span>medipulse-ai.streamlit.app</span></div>
+            <div class="chat">
+              <div class="app-title"><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></b>MediPulse AI</div>
+              <div class="msg user">I've had a sore throat and a mild fever for two days.</div>
+              <div class="msg bot">
+                <div class="triage"><span class="lvl">Moderate</span><div class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+                Rest, drink fluids and track your temperature. Book a GP appointment if the fever lasts more than three days or you find it hard to swallow.
+              </div>
+              <div class="input"><span>Describe your symptoms…</span><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase flip">
+        <div class="copy">
+          <span class="tag dev">In development</span>
+          <h3>fulltime</h3>
+          <p>A live scores app for UK sports fans on iOS and Android. It covers football, cricket, tennis, F1 and golf, with every English league level, the Women's Super League and full club histories.</p>
+          <ul class="langs"><li style="--dot:#61DAFB">React Native</li><li>Expo</li></ul>
+          <dl><dt>Role</dt><dd>Founder, product and engineering</dd></dl>
+          <div class="plinks">
+            <a class="btn line" href="https://github.com/EgeErenler" target="_blank" rel="noopener">Follow on GitHub</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s2">
+          <div class="phones" role="img" aria-label="fulltime app screens showing live match scores and a league table">
+            <div class="phone back">
+              <div class="screen table">
+                <div class="scr-top"><div class="row"><span>9:41</span><span>●●●</span></div><h4>Table</h4></div>
+                <div class="tbl">
+                  <div><span>#</span><span>Club</span><span>P</span><span>Pts</span></div>
+                  <div><span>1</span><span>Arsenal</span><span>9</span><span>22</span></div>
+                  <div><span>2</span><span>Liverpool</span><span>9</span><span>21</span></div>
+                  <div><span>3</span><span>Man City</span><span>9</span><span>19</span></div>
+                  <div><span>4</span><span>Chelsea</span><span>9</span><span>17</span></div>
+                  <div><span>5</span><span>Aston Villa</span><span>9</span><span>16</span></div>
+                  <div><span>6</span><span>Spurs</span><span>9</span><span>15</span></div>
+                  <div><span>7</span><span>Newcastle</span><span>9</span><span>14</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="phone">
+              <div class="screen">
+                <div class="scr-top">
+                  <div class="row"><span>9:41</span><span>●●●</span></div>
+                  <h4>fulltime</h4>
+                  <div class="tabs"><span class="on">Football</span><span>Cricket</span><span>Tennis</span><span>F1</span></div>
+                </div>
+                <div class="league"><span>Premier League</span><span>Today</span></div>
+                <div class="match"><span class="min"><span class="live-dot"></span>67'</span><span class="teams"><span>Arsenal</span><span>Chelsea</span></span><span class="score"><span>2</span><span>1</span></span></div>
+                <div class="match"><span class="min"><span class="live-dot"></span>54'</span><span class="teams"><span>Liverpool</span><span>Brighton</span></span><span class="score"><span>1</span><span>1</span></span></div>
+                <div class="match"><span class="min ft">FT</span><span class="teams"><span>Man City</span><span>Fulham</span></span><span class="score"><span>3</span><span>0</span></span></div>
+                <div class="league"><span>Women's Super League</span><span>Today</span></div>
+                <div class="match"><span class="min ft">FT</span><span class="teams"><span>Chelsea W</span><span>Arsenal W</span></span><span class="score"><span>1</span><span>2</span></span></div>
+              </div>
+            </div>
+          </div>
+          <p class="caption">Design preview with sample scores.</p>
+        </div>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="copy">
+          <span class="tag ms">MSc consultancy project</span>
+          <h3>Pub growth plan</h3>
+          <p>A data-driven marketing plan for a pub in Southwark, London. I combined the pub's own sales data with a customer survey and UK market research to find where it could grow.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li>Survey analysis</li><li>Euromonitor Passport</li></ul>
+          <dl><dt>Client</dt><dd>Independent pub, Southwark</dd></dl>
+          <div class="plinks">
+            <a class="btn line" href="https://github.com/EgeErenler/pub-marketing-analysis" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s4">
+            <div class="report" role="img" aria-label="Report page with a bar chart of sales by weekday and two insight boxes">
+              <h4>Sales by weekday</h4>
+              <div class="sub">Share of weekly revenue</div>
+              <div class="chart">
+                <div style="height:38%"></div><div style="height:34%"></div><div style="height:46%"></div><div style="height:62%"></div><div class="hi" style="height:94%"></div><div class="hi" style="height:100%"></div><div style="height:55%"></div>
+              </div>
+              <div class="days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+              <div class="insights">
+                <div><b>Opportunity</b>Grow early-week trade with events</div>
+                <div><b>From the survey</b>Guests want more food choice</div>
+              </div>
+            </div>
+          </div>
+          <p class="caption">Illustration with sample figures. Client data stays private.</p>
+        </div>
+      </div>
+
+      <div class="showcase flip">
+        <div class="copy">
+          <span class="tag ms">Personal project</span>
+          <h3>Finance Tracker</h3>
+          <p>A personal finance tool. It stores every payment in a local database and turns spending into clear charts by category and month.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li style="--dot:#E38C00">SQLite</li><li>Charts</li></ul>
+          <div class="plinks">
+            <a class="btn line" href="https://github.com/EgeErenler/Finance_Tracker" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s3">
+            <div class="window" role="img" aria-label="Finance tracker window with a donut chart of spending by category and a list of recent payments">
+              <div class="wtop"><strong>October spending</strong><span>Sample data</span></div>
+              <div class="split">
+                <div class="donut"><div><span><b>£1,284</b><br><small>this month</small></span></div></div>
+                <ul class="cats">
+                  <li><i style="background:#3B5BFF"></i>Rent and bills<span>34%</span></li>
+                  <li><i style="background:#3FD0E0"></i>Groceries<span>22%</span></li>
+                  <li><i style="background:#F2A93B"></i>Transport<span>16%</span></li>
+                  <li><i style="background:#E5484D"></i>Eating out<span>12%</span></li>
+                  <li><i style="background:#B7C1D6"></i>Other<span>16%</span></li>
+                </ul>
+              </div>
+              <div class="tx">
+                <div><span>Tesco</span><span>£42.60</span></div>
+                <div><span>TfL travel</span><span>£8.10</span></div>
+                <div><span>Electricity</span><span>£61.00</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="career">
+    <div class="wrap">
+      <div class="head">
+        <p class="path">~/ege/career</p>
+        <h2>Career and skills</h2>
+        <p>Engineering experience in Istanbul, a data science Master's in London, and the tools I use every day.</p>
+      </div>
+      <div class="career">
+        <div>
+          <h3 class="col-title">Experience and education</h3>
+          <ol class="steps">
+            <li class="edu"><div class="when">2025 to 2026</div><h3>MSc Data Science in Business</h3><p class="org">Regent's University London</p><p>Data analysis, machine learning and consultancy for real business clients.</p></li>
+            <li><div class="when">Oct 2023 to Jun 2024</div><h3>Junior Software Engineer</h3><p class="org">Orion Innovation</p><p>Built backend features in Python with SQL and MySQL, and worked on deployments across AWS and Azure.</p></li>
+            <li><div class="when">Feb 2023 to May 2023</div><h3>Software Engineering Intern</h3><p class="org">Mikrogrup</p><p>Supported product development at a financial software company.</p></li>
+            <li class="edu"><div class="when">2019 to 2024</div><h3>BSc Software Engineering</h3><p class="org">Bahçeşehir University, Istanbul</p></li>
+          </ol>
+        </div>
+        <div>
+          <h3 class="col-title">Skills</h3>
+          <div class="nb" aria-label="Skills shown as a notebook">
+            <div class="cell in"><div class="pr">In [1]:</div><div class="src"><span class="k">import</span> ege
+skills = ege.<span class="f">load</span>(<span class="s">"skills"</span>)</div></div>
+            <div class="cell in"><div class="pr">In [2]:</div><div class="src">skills[[<span class="s">"area"</span>, <span class="s">"tools"</span>]]</div></div>
+            <div class="cell out"><div class="pr">Out[2]:</div><div class="src"><table class="nbt"><thead><tr><th></th><th>area</th><th>tools</th></tr></thead><tbody><tr><td>0</td><td>data</td><td>Python, SQL, MySQL, SQLite</td></tr><tr><td>1</td><td>analysis</td><td>Data analysis, data visualisation</td></tr><tr><td>2</td><td>ai_apps</td><td>LLM APIs (Groq), Streamlit</td></tr><tr><td>3</td><td>mobile</td><td>React Native, Expo</td></tr><tr><td>4</td><td>cloud</td><td>AWS, Azure</td></tr><tr><td>5</td><td>tools</td><td>Git, GitHub</td></tr><tr><td>6</td><td>spoken</td><td>English, Turkish (native)</td></tr></tbody></table></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div>
+        <h2>Let's build something useful.</h2>
+        <p>I'm looking for roles in data analysis, BI, data engineering and software engineering in London. I'm happy to talk.</p>
+      </div>
+      <div class="channels" id="channels">
+        <a class="channel" href="https://github.com/EgeErenler" target="_blank" rel="noopener"><span><small>GitHub</small><strong>github.com/EgeErenler</strong></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>© 2026 Ege Erenler</span><span>London</span></div></footer>
+
+<script>
+/* Fill these in: the contact links and the photo appear automatically. */
+const PROFILE = {
+  email: "",      // e.g. "ege@example.com"
+  linkedin: "",   // e.g. "https://www.linkedin.com/in/your-name"
+  photo: ""       // e.g. "photo.jpg" (file next to index.html)
+};
+
+(function profile(){
+  const ch = document.getElementById("channels");
+  const arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>';
+  function add(label, value, href, ext){
+    const a = document.createElement("a");
+    a.className = "channel"; a.href = href;
+    if (ext){ a.target = "_blank"; a.rel = "noopener"; }
+    a.innerHTML = `<span><small>${label}</small><strong></strong></span>${arrow}`;
+    a.querySelector("strong").textContent = value;
+    ch.prepend(a);
+  }
+  if (PROFILE.linkedin) add("LinkedIn", PROFILE.linkedin.replace(/^https?:\/\/(www\.)?/,""), PROFILE.linkedin, true);
+  if (PROFILE.email) add("Email", PROFILE.email, "mailto:" + PROFILE.email, false);
+  if (PROFILE.photo){
+    const img = new Image(); img.alt = "Ege Erenler"; img.src = PROFILE.photo;
+    img.onload = () => { const av = document.getElementById("avatar"); if (av){ av.textContent = ""; av.appendChild(img); } };
+  }
+})();
+
+/* Editor tabs and the Run query button. */
+(function editor(){
+  const tabs = [...document.querySelectorAll('.ed-tabs [role="tab"]')];
+  function show(id){
+    tabs.forEach(t => {
+      const on = t.id === id;
+      t.setAttribute("aria-selected", on);
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+  }
+  function run(){
+    [...document.querySelectorAll("#rows tr")].forEach((tr,i) => {
+      tr.classList.remove("flash"); void tr.offsetWidth;
+      tr.style.animationDelay = ""; tr.classList.add("flash");
+      tr.querySelectorAll("td").forEach(td => td.style.animationDelay = (i*0.09)+"s");
+    });
+  }
+  tabs.forEach(t => t.addEventListener("click", () => show(t.id)));
+  document.querySelector('[data-go="sql"]').addEventListener("click", () => { show("t-sql"); run(); });
+  document.getElementById("run").addEventListener("click", run);
+})();
+
+/* Nav turns solid after the hero starts scrolling away. */
+(function nav(){
+  const n = document.getElementById("nav");
+  const on = () => n.classList.toggle("solid", window.scrollY > 40);
+  on(); window.addEventListener("scroll", on, {passive:true});
+})();
+
+/* Hero visual: a field of data points rolling like a surface. */
+(function field(){
+  const c = document.getElementById("field");
+  const ctx = c.getContext("2d");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w, h, dpr, t = 0, raf, visible = true;
+  function size(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = c.getBoundingClientRect(); w = r.width; h = r.height;
+    c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  const COLS = 64, ROWS = 30;
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    const horizon = h * 0.30, base = h * 1.02;
+    for (let r = 0; r < ROWS; r++){
+      const z = r / (ROWS - 1);              // 0 far .. 1 near
+      const persp = 0.25 + z * 0.95;
+      const y0 = horizon + (base - horizon) * Math.pow(z, 1.6);
+      for (let i = 0; i < COLS; i++){
+        const u = i / (COLS - 1) - 0.5;
+        const x = w * 0.62 + u * w * 1.5 * persp;
+        if (x < -10 || x > w + 10) continue;
+        const wave = Math.sin(i * 0.22 + t * 0.9) * Math.cos(r * 0.28 - t * 0.6) + Math.sin((i + r) * 0.11 + t * 0.4) * 0.6;
+        const y = y0 - wave * 26 * persp;
+        const lift = (wave + 1.6) / 3.2;
+        const a = (0.12 + z * 0.55) * (0.45 + lift * 0.75);
+        const rad = 0.6 + persp * 1.5 * (0.6 + lift * 0.6);
+        ctx.fillStyle = lift > 0.72 ? `rgba(63,208,224,${a})` : `rgba(124,146,255,${a})`;
+        ctx.beginPath(); ctx.arc(x, y, rad, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  function loop(){ t += 0.012; draw(); if (visible) raf = requestAnimationFrame(loop); }
+  size(); draw();
+  window.addEventListener("resize", () => { size(); draw(); });
+  if (!reduce){
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting; cancelAnimationFrame(raf); if (visible) loop();
+    }).observe(c);
+  }
+})();
+</script>
+
+</body>
+</html>

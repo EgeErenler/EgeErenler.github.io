@@ -418,6 +418,20 @@ html,body{margin:0}
 .hs-bars em{font-style:normal;text-align:right;font-weight:600}
 .hs-note{margin-top:10px;font-size:11px;color:#6B7489;border-top:1px solid #E6E9EF;padding-top:8px}
 @media (max-width:520px){.pf{grid-template-columns:1fr}.pf-map{min-height:120px}.hs-bars div{grid-template-columns:96px 1fr 42px}}
+
+.stage.s8{background:linear-gradient(140deg,#FFF1C9 0%,#FFE0B8 100%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stage.s8{background:linear-gradient(140deg,#3A2E12,#3A2418)}}
+:root[data-theme="dark"] .stage.s8{background:linear-gradient(140deg,#3A2E12,#3A2418)}
+.ef{padding:16px 16px 12px}
+.ef-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.ef-top h5{margin:0;font-size:13px}
+.ef-top small{display:block;color:#6B7489;font-size:11px}
+.ef-badge{background:#0F1B2D;color:#F5B301;font-weight:700;font-size:11px;padding:4px 8px;border-radius:8px;white-space:nowrap}
+.ef svg{width:100%;height:120px;display:block}
+.ef-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.ef-stats div{background:#F4F6FA;border-radius:10px;padding:8px}
+.ef-stats b{display:block;font-size:15px}
+.ef-stats small{color:#6B7489;font-size:10.5px}
 </style>
 </head>
 <body>
@@ -522,7 +536,7 @@ html,body{margin:0}
       <div class="head">
         <p class="path">~/ege/projects</p>
         <h2>Selected projects</h2>
-        <p>Products I designed and built myself: live data pipelines, a property search tool, an AI app and a sports app in development.</p>
+        <p>Products I designed and built myself: a property search tool, a live machine learning forecast, data pipelines, an AI app and a sports app in development.</p>
       </div>
 
       <div class="showcase">
@@ -562,6 +576,39 @@ html,body{margin:0}
 
       <div class="showcase flip">
         <div class="copy">
+          <span class="tag live">Live ML model</span>
+          <h3>UK Energy Demand Forecast</h3>
+          <p>A machine learning model that forecasts Great Britain's electricity demand for every half hour of the next day, and races the official forecast from NESO. It retrains every morning, and its forecasts are saved before each day starts and scored afterwards.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li>LightGBM</li><li>FastAPI</li><li>Docker</li><li>MLflow</li><li>GitHub Actions</li></ul>
+          <dl><dt>Result</dt><dd>3.17% error, against 2.93% for the official forecast</dd></dl>
+          <div class="plinks">
+            <a class="btn dark" href="https://egeerenler.com/uk-energy-forecast/" target="_blank" rel="noopener">See the forecast</a>
+            <a class="btn line" href="https://github.com/EgeErenler/uk-energy-forecast" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s8">
+            <div class="mock" role="img" aria-label="Forecast of tomorrow's electricity demand with an 80% range, and the model's error against NESO">
+              <div class="ef">
+                <div class="ef-top"><div><h5>Tomorrow's demand, Great Britain</h5><small>Half-hourly forecast with an 80% range</small></div><span class="ef-badge">Model vs NESO</span></div>
+                <svg viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 92 C25 95 40 98 60 97 S85 60 100 52 S125 70 140 72 S170 64 185 66 S210 30 228 22 S260 40 275 62 S295 80 300 84 L300 70 C295 66 280 52 272 46 S250 18 228 10 S205 50 185 54 S160 58 140 60 S118 40 100 40 S78 84 60 85 S30 82 0 80 Z" fill="rgba(245,179,1,.25)"/>
+                  <path d="M0 86 C25 89 40 92 60 91 S85 56 100 46 S125 65 140 66 S170 60 185 60 S210 24 228 16 S260 34 275 54 S295 74 300 77" fill="none" stroke="#F5B301" stroke-width="3"/>
+                </svg>
+                <div class="ef-stats">
+                  <div><b>3.17%</b><small>model error</small></div>
+                  <div><b>2.93%</b><small>NESO error</small></div>
+                  <div><b>8.52%</b><small>naive baseline</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="caption">Illustration of the live page. Errors are from a 21-month backtest.</p>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="copy">
           <span class="tag live">Live pipeline</span>
           <h3>London Pulse</h3>
           <p>An automated data pipeline that takes London's pulse every 15 minutes: Tube status, Santander Cycles, weather and air quality. dbt models turn the snapshots into a tested data warehouse and a public dashboard.</p>
@@ -598,7 +645,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase">
+      <div class="showcase flip">
         <div class="copy">
           <span class="tag live">Live analysis</span>
           <h3>UK Housing Market Analytics</h3>
@@ -632,7 +679,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase flip">
+      <div class="showcase">
         <div class="copy">
           <span class="tag live">Live app</span>
           <h3>MediPulse AI</h3>
@@ -660,7 +707,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase">
+      <div class="showcase flip">
         <div class="copy">
           <span class="tag dev">In development</span>
           <h3>fulltime</h3>
@@ -710,7 +757,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase flip">
+      <div class="showcase">
         <div class="copy">
           <span class="tag ms">MSc consultancy project</span>
           <h3>Pub growth plan</h3>
@@ -740,7 +787,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase">
+      <div class="showcase flip">
         <div class="copy">
           <span class="tag ms">Personal project</span>
           <h3>Expense Tracker</h3>

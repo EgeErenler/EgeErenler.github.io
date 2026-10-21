@@ -367,6 +367,57 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;p
 footer .wrap span:first-child{display:inline-flex;align-items:center;gap:10px}
 footer .wrap span:first-child svg{width:22px;height:22px}
 html,body{margin:0}
+
+/* Flagship data projects */
+.stage.s5{background:linear-gradient(140deg,#D9F2E6 0%,#CBE6F5 100%)}
+.stage.s6{background:linear-gradient(140deg,#0E1A33 0%,#1B2D57 100%)}
+.stage.s7{background:linear-gradient(140deg,#EDE7FF 0%,#DCE6FB 100%)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .stage.s5{background:linear-gradient(140deg,#12352A,#13304A)}:root:not([data-theme="light"]) .stage.s7{background:linear-gradient(140deg,#251E4A,#1A2A4E)}}
+:root[data-theme="dark"] .stage.s5{background:linear-gradient(140deg,#12352A,#13304A)}
+:root[data-theme="dark"] .stage.s7{background:linear-gradient(140deg,#251E4A,#1A2A4E)}
+.mock{background:#fff;color:#14213D;border-radius:16px;box-shadow:0 24px 60px rgba(14,26,51,.22);overflow:hidden;font-size:12.5px;line-height:1.35}
+.mock .mbar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#14213D;color:#C9D1E4;font-size:11.5px}
+.mock .mbar i{width:8px;height:8px;border-radius:50%;background:#33415f}
+.mock .mbar span{margin-left:8px}
+.pf{display:grid;grid-template-columns:1.05fr 1fr;min-height:250px}
+.pf-list{padding:10px;display:grid;gap:8px;background:#F6F4EF;align-content:start}
+.pf-card{background:#fff;border:1px solid #E4E1D8;border-radius:10px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center}
+.pf-card b{font-size:12.5px}
+.pf-card small{color:#6B7489;font-size:10.5px}
+.pf-card .pr{grid-column:1;font-size:12px}
+.pf-card .ring{grid-row:1/span 3;grid-column:2;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#0E9F6E calc(var(--p)*1%),#EFECE5 0)}
+.pf-card .ring span{width:27px;height:27px;border-radius:50%;background:#fff;display:grid;place-items:center;font-weight:700;font-size:11px}
+.pf-card .chip{grid-column:1;justify-self:start;margin-top:3px;font-size:10px;padding:2px 6px;border-radius:5px;background:#DEF7EC;color:#046C4E;font-weight:600}
+.pf-map{position:relative;background:#ECEAE4;overflow:hidden}
+.pf-map::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(35deg,transparent 0 22px,rgba(255,255,255,.7) 22px 24px),repeating-linear-gradient(-55deg,transparent 0 30px,rgba(255,255,255,.55) 30px 31px)}
+.pf-map::after{content:"";position:absolute;left:-10%;right:-10%;top:52%;height:14px;background:#C9DCEB;transform:rotate(-8deg);border-radius:10px}
+.pf-map i{position:absolute;width:var(--dot-size,10px);height:var(--dot-size,10px);border-radius:50%;background:var(--dot,#2B9B6E);border:1px solid rgba(20,33,61,.35);z-index:1}
+.lp{padding:14px;background:#0F1A30;color:#E6ECF8;display:grid;gap:12px}
+.mock.dark{background:#0F1A30;color:#E6ECF8}
+.lp h5{margin:0;font-size:12px;color:#97A5C3;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lp-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.lp-kpis div{background:#16243F;border-radius:10px;padding:8px 10px}
+.lp-kpis b{display:block;font-size:17px;color:#fff}
+.lp-kpis small{color:#97A5C3;font-size:10.5px}
+.lp-lines{display:grid;gap:6px}
+.lp-lines div{display:grid;grid-template-columns:86px 1fr 34px;align-items:center;gap:8px;font-size:11.5px}
+.lp-lines i{height:7px;border-radius:4px;background:#24345A;position:relative;overflow:hidden}
+.lp-lines i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--line-c);border-radius:4px}
+.lp-lines em{font-style:normal;color:#97A5C3;text-align:right}
+.lp svg{width:100%;height:64px;display:block}
+.hs{padding:16px 16px 14px}
+.hs h5{margin:0 0 2px;font-size:13px}
+.hs .sub{color:#6B7489;font-size:11px;margin-bottom:10px}
+.hs-bars{display:grid;gap:6px}
+.hs-bars div{display:grid;grid-template-columns:118px 1fr 46px;align-items:center;gap:8px;font-size:11.5px}
+.hs-bars .track{position:relative;height:12px}
+.hs-bars .track::before{content:"";position:absolute;left:33%;top:-3px;bottom:-3px;border-left:1px solid #14213D}
+.hs-bars .track i{position:absolute;top:0;bottom:0;border-radius:3px}
+.hs-bars .neg i{right:67%;background:#D9480F}
+.hs-bars .pos i{left:33%;background:#0F766E}
+.hs-bars em{font-style:normal;text-align:right;font-weight:600}
+.hs-note{margin-top:10px;font-size:11px;color:#6B7489;border-top:1px solid #E6E9EF;padding-top:8px}
+@media (max-width:520px){.pf{grid-template-columns:1fr}.pf-map{min-height:120px}.hs-bars div{grid-template-columns:96px 1fr 42px}}
 </style>
 </head>
 <body>
@@ -471,10 +522,117 @@ html,body{margin:0}
       <div class="head">
         <p class="path">~/ege/projects</p>
         <h2>Selected projects</h2>
-        <p>Products I designed and built myself, from a live AI app to a sports app in development.</p>
+        <p>Products I designed and built myself: live data pipelines, a property search tool, an AI app and a sports app in development.</p>
       </div>
 
       <div class="showcase">
+        <div class="copy">
+          <span class="tag live">Live product</span>
+          <h3>London Property Finder</h3>
+          <p>A property search tool for London. You set a budget, the homes you want and what matters to you. It ranks about 38,000 streets on value, rental yield, growth, crime, schools, stations and shops, and links to the homes for sale.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li>DuckDB</li><li>Geospatial</li><li style="--dot:#F1E05A">JavaScript</li><li>Leaflet</li><li>GitHub Actions</li></ul>
+          <dl><dt>Data</dt><dd>Seven open data sources, rebuilt every day</dd></dl>
+          <div class="plinks">
+            <a class="btn dark" href="https://egeerenler.com/london-property-finder/" target="_blank" rel="noopener">Open the app</a>
+            <a class="btn line" href="https://github.com/EgeErenler/london-property-finder" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s5">
+            <div class="mock" role="img" aria-label="London Property Finder showing ranked streets with match scores next to a map">
+              <div class="mbar"><i></i><i></i><i></i><span>egeerenler.com/london-property-finder</span></div>
+              <div class="pf">
+                <div class="pf-list">
+                  <div class="pf-card"><b>Elm Grove</b><div class="ring" style="--p:86"><span>86</span></div><small>SE15 · Southwark</small><span class="pr">Terraced <b>£845k</b></span><span class="chip">Value pick · 12% below area</span></div>
+                  <div class="pf-card"><b>Albion Road</b><div class="ring" style="--p:81"><span>81</span></div><small>N16 · Hackney</small><span class="pr">Flats <b>£520k</b></span><span class="chip">4 min to station</span></div>
+                  <div class="pf-card"><b>Cedar Avenue</b><div class="ring" style="--p:77"><span>77</span></div><small>TW1 · Richmond</small><span class="pr">Semis <b>£1.05m</b></span><span class="chip">Low crime</span></div>
+                </div>
+                <div class="pf-map" aria-hidden="true">
+                  <i style="left:22%;top:20%;--dot:#0B6E4F;--dot-size:13px"></i><i style="left:48%;top:30%"></i><i style="left:66%;top:18%;--dot:#6FBD9B"></i>
+                  <i style="left:34%;top:46%;--dot:#0B6E4F"></i><i style="left:58%;top:62%;--dot:#B7DCCB;--dot-size:8px"></i><i style="left:16%;top:70%;--dot:#2B9B6E;--dot-size:12px"></i>
+                  <i style="left:76%;top:44%;--dot:#0B6E4F;--dot-size:14px"></i><i style="left:42%;top:80%;--dot:#6FBD9B"></i><i style="left:84%;top:76%;--dot:#B7DCCB;--dot-size:8px"></i>
+                  <i style="left:28%;top:34%;--dot:#6FBD9B;--dot-size:8px"></i><i style="left:62%;top:84%;--dot:#2B9B6E"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="caption">Design preview with sample streets. The live app uses real data.</p>
+        </div>
+      </div>
+
+      <div class="showcase flip">
+        <div class="copy">
+          <span class="tag live">Live pipeline</span>
+          <h3>London Pulse</h3>
+          <p>An automated data pipeline that takes London's pulse every 15 minutes: Tube status, Santander Cycles, weather and air quality. dbt models turn the snapshots into a tested data warehouse and a public dashboard.</p>
+          <ul class="langs"><li style="--dot:#3572A5">Python</li><li style="--dot:#FF694B">dbt</li><li>DuckDB</li><li>Parquet</li><li>GitHub Actions</li></ul>
+          <dl><dt>Data</dt><dd>TfL Unified API and Open-Meteo</dd></dl>
+          <div class="plinks">
+            <a class="btn dark" href="https://egeerenler.com/london-pulse/" target="_blank" rel="noopener">Open the dashboard</a>
+            <a class="btn line" href="https://github.com/EgeErenler/london-pulse" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s6">
+            <div class="mock dark" role="img" aria-label="London Pulse dashboard with Tube reliability bars and a bike availability chart">
+              <div class="mbar"><i></i><i></i><i></i><span>egeerenler.com/london-pulse</span></div>
+              <div class="lp">
+                <div class="lp-kpis">
+                  <div><b>11 / 11</b><small>Tube lines good service</small></div>
+                  <div><b>8,412</b><small>Bikes free now</small></div>
+                  <div><b>Good</b><small>Air quality</small></div>
+                </div>
+                <h5>Good service, last 7 days</h5>
+                <div class="lp-lines">
+                  <div><span>Victoria</span><i style="--w:97%;--line-c:#0098D4"></i><em>97%</em></div>
+                  <div><span>Central</span><i style="--w:88%;--line-c:#E32017"></i><em>88%</em></div>
+                  <div><span>Northern</span><i style="--w:84%;--line-c:#9AA5B8"></i><em>84%</em></div>
+                  <div><span>Elizabeth line</span><i style="--w:79%;--line-c:#7156A5"></i><em>79%</em></div>
+                </div>
+                <h5>Bikes available across the day</h5>
+                <svg viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true"><path d="M0 18 C30 16 45 50 70 52 S110 30 135 28 S170 22 190 30 S220 56 245 54 S280 24 300 20" fill="none" stroke="#3FD0E0" stroke-width="2.5"/><path d="M0 18 C30 16 45 50 70 52 S110 30 135 28 S170 22 190 30 S220 56 245 54 S280 24 300 20 V64 H0Z" fill="rgba(63,208,224,.12)"/></svg>
+              </div>
+            </div>
+          </div>
+          <p class="caption">Illustration with sample values. The dashboard shows live data.</p>
+        </div>
+      </div>
+
+      <div class="showcase">
+        <div class="copy">
+          <span class="tag live">Live analysis</span>
+          <h3>UK Housing Market Analytics</h3>
+          <p>A SQL analysis of 7 million property sales in England and Wales since 2018. It shows London's prices stalling while the rest of the country climbed, and how the share of flats explains which boroughs fell.</p>
+          <ul class="langs"><li style="--dot:#E38C00">SQL</li><li>DuckDB</li><li style="--dot:#3572A5">Python</li><li>Tested SQL</li><li>GitHub Actions</li></ul>
+          <dl><dt>Data</dt><dd>HM Land Registry Price Paid Data</dd></dl>
+          <div class="plinks">
+            <a class="btn dark" href="https://egeerenler.com/uk-housing-analytics/" target="_blank" rel="noopener">Open the dashboard</a>
+            <a class="btn line" href="https://github.com/EgeErenler/uk-housing-analytics" target="_blank" rel="noopener">View code</a>
+          </div>
+        </div>
+        <div>
+          <div class="stage s7">
+            <div class="mock" role="img" aria-label="Bar chart of the change in median price by London borough from 2020 to 2025">
+              <div class="hs">
+                <h5>London boroughs: change in median price</h5>
+                <div class="sub">2020 to 2025, real sales data</div>
+                <div class="hs-bars">
+                  <div><span>Hillingdon</span><span class="track pos"><i style="width:56%"></i></span><em>+18.6%</em></div>
+                  <div><span>Barking &amp; Dagenham</span><span class="track pos"><i style="width:55.5%"></i></span><em>+18.5%</em></div>
+                  <div><span>Havering</span><span class="track pos"><i style="width:50.5%"></i></span><em>+16.8%</em></div>
+                  <div><span>Camden</span><span class="track neg"><i style="width:11%"></i></span><em>−3.7%</em></div>
+                  <div><span>Westminster</span><span class="track neg"><i style="width:17%"></i></span><em>−5.6%</em></div>
+                  <div><span>Kensington &amp; Chelsea</span><span class="track neg"><i style="width:22%"></i></span><em>−7.3%</em></div>
+                  <div><span>Hammersmith &amp; Fulham</span><span class="track neg"><i style="width:27%"></i></span><em>−9.0%</em></div>
+                </div>
+                <p class="hs-note">The more flats a borough sells, the weaker its prices: correlation −0.88.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="showcase flip">
         <div class="copy">
           <span class="tag live">Live app</span>
           <h3>MediPulse AI</h3>
@@ -502,7 +660,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase flip">
+      <div class="showcase">
         <div class="copy">
           <span class="tag dev">In development</span>
           <h3>fulltime</h3>
@@ -552,7 +710,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase">
+      <div class="showcase flip">
         <div class="copy">
           <span class="tag ms">MSc consultancy project</span>
           <h3>Pub growth plan</h3>
@@ -582,7 +740,7 @@ html,body{margin:0}
         </div>
       </div>
 
-      <div class="showcase flip">
+      <div class="showcase">
         <div class="copy">
           <span class="tag ms">Personal project</span>
           <h3>Expense Tracker</h3>

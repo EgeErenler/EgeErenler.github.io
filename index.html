@@ -1,15 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta property="og:title" content="Ege Erenler">
+<meta property="og:title" content="Ege Erenler | Software Engineer and Data Scientist, London">
 <meta property="og:image" content="https://egeerenler.com/logo-tile-dark-1024.png">
 <title>Ege Erenler | Software Engineer and Data Scientist, London</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Ege Erenler is a software engineer and data scientist in London. Portfolio, projects and CV: Python, SQL, cloud and AI.">
 <link rel="canonical" href="https://egeerenler.com/">
 <meta name="msvalidate.01" content="467859C3B339D6CAF5CEDC9BF4B9F5A1">
@@ -208,6 +207,8 @@ section{padding-block:104px}
 .match .score{display:grid;gap:3px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
 .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#E91E63;margin-right:3px;vertical-align:middle}
 .screen.table{background:#fff}
+.screen.shot{background:#14001A}
+.screen.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .tbl{padding:8px 10px;display:grid;gap:2px}
 .tbl div{display:grid;grid-template-columns:14px 1fr 22px 26px;gap:6px;padding:6px 4px;border-bottom:1px solid #F0ECF6;font-variant-numeric:tabular-nums}
 .tbl div:first-child{color:#8C7DA6;font-weight:600}
@@ -474,12 +475,12 @@ html,body{margin:0}
           <button role="tab" id="t-sql" aria-selected="false" aria-controls="p-sql">projects.sql</button>
         </div>
       </div>
-      <div class="panel" id="p-py" role="tabpanel" aria-labelledby="t-py"><div class="ed-body"><pre class="code"><span class="l"><span class="k">class</span> <span class="c">Engineer</span>:</span><span class="l">    name      = <span class="s">"Ege Erenler"</span></span><span class="l">    based_in  = <span class="s">"London, UK"</span></span><span class="l">    education = [<span class="s">"MSc Data Science in Business"</span>,</span><span class="l">                 <span class="s">"BSc Software Engineering"</span>]</span><span class="l">    stack     = [<span class="s">"Python"</span>, <span class="s">"SQL"</span>, <span class="s">"AWS"</span>,</span><span class="l">                 <span class="s">"Azure"</span>, <span class="s">"LLM APIs"</span>]</span><span class="l"></span><span class="l">    <span class="k">def</span> <span class="f">open_to</span>(self):</span><span class="l">        <span class="cm"># roles I am looking for</span></span><span class="l">        <span class="k">return</span> [<span class="s">"Data Analyst"</span>, <span class="s">"BI"</span>,</span><span class="l">                <span class="s">"Data Engineer"</span>, <span class="s">"Software Engineer"</span>]<span class="caret" aria-hidden="true"></span></span></pre></div>
+      <div class="panel" id="p-py" role="tabpanel" aria-labelledby="t-py"><div class="ed-body"><pre class="code"><span class="l"><span class="k">class</span> <span class="c">Engineer</span>:</span><span class="l">    name     = <span class="s">"Ege Erenler"</span></span><span class="l">    based_in = <span class="s">"London, UK"</span></span><span class="l">    education = [</span><span class="l">        <span class="s">"MSc Data Science in Business"</span>,</span><span class="l">        <span class="s">"BSc Software Engineering"</span>]</span><span class="l">    stack = [<span class="s">"Python"</span>, <span class="s">"SQL"</span>, <span class="s">"FastAPI"</span>,</span><span class="l">             <span class="s">"dbt"</span>, <span class="s">"Azure"</span>, <span class="s">"AWS"</span>]</span><span class="l"></span><span class="l">    <span class="k">def</span> <span class="f">open_to</span>(self):</span><span class="l">        <span class="cm"># roles I am looking for</span></span><span class="l">        <span class="k">return</span> [<span class="s">"Data Engineer"</span>,</span><span class="l">                <span class="s">"Software Engineer"</span>,</span><span class="l">                <span class="s">"Analytics Engineer"</span>,</span><span class="l">                <span class="s">"Data Analyst"</span>]<span class="caret" aria-hidden="true"></span></span></pre></div>
         <div class="ed-run"><span>Python 3.12</span><button type="button" data-go="sql"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg>Open projects.sql</button></div>
       </div>
       <div class="panel" id="p-sql" role="tabpanel" aria-labelledby="t-sql" hidden><div class="ed-body"><pre class="code"><span class="l"><span class="k">SELECT</span> name, stack, status</span><span class="l"><span class="k">FROM</span>   projects</span><span class="l"><span class="k">WHERE</span>  author = <span class="s">'Ege Erenler'</span></span><span class="l"><span class="k">ORDER BY</span> year <span class="k">DESC</span>;</span></pre></div>
         <div class="ed-run"><span>projects.db</span><button type="button" id="run"><svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M2 1l9 5-9 5z"/></svg>Run query</button></div>
-        <div class="result"><table><thead><tr><th>name</th><th>stack</th><th>status</th></tr></thead><tbody id="rows"><tr><td>MediPulse AI</td><td>Python, Streamlit, Groq</td><td class="st-live">live</td></tr><tr><td>Scoretime</td><td>React Native, Expo</td><td class="st-dev">in_dev</td></tr><tr><td>Pub growth plan</td><td>Python, survey data</td><td class="st-done">done</td></tr><tr><td>Expense Tracker</td><td>Python, SQLite</td><td class="st-done">done</td></tr></tbody></table><div class="meta">4 rows returned</div></div>
+        <div class="result"><table><thead><tr><th>name</th><th>stack</th><th>status</th></tr></thead><tbody id="rows"><tr><td>London Property Finder</td><td>Python, DuckDB, Leaflet</td><td class="st-live">live</td></tr><tr><td>UK Energy Demand Forecast</td><td>Python, LightGBM, FastAPI</td><td class="st-live">live</td></tr><tr><td>London Pulse</td><td>Python, dbt, DuckDB</td><td class="st-live">live</td></tr><tr><td>UK Housing Market Analytics</td><td>SQL, DuckDB</td><td class="st-live">live</td></tr><tr><td>Scoretime</td><td>React Native, FastAPI</td><td class="st-dev">in_dev</td></tr><tr><td>MediPulse AI</td><td>Python, Streamlit, Groq</td><td class="st-live">live</td></tr><tr><td>Pub growth plan</td><td>Python, survey data</td><td class="st-done">done</td></tr><tr><td>Expense Tracker</td><td>Python, SQLite</td><td class="st-done">done</td></tr></tbody></table><div class="meta">8 rows returned</div></div>
       </div>
     </div>
   </div>
@@ -510,15 +511,15 @@ html,body{margin:0}
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
           <h3>Data analysis and BI</h3>
           <p>I clean, query and model data, then present it so a business can act on it.</p>
-          <ul><li>SQL</li><li>Python</li><li>Survey analysis</li><li>Reporting</li></ul>
+          <ul><li>SQL</li><li>Python</li><li>dbt</li><li>Power BI</li></ul>
           <div class="snippet"><span class="k">SELECT</span> day, <span class="f">SUM</span>(sales)
 <span class="k">FROM</span> orders <span class="k">GROUP BY</span> day;</div>
         </article>
         <article class="pillar">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13.5 5l-3 14"/></svg></div>
           <h3>Software engineering</h3>
-          <p>I build backend features and databases and deploy them to the cloud.</p>
-          <ul><li>Python</li><li>MySQL</li><li>AWS</li><li>Azure</li></ul>
+          <p>I build APIs, data pipelines and databases, test them and deploy them to the cloud.</p>
+          <ul><li>Python</li><li>FastAPI</li><li>Docker</li><li>Azure</li></ul>
           <div class="snippet"><span class="k">def</span> <span class="f">save</span>(record):
     db.<span class="f">insert</span>(<span class="s">"payments"</span>, record)</div>
         </article>
@@ -539,7 +540,7 @@ html,body{margin:0}
       <div class="head">
         <p class="path">~/ege/projects</p>
         <h2>Selected projects</h2>
-        <p>Products I designed and built myself: a property search tool, a live machine learning forecast, data pipelines, an AI app and a sports app in development.</p>
+        <p>Products I designed and built myself: a property search tool, a live machine learning forecast, data pipelines, an AI app and a live scores app.</p>
       </div>
 
       <div class="showcase">
@@ -614,7 +615,7 @@ html,body{margin:0}
         <div class="copy">
           <span class="tag live">Live pipeline</span>
           <h3>London Pulse</h3>
-          <p>An automated data pipeline that takes London's pulse every 15 minutes: Tube status, Santander Cycles, weather and air quality. dbt models turn the snapshots into a tested data warehouse and a public dashboard.</p>
+          <p>An automated data pipeline that takes London's pulse every 15 minutes: Tube and rail status, Santander Cycles, weather and air quality. dbt models turn the snapshots into a tested data warehouse and a public dashboard.</p>
           <ul class="langs"><li style="--dot:#3572A5">Python</li><li style="--dot:#FF694B">dbt</li><li>DuckDB</li><li>Parquet</li><li>GitHub Actions</li></ul>
           <dl><dt>Data</dt><dd>TfL Unified API and Open-Meteo</dd></dl>
           <div class="plinks">
@@ -652,7 +653,7 @@ html,body{margin:0}
         <div class="copy">
           <span class="tag live">Live analysis</span>
           <h3>UK Housing Market Analytics</h3>
-          <p>A SQL analysis of 7 million property sales in England and Wales since 2018. It shows London's prices stalling while the rest of the country climbed, and how the share of flats explains which boroughs fell.</p>
+          <p>A SQL analysis of every home sold in England and Wales since 2018, about a million sales a year. It shows London's prices stalling while the rest of the country climbed, and how the share of flats explains which boroughs fell.</p>
           <ul class="langs"><li style="--dot:#E38C00">SQL</li><li>DuckDB</li><li style="--dot:#3572A5">Python</li><li>Tested SQL</li><li>GitHub Actions</li></ul>
           <dl><dt>Data</dt><dd>HM Land Registry Price Paid Data</dd></dl>
           <div class="plinks">
@@ -714,8 +715,8 @@ html,body{margin:0}
         <div class="copy">
           <span class="tag dev">In development</span>
           <h3>Scoretime</h3>
-          <p>A live scores app for UK sports fans on iOS and Android. It covers football, cricket, tennis and F1, with live match stats, line-ups, league tables, a season predictor and club histories going back to 1888.</p>
-          <ul class="langs"><li style="--dot:#61DAFB">React Native</li><li>Expo</li></ul>
+          <p>A live scores app for UK sports fans on iPhone, Android and the web. Live match stats, line-ups with player ratings, live league tables and a season predictor, on top of my own database of more than 500,000 matches since 1872.</p>
+          <ul class="langs"><li style="--dot:#61DAFB">React Native</li><li>Expo</li><li style="--dot:#3572A5">Python</li><li>FastAPI</li><li>DuckDB</li></ul>
           <dl><dt>Role</dt><dd>Founder, product and engineering</dd></dl>
           <div class="plinks">
             <a class="btn dark" href="https://scoretime.app/" target="_blank" rel="noopener">Visit the site</a>
@@ -724,39 +725,11 @@ html,body{margin:0}
         </div>
         <div>
           <div class="stage s2">
-          <div class="phones" role="img" aria-label="Scoretime app screens showing live match scores and a league table">
-            <div class="phone back">
-              <div class="screen table">
-                <div class="scr-top"><div class="row"><span>9:41</span><span>●●●</span></div><h4>Table</h4></div>
-                <div class="tbl">
-                  <div><span>#</span><span>Club</span><span>P</span><span>Pts</span></div>
-                  <div><span>1</span><span>Arsenal</span><span>9</span><span>22</span></div>
-                  <div><span>2</span><span>Liverpool</span><span>9</span><span>21</span></div>
-                  <div><span>3</span><span>Man City</span><span>9</span><span>19</span></div>
-                  <div><span>4</span><span>Chelsea</span><span>9</span><span>17</span></div>
-                  <div><span>5</span><span>Aston Villa</span><span>9</span><span>16</span></div>
-                  <div><span>6</span><span>Spurs</span><span>9</span><span>15</span></div>
-                  <div><span>7</span><span>Newcastle</span><span>9</span><span>14</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="phone">
-              <div class="screen">
-                <div class="scr-top">
-                  <div class="row"><span>9:41</span><span>●●●</span></div>
-                  <h4>scoretime</h4>
-                  <div class="tabs"><span class="on">Football</span><span>Cricket</span><span>Tennis</span><span>F1</span></div>
-                </div>
-                <div class="league"><span>Premier League</span><span>Today</span></div>
-                <div class="match"><span class="min"><span class="live-dot"></span>67'</span><span class="teams"><span>Arsenal</span><span>Chelsea</span></span><span class="score"><span>2</span><span>1</span></span></div>
-                <div class="match"><span class="min"><span class="live-dot"></span>54'</span><span class="teams"><span>Liverpool</span><span>Brighton</span></span><span class="score"><span>1</span><span>1</span></span></div>
-                <div class="match"><span class="min ft">FT</span><span class="teams"><span>Man City</span><span>Fulham</span></span><span class="score"><span>3</span><span>0</span></span></div>
-                <div class="league"><span>Süper Lig</span><span>Today</span></div>
-                <div class="match"><span class="min ft">FT</span><span class="teams"><span>Galatasaray</span><span>Fenerbahçe</span></span><span class="score"><span>2</span><span>1</span></span></div>
-              </div>
-            </div>
+          <div class="phones" role="img" aria-label="Scoretime app screens: the home screen with today's matches, and match statistics for Fenerbahçe 2, Slavia Praha 2">
+            <div class="phone back"><div class="screen shot"><img src="img/scoretime-stats.webp" alt="" width="640" height="1385" loading="lazy"></div></div>
+            <div class="phone"><div class="screen shot"><img src="img/scoretime-home.webp" alt="" width="640" height="1385" loading="lazy"></div></div>
           </div>
-          <p class="caption">Design preview with sample scores.</p>
+          <p class="caption">Screens from the current build.</p>
         </div>
         </div>
       </div>

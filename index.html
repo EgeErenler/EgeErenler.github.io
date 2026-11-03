@@ -17,7 +17,7 @@
 <meta property="og:url" content="https://egeerenler.com/">
 <meta property="og:description" content="Ege Erenler is a software engineer and data scientist in London, working with Python, SQL, cloud and AI.">
 <meta name="twitter:card" content="summary">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ege Erenler", "url": "https://egeerenler.com/", "image": "https://egeerenler.com/logo-tile-dark-1024.png", "jobTitle": "Software Engineer and Data Scientist", "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"}, "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Regent's University London"}, {"@type": "CollegeOrUniversity", "name": "Bahçeşehir University"}], "knowsAbout": ["Python", "SQL", "Data Science", "Software Engineering", "AWS", "Azure", "LLM applications"], "sameAs": ["https://github.com/EgeErenler", "https://www.linkedin.com/in/ege-erenler"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ege Erenler", "url": "https://egeerenler.com/", "image": "https://egeerenler.com/logo-tile-dark-1024.png", "jobTitle": "Software Engineer and Data Scientist", "address": {"@type": "PostalAddress", "addressLocality": "London", "addressCountry": "GB"}, "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Regent's University London"}, {"@type": "CollegeOrUniversity", "name": "Bahçeşehir University"}], "knowsAbout": ["Python", "SQL", "FastAPI", "React Native", "Data Engineering", "Data Science", "Software Engineering", "AWS", "Azure", "LLM applications"], "sameAs": ["https://github.com/EgeErenler", "https://www.linkedin.com/in/ege-erenler"]}</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -329,6 +329,8 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;p
 .nbt{border-collapse:collapse;font-size:13px;white-space:nowrap}
 .nbt th,.nbt td{text-align:left;padding:6px 18px 6px 0;border-bottom:1px solid var(--line)}
 .nbt th{color:var(--muted);font-weight:500}
+.cell.out .src{white-space:normal}
+.nbt td:last-child{white-space:normal}
 .nbt td:first-child{color:var(--muted)}
 .nb .k{color:#8B3FD1}.nb .s{color:#2F8A2F}.nb .f{color:#2747E8}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .nb .k{color:var(--k)}:root:not([data-theme="light"]) .nb .s{color:var(--s)}:root:not([data-theme="light"]) .nb .f{color:var(--f)}}
@@ -485,6 +487,7 @@ html,body{margin:0}
     <div class="wrap">
       <p>Experience and study with</p>
       <ul>
+        <li>Sokian</li>
         <li>Orion Innovation</li>
         <li>Mikrogrup</li>
         <li>Regent's University London</li>
@@ -829,16 +832,17 @@ html,body{margin:0}
       <div class="head">
         <p class="path">~/ege/career</p>
         <h2>Career and skills</h2>
-        <p>Engineering experience in Istanbul, a data science Master's in London, and the tools I use every day.</p>
+        <p>Freelance work in London, engineering roles in Istanbul, a data science Master's, and the tools I use every day.</p>
       </div>
       <div class="career">
         <div>
           <h3 class="col-title">Experience and education</h3>
           <ol class="steps">
-            <li class="edu"><div class="when">2025 to 2026</div><h3>MSc Data Science in Business</h3><p class="org">Regent's University London</p><p>Data analysis, machine learning and consultancy for real business clients.</p></li>
-            <li><div class="when">Oct 2023 to Jun 2024</div><h3>Junior Software Engineer</h3><p class="org">Orion Innovation</p><p>Built backend features in Python with SQL and MySQL, and worked on deployments across AWS and Azure.</p></li>
-            <li><div class="when">Feb 2023 to May 2023</div><h3>Software Engineering Intern</h3><p class="org">Mikrogrup</p><p>Supported product development at a financial software company.</p></li>
-            <li class="edu"><div class="when">2019 to 2024</div><h3>BSc Software Engineering</h3><p class="org">Bahçeşehir University, Istanbul</p></li>
+            <li class="edu"><div class="when">Sep 2025 to Oct 2026</div><h3>MSc Data Science in Business</h3><p class="org">Regent's University London · London</p><p>Consultancy project for a real client: analysed 67,500 point-of-sale transactions in Python, tested customer segments and delivered a costed plan. Power BI, Tableau and machine learning on business data.</p></li>
+            <li><div class="when">Sep 2024 to Aug 2025</div><h3>Freelance Software and Data Developer</h3><p class="org">Sokian Ltd · London (remote)</p><p>Built a sales incentive app end to end for a multinational FMCG client (confidential), used by 11 managers, 42 sales supervisors and around 250 sales reps. Python ETL pipelines into MySQL, FastAPI APIs on Azure and a React Native app with daily regional and national rankings. Supported it for a year with quarterly releases.</p></li>
+            <li><div class="when">Sep 2023 to Aug 2024</div><h3>Junior Software Engineer</h3><p class="org">Orion Innovation · Istanbul</p><p>Improved SQL query and reporting performance by up to 20% by redesigning MySQL databases. Automated internal reporting and deployed data-driven apps on AWS and Azure in Agile teams.</p></li>
+            <li><div class="when">Feb 2023 to Aug 2023</div><h3>Software Engineer Intern</h3><p class="org">Mikrogrup · Istanbul</p><p>Built backend logic in Python and SQL for financial and accounting reports at a financial software company, and improved database reliability.</p></li>
+            <li class="edu"><div class="when">2019 to 2024</div><h3>BSc Software Engineering</h3><p class="org">Bahçeşehir University · Istanbul</p></li>
           </ol>
         </div>
         <div>
@@ -847,7 +851,7 @@ html,body{margin:0}
             <div class="cell in"><div class="pr">In [1]:</div><div class="src"><span class="k">import</span> ege
 skills = ege.<span class="f">load</span>(<span class="s">"skills"</span>)</div></div>
             <div class="cell in"><div class="pr">In [2]:</div><div class="src">skills[[<span class="s">"area"</span>, <span class="s">"tools"</span>]]</div></div>
-            <div class="cell out"><div class="pr">Out[2]:</div><div class="src"><table class="nbt"><thead><tr><th></th><th>area</th><th>tools</th></tr></thead><tbody><tr><td>0</td><td>data</td><td>Python, SQL, MySQL, SQLite</td></tr><tr><td>1</td><td>analysis</td><td>Data analysis, data visualisation</td></tr><tr><td>2</td><td>ai_apps</td><td>LLM APIs (Groq), Streamlit</td></tr><tr><td>3</td><td>mobile</td><td>React Native, Expo</td></tr><tr><td>4</td><td>cloud</td><td>AWS, Azure</td></tr><tr><td>5</td><td>tools</td><td>Git, GitHub</td></tr><tr><td>6</td><td>spoken</td><td>English, Turkish (native)</td></tr></tbody></table></div></div>
+            <div class="cell out"><div class="pr">Out[2]:</div><div class="src"><table class="nbt"><thead><tr><th></th><th>area</th><th>tools</th></tr></thead><tbody><tr><td>0</td><td>data</td><td>Python, SQL, MySQL, PostgreSQL</td></tr><tr><td>1</td><td>backend</td><td>FastAPI, REST APIs, ETL, Docker</td></tr><tr><td>2</td><td>analysis</td><td>pandas, scikit-learn, Power BI, Tableau</td></tr><tr><td>3</td><td>ai_apps</td><td>LLM APIs (Groq), Streamlit</td></tr><tr><td>4</td><td>mobile</td><td>React Native, Expo, TypeScript</td></tr><tr><td>5</td><td>cloud</td><td>Azure, AWS, GitHub Actions</td></tr><tr><td>6</td><td>tools</td><td>Git, Jira, Agile</td></tr><tr><td>7</td><td>spoken</td><td>English, Turkish (native)</td></tr></tbody></table></div></div>
           </div>
         </div>
       </div>

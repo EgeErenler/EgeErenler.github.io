@@ -2241,7 +2241,7 @@ class Component extends DCLogic {
     <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Main} startMode="simple" linked=${true} /></div>
   ` : null}
   ${($v.dark) ? html`
-    <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Night} startMode="dark" linked=${true} /></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Main} startMode="dark" linked=${true} /></div>
   ` : null}
   ${($v.art) ? html`
     <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Main} startMode="art" linked=${true} /></div>

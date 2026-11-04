@@ -1,0 +1,7 @@
+{
+  "name": "egeerenler-site-build",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "node build.mjs components .." },
+  "dependencies": { "htmlparser2": "9.1.0" }
+}

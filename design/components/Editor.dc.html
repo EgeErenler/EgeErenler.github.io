@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Code editor: profile, projects and contact</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+@keyframes ee-row{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes ee-caret{50%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.ee-anim{animation:none !important}}
+</style>
+</helmet>
+<div style="width: 100%; box-sizing: border-box; border-radius: 16px; overflow: hidden; background: #0B0E17; color: #E4E8F5; border: 1px solid rgba(228,232,245,.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px; box-shadow: 0 40px 80px -40px rgba(0,0,0,.8)">
+  <div style="display: flex; align-items: center; gap: 14px; padding: 0 14px; background: #111522; border-bottom: 1px solid rgba(228,232,245,.10); overflow-x: auto">
+    <div aria-hidden="true" style="display: flex; gap: 7px; padding: 14px 4px 14px 0">
+      <span style="width: 11px; height: 11px; border-radius: 50%; background: #FF5F57"></span>
+      <span style="width: 11px; height: 11px; border-radius: 50%; background: #FEBC2E"></span>
+      <span style="width: 11px; height: 11px; border-radius: 50%; background: #28C840"></span>
+    </div>
+    <div role="tablist" aria-label="Files" style="display: flex">
+      <sc-for list="{{tabs}}" as="tb" hint-placeholder-count="3">
+        <button type="button" role="tab" aria-selected="{{tb.on}}" onClick="{{tb.pick}}" style="min-height: 44px; padding: 0 16px; border: 0; border-bottom: 2px solid {{tb.line}}; background: transparent; color: {{tb.fg}}; font: 500 13px 'JetBrains Mono', monospace; cursor: pointer; white-space: nowrap">{{tb.label}}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="padding: 18px 0; overflow-x: auto; min-height: 300px">
+    <sc-for list="{{lines}}" as="ln" hint-placeholder-count="10">
+      <div style="display: flex; white-space: pre; line-height: 1.75">
+        <span aria-hidden="true" style="flex: none; width: 46px; padding-right: 16px; text-align: right; color: #4A5270">{{ln.no}}</span>
+        <span><sc-for list="{{ln.tokens}}" as="tk" hint-placeholder-count="3"><span style="color: {{tk.c}}">{{tk.t}}</span></sc-for><sc-if value="{{ln.caret}}" hint-placeholder-val="{{ false }}"><span class="ee-anim" aria-hidden="true" style="display: inline-block; width: 8px; height: 17px; margin-left: 2px; vertical-align: -3px; background: #82AAFF; animation: ee-caret 1s steps(1) infinite"></span></sc-if></span>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{isSql}}" hint-placeholder-val="{{ false }}">
+    <div style="border-top: 1px solid rgba(228,232,245,.10)">
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; background: #111522; font-size: 12px; color: #8A93B0">
+        <span>projects.db</span>
+        <button type="button" onClick="{{run}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: {{accent}}; color: #0B0E17; font: 700 12px 'JetBrains Mono', monospace; cursor: pointer"><svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor" aria-hidden="true"><path d="M2 1l9 5-9 5z"></path></svg>Run query</button>
+      </div>
+      <sc-if value="{{ran}}" hint-placeholder-val="{{ false }}">
+        <div style="overflow-x: auto">
+          <div style="min-width: 560px">
+            <div style="display: grid; grid-template-columns: 2.2fr 2fr 1fr; gap: 12px; padding: 10px 16px; font-size: 12px; color: #8A93B0; border-bottom: 1px solid rgba(228,232,245,.10)"><span>name</span><span>stack</span><span>status</span></div>
+            <sc-for list="{{rows}}" as="rw" hint-placeholder-count="6">
+              <a href="{{rw.url}}" target="_blank" rel="noopener" class="ee-anim" style="display: grid; grid-template-columns: 2.2fr 2fr 1fr; gap: 12px; padding: 11px 16px; color: #E4E8F5; text-decoration: none; border-bottom: 1px solid rgba(228,232,245,.06); animation: ee-row .45s both; animation-delay: {{rw.delay}}">
+                <span>{{rw.name}} ↗</span><span style="color: #8A93B0">{{rw.stack}}</span><span style="color: {{rw.col}}">{{rw.status}}</span>
+              </a>
+            </sc-for>
+            <div style="padding: 10px 16px; font-size: 12px; color: #8A93B0">6 rows returned</div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isSh}}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 18px 62px">
+      <a href="mailto:salih2000ege@gmail.com" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 8px; background: {{accent}}; color: #0B0E17; text-decoration: none; font-weight: 700; font-size: 13px">email</a>
+      <a href="https://www.linkedin.com/in/ege-erenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid rgba(228,232,245,.2); color: #E4E8F5; text-decoration: none; font-size: 13px">linkedin ↗</a>
+      <a href="https://github.com/EgeErenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 8px; border: 1px solid rgba(228,232,245,.2); color: #E4E8F5; text-decoration: none; font-size: 13px">github ↗</a>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#82AAFF"},"startTab":{"editor":"enum","options":["py","sql","sh"],"default":"py"},"$preview":{"width":760,"height":560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: null, ran: false, run: 0 };
+  }
+  componentWillUnmount() { clearTimeout(this.t); }
+  renderVals() {
+    const tab = this.state.tab || this.props.startTab || 'py';
+    const C = { kw: '#C792EA', str: '#C3E88D', fn: '#82AAFF', cm: '#6B7394', cls: '#FFCB6B', p: '#E4E8F5', prompt: '#3DDC97', key: '#F78C6C' };
+    const L = (...parts) => parts.map(([c, t]) => ({ c: C[c], t }));
+    const files = {
+      py: [
+        L(['kw', 'class '], ['cls', 'Engineer'], ['p', ':']),
+        L(['p', '    name     = '], ['str', '"Ege Erenler"']),
+        L(['p', '    based_in = '], ['str', '"London, UK"']),
+        L(['p', '    stack    = ['], ['str', '"Python"'], ['p', ', '], ['str', '"SQL"'], ['p', ', '], ['str', '"FastAPI"'], ['p', ',']),
+        L(['p', '                '], ['str', '"dbt"'], ['p', ', '], ['str', '"Azure"'], ['p', ', '], ['str', '"AWS"'], ['p', ']']),
+        [],
+        L(['p', '    '], ['kw', 'def '], ['fn', 'open_to'], ['p', '(self):']),
+        L(['cm', '        # roles I am looking for']),
+        L(['p', '        '], ['kw', 'return '], ['p', '['], ['str', '"Data Engineer"'], ['p', ',']),
+        L(['p', '                '], ['str', '"Software Engineer"'], ['p', ',']),
+        L(['p', '                '], ['str', '"Analytics Engineer"'], ['p', ']'])
+      ],
+      sql: [
+        L(['kw', 'SELECT '], ['p', 'name, stack, status']),
+        L(['kw', 'FROM   '], ['p', 'projects']),
+        L(['kw', 'WHERE  '], ['p', 'author = '], ['str', "'Ege Erenler'"]),
+        L(['kw', 'ORDER  BY '], ['p', 'updated '], ['kw', 'DESC'], ['p', ';'])
+      ],
+      sh: [
+        L(['prompt', '$ '], ['p', 'curl -s egeerenler.com/contact']),
+        L(['p', '{']),
+        L(['p', '  '], ['key', '"email"'], ['p', ':    '], ['str', '"salih2000ege@gmail.com"'], ['p', ',']),
+        L(['p', '  '], ['key', '"linkedin"'], ['p', ': '], ['str', '"linkedin.com/in/ege-erenler"'], ['p', ',']),
+        L(['p', '  '], ['key', '"github"'], ['p', ':   '], ['str', '"github.com/EgeErenler"'], ['p', ',']),
+        L(['p', '  '], ['key', '"based_in"'], ['p', ': '], ['str', '"London, UK"']),
+        L(['p', '}']),
+        L(['prompt', '$ '])
+      ]
+    };
+    const lines = files[tab].map((tokens, i, arr) => ({ no: i + 1, tokens, caret: i === arr.length - 1 }));
+    const tabs = [['py', 'profile.py'], ['sql', 'projects.sql'], ['sh', 'contact.sh']].map(([id, label]) => ({
+      label, on: id === tab ? 'true' : 'false',
+      fg: id === tab ? '#E4E8F5' : '#8A93B0',
+      line: id === tab ? (this.props.accent || '#82AAFF') : 'transparent',
+      pick: () => this.setState({ tab: id, ran: false })
+    }));
+    const list = [
+      ['London Property Finder', 'Python, DuckDB', 'live', 'https://egeerenler.com/london-property-finder/'],
+      ['UK Energy Demand Forecast', 'LightGBM, FastAPI', 'live', 'https://egeerenler.com/uk-energy-forecast/'],
+      ['London Pulse', 'dbt, DuckDB', 'live', 'https://egeerenler.com/london-pulse/'],
+      ['UK Housing Market Analytics', 'SQL, DuckDB', 'live', 'https://egeerenler.com/uk-housing-analytics/'],
+      ['Scoretime', 'React Native, FastAPI', 'in_dev', 'https://scoretime.app/'],
+      ['MediPulse AI', 'Streamlit, Groq', 'live', 'https://medipulse-ai.streamlit.app']
+    ];
+    return {
+      tabs, lines, accent: this.props.accent || '#82AAFF',
+      isSql: tab === 'sql', isSh: tab === 'sh', ran: this.state.ran,
+      rows: list.map(([name, stack, status, url], i) => ({ name, stack, status, url, delay: (i * 0.08) + 's', col: status === 'live' ? '#3DDC97' : '#FFCB6B' })),
+      run: () => {
+        this.setState({ ran: false });
+        clearTimeout(this.t);
+        this.t = setTimeout(() => this.setState({ ran: true }), 60);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

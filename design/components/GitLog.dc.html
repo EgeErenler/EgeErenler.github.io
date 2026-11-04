@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Career as a git log</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 100%; box-sizing: border-box; border-radius: 16px; overflow: hidden; background: #0B0E17; color: #E4E8F5; border: 1px solid rgba(228,232,245,.12); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 14px">
+  <div style="padding: 14px 18px; background: #111522; border-bottom: 1px solid rgba(228,232,245,.10); color: #8A93B0; font-size: 13px"><span style="color: #3DDC97">ege@london</span>:<span style="color: #82AAFF">~/career</span>$ git log --graph --date=short</div>
+  <div style="padding: 18px; overflow-x: auto">
+    <div style="min-width: 0; overflow-wrap: anywhere">
+      <sc-for list="{{commits}}" as="cm" hint-placeholder-count="5">
+        <div style="display: grid; grid-template-columns: 28px 1fr; gap: 6px">
+          <div aria-hidden="true" style="display: flex; flex-direction: column; align-items: center">
+            <span style="width: 12px; height: 12px; margin-top: 5px; border-radius: 50%; border: 2px solid {{cm.dot}}; background: {{cm.fill}}"></span>
+            <span style="flex: 1; width: 2px; background: rgba(228,232,245,.16)"></span>
+          </div>
+          <div style="padding-bottom: 22px">
+            <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px">
+              <span style="color: #FFCB6B">{{cm.hash}}</span>
+              <sc-if value="{{cm.hasRef}}" hint-placeholder-val="{{ false }}"><span style="color: #3DDC97">({{cm.ref}})</span></sc-if>
+              <span style="color: #E4E8F5; font-weight: 700">{{cm.title}}</span>
+            </div>
+            <div style="margin-top: 4px; color: #8A93B0">{{cm.org}} · {{cm.when}}</div>
+            <div style="margin-top: 6px; color: #B9C0D8; line-height: 1.6; white-space: normal">{{cm.body}}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":760,"height":620}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const list = [
+      ['MSc Data Science in Business', 'Regent’s University London', 'Sep 2025 – Oct 2026', 'HEAD -> main, london', 'Consultancy project for a real client: 67,500 sales records analysed in Python, customer segments tested, a costed plan delivered.'],
+      ['Freelance Software and Data Developer', 'Sokian Ltd · London (remote)', 'Sep 2024 – Aug 2025', '', 'A sales incentive app for a multinational FMCG client, used by about 300 people. Python ETL into MySQL, FastAPI on Azure, React Native app, daily rankings.'],
+      ['Junior Software Engineer', 'Orion Innovation · Istanbul', 'Sep 2023 – Aug 2024', '', 'SQL and reporting up to 20% faster after redesigning MySQL databases. Apps deployed on AWS and Azure.'],
+      ['Software Engineer Intern', 'Mikrogrup · Istanbul', 'Feb 2023 – Aug 2023', '', 'Backend logic in Python and SQL for financial and accounting reports.'],
+      ['BSc Software Engineering', 'Bahçeşehir University · Istanbul', '2019 – 2024', 'origin', 'Where it started.']
+    ];
+    const hashes = ['a3f9c21', '7be4d08', '52c1e9a', 'e08b4f3', '1d6a7c0'];
+    return {
+      commits: list.map(([title, org, when, ref, body], i) => ({
+        title, org, when, body, ref, hasRef: !!ref, hash: hashes[i],
+        dot: i === 0 ? '#3DDC97' : '#82AAFF', fill: i === 0 ? '#3DDC97' : '#0B0E17'
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

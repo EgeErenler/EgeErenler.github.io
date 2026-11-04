@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Selected projects</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.pj-card{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pj-shot{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.pj-card:hover .pj-shot{transform:scale(1.025)}
+.pj-btn{transition:transform .2s, opacity .2s}
+.pj-btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.pj-card,.pj-shot,.pj-btn{transition:none}.pj-card:hover .pj-shot{transform:none}}
+</style>
+</helmet>
+<div style="color: {{ink}}; font-family: {{font}}">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 40px; margin-bottom: 40px">
+    <div>
+      <p style="margin: 0 0 14px; font: 500 13px {{mono}}; color: {{muted}}">{{kicker}}</p>
+      <h2 style="margin: 0; font-family: {{headFont}}; font-weight: {{headWeight}}; font-size: {{headSize}}; line-height: .92; letter-spacing: {{headTrack}}; text-transform: {{headCase}}">Selected projects</h2>
+    </div>
+    <p style="max-width: 480px; margin: 0; font-size: 17px; line-height: 1.55; color: {{muted}}">Products I designed and built myself: a property search tool, a live machine learning forecast, data pipelines, an AI app and a live scores app.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: {{gap}}">
+    <sc-for list="{{featured}}" as="p" hint-placeholder-count="6">
+      <article class="pj-card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 36px; align-items: center; padding: {{pad}}; border-radius: {{radius}}; background: {{card}}; color: {{cardInk}}; border: 1px solid {{line}}; box-shadow: {{shadow}}; backdrop-filter: {{blur}}; -webkit-backdrop-filter: {{blur}}">
+        <div style="display: flex; flex-direction: column; gap: 18px; order: {{p.textOrder}}">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font: 500 12px {{mono}}; color: {{cardMuted}}">
+            <span>{{p.no}}</span><span aria-hidden="true">/</span><span>{{p.kind}}</span>
+            <span style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid {{chipLine}}; color: {{cardInk}}"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: {{p.dot}}"></span>{{p.status}}</span>
+          </div>
+          <h3 style="margin: 0; font-family: {{titleFont}}; font-weight: {{titleWeight}}; font-size: clamp(30px, 3.4vw, 48px); line-height: 1; letter-spacing: -.025em; text-transform: {{titleCase}}">{{p.name}}</h3>
+          <p style="margin: 0; font-size: 16.5px; line-height: 1.6; color: {{cardMuted}}">{{p.desc}}</p>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{p.stack}}" as="t" hint-placeholder-count="5">
+              <li style="padding: 6px 11px; border-radius: 999px; border: 1px solid {{chipLine}}; font: 500 12px {{mono}}">{{t}}</li>
+            </sc-for>
+          </ul>
+          <div style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-top: 1px solid {{chipLine}}; border-bottom: 1px solid {{chipLine}}">
+            <span style="flex: none; font: 500 12px {{mono}}; text-transform: uppercase; letter-spacing: .06em; color: {{cardMuted}}">{{p.factK}}</span>
+            <span style="font-size: 15px; font-weight: 600; line-height: 1.4">{{p.factV}}</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <sc-if value="{{p.hasLive}}" hint-placeholder-val="{{ true }}">
+              <a class="pj-btn" href="{{p.live}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: {{btnRadius}}; text-decoration: none; font-weight: 700; font-size: 15px; background: {{accent}}; color: {{onAccent}}">{{p.liveLabel}} <span aria-hidden="true">↗</span></a>
+            </sc-if>
+            <a class="pj-btn" href="{{p.code}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: {{btnRadius}}; text-decoration: none; font-weight: 700; font-size: 15px; border: 1px solid {{chipLine}}; color: {{cardInk}}">{{p.codeLabel}}</a>
+          </div>
+        </div>
+        <figure style="margin: 0; order: {{p.picOrder}}; display: flex; flex-direction: column; gap: 10px">
+          <div style="border-radius: {{innerRadius}}; overflow: hidden; background: {{panel}}; border: 1px solid {{chipLine}}">
+            <sc-if value="{{p.isApp}}" hint-placeholder-val="{{ false }}">
+              <div class="pj-shot" style="display: flex; justify-content: center; align-items: center; gap: 18px; padding: 28px 20px; aspect-ratio: 14 / 9; box-sizing: border-box">
+                <img src="./img/scoretime-home.webp" alt="Scoretime home screen with live matches" style="height: 100%; max-width: 46%; object-fit: contain; border-radius: 18px; box-shadow: 0 20px 40px -20px rgba(0,0,0,.5)">
+                <img src="./img/scoretime-stats.webp" alt="Scoretime match screen with live stats" style="height: 100%; max-width: 46%; object-fit: contain; border-radius: 18px; box-shadow: 0 20px 40px -20px rgba(0,0,0,.5); transform: translateY(14px)">
+              </div>
+            </sc-if>
+            <sc-if value="{{p.isChart}}" hint-placeholder-val="{{ true }}">
+              <img class="pj-shot" src="{{p.pic}}" alt="{{p.picAlt}}" style="display: block; width: 100%; aspect-ratio: 14 / 9">
+            </sc-if>
+          </div>
+          <figcaption style="font: 500 12px {{mono}}; color: {{cardMuted}}">{{p.caption}}</figcaption>
+        </figure>
+      </article>
+    </sc-for>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: {{gap}}; margin-top: {{gap}}">
+    <sc-for list="{{small}}" as="p" hint-placeholder-count="2">
+      <article class="pj-card" style="display: flex; flex-direction: column; gap: 16px; padding: {{pad}}; border-radius: {{radius}}; background: {{card}}; color: {{cardInk}}; border: 1px solid {{line}}; box-shadow: {{shadow}}; backdrop-filter: {{blur}}; -webkit-backdrop-filter: {{blur}}">
+        <div style="border-radius: {{innerRadius}}; overflow: hidden; background: {{panel}}; border: 1px solid {{chipLine}}">
+          <img class="pj-shot" src="{{p.pic}}" alt="{{p.picAlt}}" style="display: block; width: 100%; aspect-ratio: 14 / 9">
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; font: 500 12px {{mono}}; color: {{cardMuted}}"><span>{{p.no}}</span><span aria-hidden="true">/</span><span>{{p.kind}}</span></div>
+        <h3 style="margin: 0; font-family: {{titleFont}}; font-weight: {{titleWeight}}; font-size: clamp(26px, 2.6vw, 34px); line-height: 1; letter-spacing: -.02em; text-transform: {{titleCase}}">{{p.name}}</h3>
+        <p style="margin: 0; font-size: 16px; line-height: 1.55; color: {{cardMuted}}">{{p.desc}}</p>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{p.stack}}" as="t" hint-placeholder-count="3">
+            <li style="padding: 6px 11px; border-radius: 999px; border: 1px solid {{chipLine}}; font: 500 12px {{mono}}">{{t}}</li>
+          </sc-for>
+        </ul>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: auto">
+          <span style="font: 500 12px {{mono}}; color: {{cardMuted}}">{{p.factK}} · {{p.factV}}</span>
+          <a class="pj-btn" href="{{p.code}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 42px; padding: 0 18px; border-radius: {{btnRadius}}; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid {{chipLine}}; color: {{cardInk}}">View code</a>
+        </div>
+      </article>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ink":{"editor":"color","default":"#121212"},"muted":{"editor":"color","default":"#5C5B57"},"card":{"editor":"color","default":"#FFFFFF"},"cardInk":{"editor":"color","default":"#121212"},"line":{"editor":"color","default":"rgba(18,18,18,.12)"},"accent":{"editor":"color","default":"#121212"},"onAccent":{"editor":"color","default":"#FFFFFF"},"hot":{"editor":"color","default":"#FF6A2B"},"font":{"editor":"text","default":"inherit"},"mono":{"editor":"text","default":"ui-monospace, monospace"},"headFont":{"editor":"text","default":"inherit"},"headWeight":{"editor":"text","default":"900"},"headCase":{"editor":"text","default":"uppercase"},"headSize":{"editor":"text","default":"clamp(48px, 7vw, 112px)"},"titleFont":{"editor":"text","default":"inherit"},"titleWeight":{"editor":"text","default":"800"},"titleCase":{"editor":"text","default":"none"},"radius":{"editor":"text","default":"24px"},"btnRadius":{"editor":"text","default":"999px"},"kicker":{"editor":"text","default":"( selected projects )"},"blur":{"editor":"text","default":"none"},"$preview":{"width":1280,"height":5200}}'>
+const parse = (c) => {
+  if (!c) return [0, 0, 0, 1];
+  if (c[0] === '#') { const h = c.length === 4 ? c.slice(1).split('').map((x) => x + x).join('') : c.slice(1, 7); return [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16)).concat(1); }
+  const m = c.match(/[\d.]+/g) || []; return [+m[0] || 0, +m[1] || 0, +m[2] || 0, m[3] == null ? 1 : +m[3]];
+};
+const rgba = (c, a) => { const v = parse(c); return `rgba(${v[0]},${v[1]},${v[2]},${a})`; };
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const uri = (body) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" font-family="Helvetica, Arial, sans-serif">${body}</svg>`);
+
+// Small illustrations of each product, drawn in the page colours.
+function art(kind, C) {
+  const T = (x, y, s, size, w, fill, anchor) => `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w || 400}" fill="${fill || C.ink}" text-anchor="${anchor || 'start'}">${esc(s)}</text>`;
+  const bar = (x, y, w, h, fill, r) => `<rect x="${x}" y="${y}" width="${Math.max(0, w)}" height="${h}" rx="${r == null ? 4 : r}" fill="${fill}"/>`;
+  const top = (s) => `${bar(24, 22, 512, 30, C.soft, 15)}<circle cx="44" cy="37" r="5" fill="${C.hot}"/>${T(58, 42, s, 13, 500, C.muted)}`;
+  if (kind === 'property') {
+    const rows = [['Elm Grove', 'SE15 · Southwark · Terraced', '£845k', 'Value pick · 12% below area', 86], ['Albion Road', 'N16 · Hackney · Flats', '£520k', '4 min to station', 81], ['Cedar Avenue', 'TW1 · Richmond · Semis', '£1.05m', 'Low crime', 77]];
+    return uri(top('egeerenler.com/london-property-finder') + rows.map((r, i) => {
+      const y = 72 + i * 92;
+      return bar(24, y, 512, 80, C.card, 14) + `<circle cx="70" cy="${y + 40}" r="25" fill="none" stroke="${C.hot}" stroke-width="4"/>` + T(70, y + 46, r[4], 18, 800, C.ink, 'middle') +
+        T(112, y + 32, r[0], 19, 800) + T(112, y + 54, r[1], 13, 400, C.muted) + T(516, y + 34, r[2], 19, 800, C.ink, 'end') + T(516, y + 56, r[3], 12, 600, C.hot, 'end');
+    }).join(''));
+  }
+  if (kind === 'energy') {
+    const pts = []; for (let i = 0; i <= 48; i++) { const h = i / 2; const v = 0.42 + 0.22 * Math.exp(-Math.pow((h - 8.5) / 2.2, 2)) + 0.32 * Math.exp(-Math.pow((h - 18) / 2.6, 2)) - 0.12 * Math.exp(-Math.pow((h - 4) / 2, 2)); pts.push([40 + i * 10, 230 - v * 160]); }
+    const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
+    const band = pts.map((p, i) => (i ? 'L' : 'M') + p[0] + ' ' + (p[1] - 14)).join('') + pts.slice().reverse().map((p) => 'L' + p[0] + ' ' + (p[1] + 14)).join('') + 'Z';
+    const stat = (x, n, l, hi) => bar(x, 262, 160, 76, hi ? C.hot : C.card, 12) + T(x + 16, 298, n, 26, 800, hi ? C.onHot : C.ink) + T(x + 16, 322, l, 12, 500, hi ? C.onHot : C.muted);
+    return uri(T(28, 40, "Tomorrow's demand, Great Britain", 16, 800) + T(28, 60, 'Half-hourly forecast with an 80% range', 12, 400, C.muted) +
+      [90, 130, 170, 210].map((y) => `<path d="M40 ${y}H520" stroke="${C.soft}"/>`).join('') + `<path d="${band}" fill="${C.hot}" opacity=".18"/><path d="${line}" fill="none" stroke="${C.hot}" stroke-width="3"/>` +
+      stat(24, '3.17%', 'model error', true) + stat(200, '2.93%', 'NESO error') + stat(376, '8.52%', 'naive baseline'));
+  }
+  if (kind === 'pulse') {
+    const lines = [['Victoria', 97], ['Central', 88], ['Northern', 84], ['Elizabeth line', 79]];
+    const tile = (x, n, l) => bar(x, 70, 160, 74, C.card, 12) + T(x + 16, 104, n, 24, 800) + T(x + 16, 128, l, 12, 500, C.muted);
+    return uri(top('egeerenler.com/london-pulse') + tile(24, '11 / 11', 'Tube lines good') + tile(200, '8,412', 'Bikes free now') + tile(376, 'Good', 'Air quality') +
+      T(28, 180, 'Good service, last 7 days', 13, 700) + lines.map((r, i) => { const y = 196 + i * 38; return T(28, y + 18, r[0], 13, 500, C.muted) + bar(150, y + 6, 330, 14, C.soft, 7) + bar(150, y + 6, 330 * r[1] / 100, 14, C.hot, 7) + T(532, y + 18, r[1] + '%', 13, 700, C.ink, 'end'); }).join(''));
+  }
+  if (kind === 'housing') {
+    const rows = [['Hillingdon', 18.6], ['Barking & Dagenham', 18.5], ['Havering', 16.8], ['Camden', -3.7], ['Westminster', -5.6], ['Kensington & Chelsea', -7.3], ['Hammersmith & Fulham', -9.0]];
+    const zero = 330, k = 9;
+    return uri(T(28, 40, 'London boroughs: change in median price', 16, 800) + T(28, 60, '2020 to 2025, real sales data', 12, 400, C.muted) + `<path d="M${zero} 76V330" stroke="${C.soft}" stroke-width="2"/>` +
+      rows.map((r, i) => { const y = 82 + i * 34, w = Math.abs(r[1]) * k, pos = r[1] > 0; return T(zero - (pos ? 10 : w + 10), y + 17, r[0], 13, 500, C.muted, 'end') + bar(pos ? zero : zero - w, y + 4, w, 18, pos ? C.hot : C.ink, 4) + T(pos ? zero + w + 8 : zero + 8, y + 18, (pos ? '+' : '−') + Math.abs(r[1]).toFixed(1) + '%', 12, 700); }).join('') +
+      T(28, 346, 'More flats sold, weaker prices: correlation −0.88', 12, 500, C.muted));
+  }
+  if (kind === 'medi') {
+    return uri(top('medipulse-ai.streamlit.app') + bar(196, 76, 340, 58, C.hot, 16) + T(214, 101, "I've had a sore throat and a mild", 14, 500, C.onHot) + T(214, 121, 'fever for two days.', 14, 500, C.onHot) +
+      bar(24, 150, 400, 128, C.card, 16) + bar(42, 166, 92, 24, C.soft, 12) + T(88, 183, 'Moderate', 12, 800, C.ink, 'middle') +
+      T(42, 214, 'Rest, drink fluids and track your', 14, 400) + T(42, 236, 'temperature. Book a GP if the fever', 14, 400) + T(42, 258, 'lasts more than three days.', 14, 400) +
+      bar(24, 298, 512, 40, C.card, 20) + T(46, 323, 'Describe your symptoms…', 13, 400, C.muted));
+  }
+  if (kind === 'pub') {
+    const d = [['Mon', 8], ['Tue', 9], ['Wed', 11], ['Thu', 14], ['Fri', 21], ['Sat', 23], ['Sun', 14]];
+    return uri(T(28, 40, 'Sales by weekday', 16, 800) + T(28, 60, 'Share of weekly revenue', 12, 400, C.muted) +
+      d.map((r, i) => { const x = 44 + i * 70, h = r[1] * 9; return bar(x, 300 - h, 44, h, i < 3 ? C.hot : C.soft, 6) + T(x + 22, 324, r[0], 12, 600, C.muted, 'middle'); }).join('') +
+      T(28, 96, 'Opportunity: grow early-week trade with events', 13, 700, C.hot));
+  }
+  const cats = [['Rent and bills', 34], ['Groceries', 22], ['Transport', 16], ['Eating out', 12], ['Other', 16]];
+  return uri(T(28, 40, 'October spending', 16, 800) + T(28, 60, 'Sample data', 12, 400, C.muted) + T(28, 112, '£1,284', 40, 800) + T(28, 134, 'this month', 13, 500, C.muted) +
+    cats.map((r, i) => { const y = 160 + i * 36; return T(28, y + 16, r[0], 13, 500, C.muted) + bar(170, y + 4, 300, 14, C.soft, 7) + bar(170, y + 4, 300 * r[1] / 34, 14, i ? C.ink : C.hot, 7) + T(532, y + 16, r[1] + '%', 13, 700, C.ink, 'end'); }).join(''));
+}
+
+const P = [
+  { name: 'London Property Finder', kind: 'Live product', status: 'Live', vis: 'property', desc: 'A property search tool for London. You set a budget, the homes you want and what matters to you. It ranks about 38,000 streets on value, rental yield, growth, crime, schools, stations and shops, and links to the homes for sale.', stack: ['Python', 'DuckDB', 'Geospatial', 'JavaScript', 'Leaflet', 'GitHub Actions'], fact: ['Data', 'Seven open data sources, rebuilt every day'], live: ['Open the app', 'https://egeerenler.com/london-property-finder/'], code: 'https://github.com/EgeErenler/london-property-finder', caption: 'Design preview with sample streets. The live app uses real data.' },
+  { name: 'UK Energy Demand Forecast', kind: 'Live ML model', status: 'Live', vis: 'energy', desc: "A machine learning model that forecasts Great Britain's electricity demand for every half hour of the next day, and races the official forecast from NESO. It retrains every morning, and its forecasts are saved before each day starts and scored afterwards.", stack: ['Python', 'LightGBM', 'FastAPI', 'Docker', 'MLflow', 'GitHub Actions'], fact: ['Result', '3.17% error, against 2.93% for the official forecast'], live: ['See the forecast', 'https://egeerenler.com/uk-energy-forecast/'], code: 'https://github.com/EgeErenler/uk-energy-forecast', caption: 'Illustration of the live page. Errors are from a 21-month backtest.' },
+  { name: 'London Pulse', kind: 'Live pipeline', status: 'Live', vis: 'pulse', desc: "An automated data pipeline that takes London's pulse every 15 minutes: Tube and rail status, Santander Cycles, weather and air quality. dbt models turn the snapshots into a tested data warehouse and a public dashboard.", stack: ['Python', 'dbt', 'DuckDB', 'Parquet', 'GitHub Actions'], fact: ['Data', 'TfL Unified API and Open-Meteo'], live: ['Open the dashboard', 'https://egeerenler.com/london-pulse/'], code: 'https://github.com/EgeErenler/london-pulse', caption: 'Illustration with sample values. The dashboard shows live data.' },
+  { name: 'UK Housing Market Analytics', kind: 'Live analysis', status: 'Live', vis: 'housing', desc: "A SQL analysis of every home sold in England and Wales since 2018, about a million sales a year. It shows London's prices stalling while the rest of the country climbed, and how the share of flats explains which boroughs fell.", stack: ['SQL', 'DuckDB', 'Python', 'Tested SQL', 'GitHub Actions'], fact: ['Data', 'HM Land Registry Price Paid Data'], live: ['Open the dashboard', 'https://egeerenler.com/uk-housing-analytics/'], code: 'https://github.com/EgeErenler/uk-housing-analytics', caption: 'Real sales data. The more flats a borough sells, the weaker its prices.' },
+  { name: 'Scoretime', kind: 'In development', status: 'In development', vis: 'app', desc: 'A live scores app for UK sports fans on iPhone, Android and the web. Live match stats, line-ups with player ratings, live league tables and a season predictor, on top of my own database of more than 500,000 matches since 1872.', stack: ['React Native', 'Expo', 'Python', 'FastAPI', 'DuckDB'], fact: ['Role', 'Founder, product and engineering'], live: ['Visit the site', 'https://scoretime.app/'], code: 'https://github.com/EgeErenler', codeLabel: 'Follow on GitHub', caption: 'Screens from the current build.' },
+  { name: 'MediPulse AI', kind: 'Live app', status: 'Live', vis: 'medi', desc: 'A health triage assistant. People describe their symptoms in plain language, and a large language model rates how urgent they are and suggests the next step.', stack: ['Python', 'Streamlit', 'Groq API'], fact: ['Role', 'Solo build, design to deployment'], live: ['Open the app', 'https://medipulse-ai.streamlit.app'], code: 'https://github.com/EgeErenler/Medipulse-AI-Chatbot', caption: 'Illustration of the app with a sample question.' }
+];
+const S = [
+  { name: 'Pub growth plan', kind: 'MSc consultancy project', vis: 'pub', desc: "A data-driven marketing plan for a pub in Southwark, London. I combined the pub's own sales data with a customer survey and UK market research to find where it could grow.", stack: ['Python', 'Survey analysis', 'Euromonitor Passport'], fact: ['Client', 'Independent pub, Southwark'], code: 'https://github.com/EgeErenler/pub-marketing-analysis' },
+  { name: 'Expense Tracker', kind: 'Personal project', vis: 'expense', desc: 'A personal finance tool. It stores every payment in a local database and turns spending into clear charts by category and month.', stack: ['Python', 'SQLite', 'Charts'], fact: ['Stack', 'Python and SQLite'], code: 'https://github.com/EgeErenler/expense-tracker' }
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const ink = p.ink || '#121212', cardInk = p.cardInk || ink, card = p.card || '#FFFFFF';
+    const cv = parse(card), solid = cv[3] > 0.6 && card !== 'transparent';
+    const cardMuted = solid ? rgba(cardInk, 0.68) : (p.muted || '#5C5B57');
+    const hot = p.hot || '#FF6A2B';
+    const C = { ink: cardInk, muted: rgba(cardInk, 0.6), soft: rgba(cardInk, 0.1), card: rgba(cardInk, 0.05), hot, onHot: parse(hot).slice(0, 3).reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0) > 150 ? '#111111' : '#FFFFFF' };
+    const featured = P.map((x, i) => ({
+      no: String(i + 1).padStart(2, '0'), name: x.name, kind: x.kind, status: x.status, desc: x.desc, stack: x.stack,
+      factK: x.fact[0], factV: x.fact[1], hasLive: !!x.live, live: x.live ? x.live[1] : '', liveLabel: x.live ? x.live[0] : '',
+      code: x.code, codeLabel: x.codeLabel || 'View code', caption: x.caption,
+      dot: x.status === 'Live' ? '#2BD27A' : '#FFB020',
+      isApp: x.vis === 'app', isChart: x.vis !== 'app', pic: x.vis === 'app' ? '' : art(x.vis, C), picAlt: 'Illustration of ' + x.name,
+      textOrder: i % 2 ? 2 : 1, picOrder: i % 2 ? 1 : 2
+    }));
+    const small = S.map((x, i) => ({ no: String(i + 7).padStart(2, '0'), name: x.name, kind: x.kind, desc: x.desc, stack: x.stack, factK: x.fact[0], factV: x.fact[1], code: x.code, pic: art(x.vis, C), picAlt: 'Illustration of ' + x.name }));
+    return {
+      featured, small, ink, muted: p.muted || '#5C5B57', card, cardInk, cardMuted,
+      line: p.line || 'rgba(18,18,18,.12)', chipLine: rgba(cardInk, 0.18), panel: rgba(cardInk, 0.04),
+      accent: p.accent || '#121212', onAccent: p.onAccent || '#FFFFFF',
+      font: p.font || 'inherit', mono: p.mono || 'ui-monospace, monospace',
+      headFont: p.headFont || 'inherit', headWeight: p.headWeight || '900', headCase: p.headCase || 'uppercase',
+      headSize: p.headSize || 'clamp(48px, 7vw, 112px)', headTrack: p.headCase === 'none' ? '-.03em' : '-.04em',
+      titleFont: p.titleFont || 'inherit', titleWeight: p.titleWeight || '800', titleCase: p.titleCase || 'none',
+      radius: p.radius || '24px', innerRadius: 'calc(' + (p.radius || '24px') + ' * .6)', btnRadius: p.btnRadius || '999px',
+      pad: 'clamp(22px, 3vw, 40px)', gap: '24px', kicker: p.kicker || '( selected projects )',
+      blur: p.blur || 'none', shadow: solid ? '0 40px 80px -50px rgba(0,0,0,.4)' : 'none'
+    };
+  }
+}
+</script>
+</body>
+</html>

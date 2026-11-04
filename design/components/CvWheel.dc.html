@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Drag the CV to convert, crop or download it</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+@keyframes ee-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes ee-pulse{0%{box-shadow:0 0 0 0 var(--ring)}80%,100%{box-shadow:0 0 0 16px transparent}}
+@keyframes ee-wiggle{0%,82%,100%{transform:rotate(0)}86%{transform:rotate(-9deg)}90%{transform:rotate(7deg)}94%{transform:rotate(-4deg)}}
+@keyframes ee-nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-5px)}}
+@keyframes ee-toast{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion: reduce){.ee-anim{animation:none !important}}
+.ee-chip{border:1px solid;border-radius:999px;padding:5px 11px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1}
+</style>
+</helmet>
+<div ref="{{setRoot}}" style="display: inline-flex; flex-direction: column; align-items: flex-start; gap: 10px; font-family: {{font}}; color: {{ink}}">
+  <div style="display: inline-flex; align-items: center; gap: 14px; touch-action: none; user-select: none; -webkit-user-select: none">
+    <button type="button" aria-label="Ege Erenler CV. Drag it, or press Enter, to download, convert or crop it" aria-haspopup="menu" aria-expanded="{{openStr}}" onPointerDown="{{down}}" onKeyDown="{{key}}" class="ee-anim" style="display: inline-flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px 8px 10px; border: 1px dashed {{line}}; border-radius: 14px; background: {{card}}; color: {{ink}}; cursor: grab; font: inherit; opacity: {{fileOpacity}}; --ring: {{ring}}; animation: {{pulse}}">
+      <svg viewBox="0 0 32 40" width="30" height="38" aria-hidden="true" class="ee-anim" style="animation: {{wiggle}}; transform-origin: 50% 90%">
+        <path d="M3 2h18l8 8v28H3z" fill="{{paper}}" stroke="{{ink}}" stroke-width="2" stroke-linejoin="round"></path>
+        <path d="M21 2v8h8" fill="none" stroke="{{ink}}" stroke-width="2" stroke-linejoin="round"></path>
+        <rect x="7" y="22" width="18" height="9" rx="2" fill="{{accent}}"></rect>
+        <text x="16" y="29" text-anchor="middle" font-size="6.5" font-weight="700" fill="{{onAccent}}" font-family="Arial, sans-serif">CV</text>
+      </svg>
+      <span style="display: flex; flex-direction: column; align-items: flex-start; text-align: left">
+        <span style="font-weight: 700; font-size: 14px">Ege_Erenler_CV.pdf</span>
+        <span style="font-size: 12px; opacity: .75">{{fileSub}}</span>
+      </span>
+    </button>
+    <sc-if value="{{showHint}}" hint-placeholder-val="{{ true }}">
+      <span aria-hidden="true" class="ee-anim" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; white-space: nowrap; animation: ee-nudge 1.6s ease-in-out infinite">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+        drag it
+      </span>
+    </sc-if>
+  </div>
+  <div role="group" aria-label="Choose what the wheel does" style="display: flex; flex-wrap: wrap; gap: 6px">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="4">
+      <button type="button" class="ee-chip" aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="background: {{c.bg}}; color: {{c.fg}}; border-color: {{c.bd}}">{{c.label}} <span style="opacity: .6; font-weight: 600">{{c.key}}</span></button>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
+    <div role="menu" aria-label="{{groupName}}" style="position: fixed; left: {{wx}}px; top: {{wy}}px; width: 380px; height: 380px; z-index: 50; pointer-events: none; font-family: {{font}}">
+      <div style="transform: scale({{wscale}}); transform-origin: 50% 50%"><div class="ee-anim" style="position: relative; width: 380px; height: 380px; animation: ee-pop .18s cubic-bezier(.2,.9,.3,1.2) both">
+        <svg viewBox="0 0 380 380" width="380" height="380" aria-hidden="true" style="position: absolute; inset: 0; overflow: visible; filter: drop-shadow(0 20px 40px rgba(0,0,0,.35))">
+          <sc-for list="{{wedges}}" as="w" hint-placeholder-count="6">
+            <path d="{{w.d}}" fill="{{w.fill}}" stroke="{{w.stroke}}" stroke-width="1.5"></path>
+          </sc-for>
+          <circle cx="190" cy="190" r="50" fill="{{card}}" stroke="{{line}}" stroke-width="1.5"></circle>
+        </svg>
+        <sc-for list="{{wedges}}" as="w" hint-placeholder-count="6">
+          <div role="menuitem" aria-current="{{w.cur}}" style="position: absolute; left: {{w.lx}}px; top: {{w.ly}}px; width: 104px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; color: {{w.text}}">
+            <img src="{{w.icon}}" alt="" width="22" height="22" style="display: block">
+            <span style="font-size: 12px; font-weight: 700; line-height: 1.15">{{w.label}}</span>
+            <span style="font-size: 10px; line-height: 1.1; opacity: .7">{{w.sub}}</span>
+          </div>
+        </sc-for>
+        <div style="position: absolute; left: 190px; top: 190px; width: 92px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; color: {{ink}}">
+          <span style="font-size: 8.5px; font-weight: 700; letter-spacing: .1em; color: {{accent}}">{{groupTag}}</span>
+          <span style="font-size: 11px; font-weight: 700; line-height: 1.15">{{centerTop}}</span>
+        </div>
+      </div>
+    </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{demo}}" hint-placeholder-val="{{ false }}">
+    <div aria-hidden="true" style="position: fixed; left: {{gx}}px; top: {{gy}}px; z-index: 52; pointer-events: none; transition: left .25s ease, top .25s ease">
+      <svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 2l16 9-7 2-3 7z" fill="{{ink}}" stroke="{{paper}}" stroke-width="1.5" stroke-linejoin="round"></path></svg>
+    </div>
+  </sc-if>
+  <sc-if value="{{ghost}}" hint-placeholder-val="{{ false }}">
+    <div aria-hidden="true" style="position: fixed; left: {{gx}}px; top: {{gy}}px; z-index: 51; pointer-events: none; transform: translate(-50%, -50%) rotate(-6deg)">
+      <svg viewBox="0 0 32 40" width="34" height="42">
+        <path d="M3 2h18l8 8v28H3z" fill="{{paper}}" stroke="{{ink}}" stroke-width="2" stroke-linejoin="round"></path>
+        <rect x="7" y="22" width="18" height="9" rx="2" fill="{{accent}}"></rect>
+      </svg>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasToast}}" hint-placeholder-val="{{ false }}">
+    <div role="status" class="ee-anim" style="position: fixed; left: 50%; bottom: 28px; z-index: 60; padding: 12px 18px; border-radius: 12px; background: {{ink}}; color: {{paper}}; font-size: 14px; font-weight: 600; animation: ee-toast .2s both; transform: translateX(-50%); max-width: calc(100vw - 32px)">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ink":{"editor":"color","default":"#121212"},"paper":{"editor":"color","default":"#FFFFFF"},"card":{"editor":"color","default":"#FFFFFF"},"line":{"editor":"color","default":"#BDBBB5"},"accent":{"editor":"color","default":"#FF6A2B"},"onAccent":{"editor":"color","default":"#121212"},"font":{"editor":"text","default":"inherit"},"$preview":{"width":460,"height":420}}'>
+const CV = {
+  name: 'Ege Erenler',
+  title: 'Software Engineer and Data Scientist',
+  contact: ['London, UK', 'salih2000ege@gmail.com', 'egeerenler.com', 'github.com/EgeErenler', 'linkedin.com/in/ege-erenler'],
+  summary: 'I turn data into products people can use. Python, SQL, cloud and AI, from first query to live app. Open to Data Engineer, Software Engineer, Analytics Engineer and Data Analyst roles in London.',
+  experience: [
+    { role: 'Freelance Software and Data Developer', org: 'Sokian Ltd, London (remote)', when: 'Sep 2024 to Aug 2025', text: 'Built a sales incentive app end to end for a multinational FMCG client, used by 11 managers, 42 sales supervisors and around 250 sales reps. Python ETL pipelines into MySQL, FastAPI APIs on Azure and a React Native app with daily regional and national rankings. Supported it for a year with quarterly releases.' },
+    { role: 'Junior Software Engineer', org: 'Orion Innovation, Istanbul', when: 'Sep 2023 to Aug 2024', text: 'Improved SQL query and reporting performance by up to 20% by redesigning MySQL databases. Automated internal reporting and deployed data-driven apps on AWS and Azure in Agile teams.' },
+    { role: 'Software Engineer Intern', org: 'Mikrogrup, Istanbul', when: 'Feb 2023 to Aug 2023', text: 'Built backend logic in Python and SQL for financial and accounting reports at a financial software company, and improved database reliability.' }
+  ],
+  education: [
+    { role: 'MSc Data Science in Business', org: "Regent's University London", when: 'Sep 2025 to Oct 2026', text: 'Consultancy project for a real client: analysed 67,500 point-of-sale transactions in Python, tested customer segments and delivered a costed plan.' },
+    { role: 'BSc Software Engineering', org: 'Bahçeşehir University, Istanbul', when: '2019 to 2024', text: '' }
+  ],
+  projects: [
+    { role: 'London Property Finder', org: 'Python, DuckDB, Leaflet', when: 'live', text: 'Ranks about 38,000 London streets on value, rental yield, growth, crime, schools and stations. Rebuilt every day from seven open data sources.' },
+    { role: 'UK Energy Demand Forecast', org: 'Python, LightGBM, FastAPI', when: 'live', text: 'Forecasts GB electricity demand for every half hour of the next day. 3.17% error, against 2.93% for the official NESO forecast.' },
+    { role: 'London Pulse', org: 'Python, dbt, DuckDB', when: 'live', text: 'A pipeline that snapshots Tube status, bikes, weather and air quality every 15 minutes into a tested data warehouse.' },
+    { role: 'UK Housing Market Analytics', org: 'SQL, DuckDB', when: 'live', text: 'SQL analysis of every home sold in England and Wales since 2018.' },
+    { role: 'Scoretime', org: 'React Native, Expo, FastAPI', when: 'in development', text: 'Live scores app for UK sports fans on my own database of more than 500,000 matches since 1872.' },
+    { role: 'MediPulse AI', org: 'Python, Streamlit, Groq', when: 'live', text: 'A triage assistant that rates how urgent symptoms are with a large language model.' }
+  ],
+  skills: [
+    ['Data', 'Python, SQL, MySQL, PostgreSQL'],
+    ['Backend', 'FastAPI, REST APIs, ETL, Docker'],
+    ['Analysis', 'pandas, scikit-learn, Power BI, Tableau'],
+    ['AI apps', 'LLM APIs (Groq), Streamlit'],
+    ['Mobile', 'React Native, Expo, TypeScript'],
+    ['Cloud', 'Azure, AWS, GitHub Actions'],
+    ['Tools', 'Git, Jira, Agile'],
+    ['Languages', 'English, Turkish (native)']
+  ]
+};
+const GROUPS = ['actions', 'convert', 'tools', 'projects'];
+const META = {
+  actions: { name: 'Actions', key: '', tag: 'ACTIONS' },
+  convert: { name: 'Convert', key: '⇧', tag: 'CONVERT · ⇧' },
+  tools: { name: 'Crop & tools', key: '⌘', tag: 'TOOLS · ⌘' },
+  projects: { name: 'Projects', key: 'ctrl', tag: 'PROJECTS · CTRL' }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { used: !!window.__eeWheelUsed, open: false, cx: 0, cy: 0, px: 0, py: 0, sel: -1, group: 'actions', g: 'actions', toast: '', dragging: false, demo: false };
+    this.setRoot = (el) => { this.root = el; };
+    this.start = null;
+  }
+
+  // ---------- what each wedge does ----------
+  items(g) {
+    const S = {
+      actions: [
+        { icon: 'download', label: 'Download PDF', sub: 'one click', run: () => this.downloadPdf() },
+        { icon: 'copy', label: 'Copy email', sub: 'to clipboard', run: () => this.copy('salih2000ege@gmail.com', 'Email copied') },
+        { icon: 'share', label: 'Share link', sub: 'egeerenler.com', run: () => this.share() },
+        { icon: 'open', label: 'Open LinkedIn', sub: 'new tab', run: () => this.go('https://www.linkedin.com/in/ege-erenler') },
+        { icon: 'open', label: 'Open GitHub', sub: 'new tab', run: () => this.go('https://github.com/EgeErenler') },
+        { icon: 'mail', label: 'Send email', sub: 'mail app', run: () => { window.location.href = 'mailto:salih2000ege@gmail.com'; } }
+      ],
+      convert: [
+        { icon: 'file', label: 'Convert to PDF', sub: 'document', run: () => this.downloadPdf() },
+        { icon: 'image', label: 'Convert to PNG', sub: 'image', run: () => this.image('png') },
+        { icon: 'image', label: 'Convert to JPG', sub: 'image', run: () => this.image('jpeg') },
+        { icon: 'text', label: 'Convert to Markdown', sub: '.md', run: () => this.text('md') },
+        { icon: 'text', label: 'Convert to TXT', sub: '.txt', run: () => this.text('txt') },
+        { icon: 'contact', label: 'Save as vCard', sub: 'add to contacts', run: () => this.text('vcf') }
+      ],
+      tools: [
+        { icon: 'crop', label: 'Crop to Experience', sub: 'PNG', run: () => this.crop('experience') },
+        { icon: 'crop', label: 'Crop to Projects', sub: 'PNG', run: () => this.crop('projects') },
+        { icon: 'crop', label: 'Crop to Skills', sub: 'PNG', run: () => this.crop('skills') },
+        { icon: 'compress', label: 'Compress', sub: 'small JPG', run: () => this.compress() },
+        { icon: 'card', label: 'Make one-pager', sub: 'summary card', run: () => this.card() },
+        { icon: 'copy', label: 'Copy as text', sub: 'plain CV', run: () => this.copy(this.plain(), 'CV text copied') }
+      ],
+      projects: [
+        { icon: 'open', label: 'Open Property Finder', sub: 'live app', run: () => this.go('https://egeerenler.com/london-property-finder/') },
+        { icon: 'open', label: 'Open Energy Forecast', sub: 'ML model', run: () => this.go('https://egeerenler.com/uk-energy-forecast/') },
+        { icon: 'open', label: 'Open London Pulse', sub: 'pipeline', run: () => this.go('https://egeerenler.com/london-pulse/') },
+        { icon: 'open', label: 'Open Housing Analytics', sub: 'SQL', run: () => this.go('https://egeerenler.com/uk-housing-analytics/') },
+        { icon: 'open', label: 'Open Scoretime', sub: 'scores app', run: () => this.go('https://scoretime.app/') },
+        { icon: 'open', label: 'Open MediPulse', sub: 'AI app', run: () => this.go('https://medipulse-ai.streamlit.app') }
+      ]
+    };
+    return S[g];
+  }
+
+  // ---------- small helpers ----------
+  // Each petal shows an icon and its action, like Tangerine.
+  icon(name, color) {
+    const P = {
+      download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
+      copy: 'M9 9h11v11H9zM5 15V4h11',
+      share: 'M12 15V4M8 8l4-4 4 4M5 13v7h14v-7',
+      open: 'M14 4h6v6M20 4l-9 9M18 14v6H4V6h6',
+      mail: 'M3 6h18v12H3zM3 7l9 7 9-7',
+      file: 'M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6',
+      image: 'M4 5h16v14H4zM4 16l5-5 4 4 3-3 4 4M15 9h.01',
+      text: 'M5 6h14M5 11h14M5 16h9',
+      contact: 'M4 5h16v14H4zM6.5 16c.8-2.4 5.2-2.4 6 0M9.5 11.5a.01.01 0 1 0 0 .01M14 10h4M14 14h4',
+      crop: 'M6 2v16h16M2 6h16v16',
+      compress: 'M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7',
+      card: 'M3 6h18v12H3zM7 10h6M7 14h10'
+    };
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${P[name] || P.open}"/></svg>`;
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
+  go(url) { window.open(url, '_blank', 'noopener'); }
+  say(msg) {
+    clearTimeout(this.toastTimer);
+    this.setState({ toast: msg });
+    this.toastTimer = setTimeout(() => this.setState({ toast: '' }), 2400);
+  }
+  copy(text, msg) {
+    const done = () => this.say(msg);
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, () => this.say('Copy is blocked here'));
+    else this.say('Copy is blocked here');
+  }
+  share() {
+    const url = 'https://egeerenler.com';
+    if (navigator.share) navigator.share({ title: 'Ege Erenler', text: CV.title, url }).catch(() => {});
+    else this.copy(url, 'Link copied');
+  }
+  kb(n) { return n < 1024 ? n + ' B' : Math.round(n / 1024) + ' KB'; }
+  save(blob, name, extra) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    this.say('Saved ' + name + ' · ' + this.kb(blob.size) + (extra || ''));
+  }
+  accent() { const a = this.props.accent || '#FF6A2B'; return /^#[0-9a-f]{6}$/i.test(a) ? a : '#FF6A2B'; }
+
+  // ---------- the CV as blocks, shared by every format ----------
+  blocks(only) {
+    const B = [];
+    const head = () => {
+      B.push({ t: 'h1', s: CV.name });
+      B.push({ t: 'meta', s: CV.title });
+      B.push({ t: 'meta', s: CV.contact.join('  ·  ') });
+      B.push({ t: 'gap' });
+    };
+    const list = (title, rows) => {
+      B.push({ t: 'h2', s: title });
+      rows.forEach((r) => {
+        B.push({ t: 'item', s: r.role, right: r.when });
+        B.push({ t: 'meta', s: r.org });
+        if (r.text) B.push({ t: 'p', s: r.text });
+        B.push({ t: 'gap', h: 0.5 });
+      });
+    };
+    const skills = () => {
+      B.push({ t: 'h2', s: 'Skills' });
+      CV.skills.forEach((s) => B.push({ t: 'p', s: s[0] + ': ' + s[1] }));
+    };
+    head();
+    if (!only) { B.push({ t: 'h2', s: 'Profile' }); B.push({ t: 'p', s: CV.summary }); B.push({ t: 'gap' }); }
+    if (!only || only === 'experience') { list('Experience', CV.experience); if (!only) list('Education', CV.education); }
+    if (!only || only === 'projects') list('Selected projects', CV.projects);
+    if (!only || only === 'skills') skills();
+    return B;
+  }
+  plain() {
+    return this.blocks().map((b) => b.t === 'gap' ? '' : b.t === 'h2' ? '\n' + b.s.toUpperCase() : b.t === 'item' ? b.s + ' (' + b.right + ')' : b.s).join('\n').replace(/\n{3,}/g, '\n\n') + '\n';
+  }
+  text(kind) {
+    let body, type = 'text/plain';
+    if (kind === 'md') {
+      type = 'text/markdown';
+      body = this.blocks().map((b) => b.t === 'h1' ? '# ' + b.s : b.t === 'h2' ? '\n## ' + b.s : b.t === 'item' ? '\n**' + b.s + '** · ' + b.right : b.t === 'meta' ? '_' + b.s + '_' : b.t === 'gap' ? '' : b.s).join('\n').replace(/\n{3,}/g, '\n\n') + '\n';
+    } else if (kind === 'vcf') {
+      type = 'text/vcard';
+      body = ['BEGIN:VCARD', 'VERSION:3.0', 'N:Erenler;Ege;;;', 'FN:Ege Erenler', 'TITLE:' + CV.title, 'EMAIL;TYPE=INTERNET:salih2000ege@gmail.com', 'URL:https://egeerenler.com', 'URL:https://github.com/EgeErenler', 'URL:https://www.linkedin.com/in/ege-erenler', 'ADR;TYPE=WORK:;;;London;;;United Kingdom', 'END:VCARD', ''].join('\r\n');
+    } else body = this.plain();
+    const ext = kind === 'md' ? 'md' : kind === 'vcf' ? 'vcf' : 'txt';
+    this.save(new Blob([body], { type: type + ';charset=utf-8' }), (kind === 'vcf' ? 'Ege_Erenler' : 'Ege_Erenler_CV') + '.' + ext);
+  }
+
+  // ---------- images: draw the CV on a canvas ----------
+  paint(only) {
+    const W = 1240, M = 96, maxW = W - M * 2;
+    const c = document.createElement('canvas'); c.width = W; c.height = 4200;
+    const x = c.getContext('2d');
+    const F = 'Helvetica, Arial, sans-serif', acc = this.accent();
+    x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, c.height);
+    x.fillStyle = acc; x.fillRect(0, 0, W, 14);
+    let y = M;
+    const wrap = (s, font) => {
+      x.font = font; const out = []; let line = '';
+      s.split(' ').forEach((w) => { const t = line ? line + ' ' + w : w; if (x.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t; });
+      if (line) out.push(line); return out;
+    };
+    this.blocks(only).forEach((b) => {
+      if (b.t === 'h1') { x.font = '700 64px ' + F; x.fillStyle = '#121212'; y += 52; x.fillText(b.s, M, y); y += 26; }
+      else if (b.t === 'h2') { y += 34; x.font = '700 22px ' + F; x.fillStyle = acc; x.fillText(b.s.toUpperCase(), M, y); y += 14; x.fillStyle = '#E4E2DD'; x.fillRect(M, y, maxW, 2); y += 38; }
+      else if (b.t === 'item') { x.font = '700 27px ' + F; x.fillStyle = '#121212'; x.fillText(b.s, M, y); x.font = '600 21px ' + F; x.fillStyle = '#6B6964'; const w = x.measureText(b.right).width; x.fillText(b.right, M + maxW - w, y); y += 34; }
+      else if (b.t === 'meta') { wrap(b.s, '400 21px ' + F).forEach((l) => { x.fillStyle = '#6B6964'; x.fillText(l, M, y); y += 30; }); }
+      else if (b.t === 'p') { wrap(b.s, '400 23px ' + F).forEach((l) => { x.fillStyle = '#2A2A2A'; x.fillText(l, M, y); y += 34; }); }
+      else if (b.t === 'gap') { y += 22 * (b.h || 1); }
+    });
+    const h = Math.max(only ? 0 : 1754, y + M - 20);
+    const out = document.createElement('canvas'); out.width = W; out.height = h;
+    out.getContext('2d').drawImage(c, 0, 0);
+    return out;
+  }
+  blob(canvas, type, q) { return new Promise((res) => canvas.toBlob(res, 'image/' + type, q)); }
+  async image(type) {
+    const b = await this.blob(this.paint(), type, 0.92);
+    if (b) this.save(b, 'Ege_Erenler_CV.' + (type === 'jpeg' ? 'jpg' : 'png'));
+  }
+  async crop(part) {
+    const b = await this.blob(this.paint(part), 'png');
+    if (b) this.save(b, 'Ege_Erenler_' + part + '.png', ' · cropped');
+  }
+  async compress() {
+    const c = this.paint();
+    const big = await this.blob(c, 'png'), small = await this.blob(c, 'jpeg', 0.5);
+    if (small) this.save(small, 'Ege_Erenler_CV_small.jpg', big ? ' · ' + Math.round((1 - small.size / big.size) * 100) + '% smaller' : '');
+  }
+  async card() {
+    const W = 1200, H = 630, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'), F = 'Helvetica, Arial, sans-serif', acc = this.accent();
+    x.fillStyle = '#121212'; x.fillRect(0, 0, W, H);
+    x.fillStyle = acc; x.fillRect(0, H - 18, W, 18);
+    x.fillStyle = '#FFFFFF'; x.font = '700 92px ' + F; x.fillText('Ege Erenler', 80, 170);
+    x.font = '400 34px ' + F; x.fillStyle = '#CFCDC7'; x.fillText(CV.title + ' · London', 80, 228);
+    [['3.17%', 'forecast error'], ['38,000', 'streets ranked'], ['500k+', 'matches in my DB']].forEach((f, i) => {
+      const fx = 80 + i * 360; x.fillStyle = acc; x.font = '700 64px ' + F; x.fillText(f[0], fx, 380); x.fillStyle = '#CFCDC7'; x.font = '400 26px ' + F; x.fillText(f[1], fx, 420);
+    });
+    x.fillStyle = '#FFFFFF'; x.font = '700 28px ' + F; x.fillText('egeerenler.com  ·  salih2000ege@gmail.com', 80, 540);
+    const b = await this.blob(c, 'png');
+    if (b) this.save(b, 'Ege_Erenler_one_pager.png');
+  }
+
+  // ---------- PDF: the real file on the live site, or one built right here ----------
+  async downloadPdf() {
+    try {
+      const r = await fetch('/cv/Ege_Erenler_CV.pdf', { method: 'HEAD' });
+      if (r.ok && /pdf/.test(r.headers.get('content-type') || '')) {
+        const a = document.createElement('a'); a.href = '/cv/Ege_Erenler_CV.pdf'; a.download = 'Ege_Erenler_CV.pdf';
+        document.body.appendChild(a); a.click(); a.remove(); this.say('Downloading Ege_Erenler_CV.pdf'); return;
+      }
+    } catch (e) { /* no file next to the page, so build one */ }
+    this.save(this.buildPdf(), 'Ege_Erenler_CV.pdf');
+  }
+  buildPdf() {
+    const fix = (s) => s.replace(/ş/g, 's').replace(/Ş/g, 'S').replace(/ğ/g, 'g').replace(/Ğ/g, 'G').replace(/ı/g, 'i').replace(/İ/g, 'I').replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/[^\x00-\xff]/g, '?');
+    const esc = (s) => fix(s).replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)');
+    const m = document.createElement('canvas').getContext('2d');
+    const width = (s, size, bold) => { m.font = (bold ? '700 ' : '400 ') + size + 'px Helvetica, Arial'; return m.measureText(s).width; };
+    const [ar, ag, ab] = [1, 3, 5].map((i) => (parseInt(this.accent().substr(i, 2), 16) / 255).toFixed(3));
+    const L = 56, R = 539, maxW = R - L, pages = [];
+    let cur = [], y = 790;
+    const put = (s, size, bold, col, xx) => cur.push(`${col} rg BT /${bold ? 'F2' : 'F1'} ${size} Tf ${xx.toFixed(1)} ${y.toFixed(1)} Td (${esc(s)}) Tj ET`);
+    const need = (h) => { if (y - h < 56) { pages.push(cur); cur = []; y = 790; } };
+    const wrap = (s, size) => { const out = []; let line = ''; s.split(' ').forEach((w) => { const t = line ? line + ' ' + w : w; if (width(t, size) > maxW && line) { out.push(line); line = w; } else line = t; }); if (line) out.push(line); return out; };
+    const ink = '0.07 0.07 0.07', grey = '0.42 0.41 0.39', acc = `${ar} ${ag} ${ab}`;
+    cur.push(`${acc} rg 0 836 595 6 re f`);
+    this.blocks().forEach((b) => {
+      if (b.t === 'h1') { y -= 10; put(b.s, 26, true, ink, L); y -= 18; }
+      else if (b.t === 'h2') { need(40); y -= 14; put(b.s.toUpperCase(), 10, true, acc, L); y -= 6; cur.push(`0.89 0.89 0.87 rg ${L} ${y.toFixed(1)} ${maxW} 0.8 re f`); y -= 16; }
+      else if (b.t === 'item') { need(30); put(b.s, 11, true, ink, L); put(b.right, 9, false, grey, R - width(b.right, 9, false)); y -= 13; }
+      else if (b.t === 'meta') { wrap(b.s, 9).forEach((l) => { need(12); put(l, 9, false, grey, L); y -= 12; }); }
+      else if (b.t === 'p') { wrap(b.s, 9.5).forEach((l) => { need(13); put(l, 9.5, false, '0.16 0.16 0.16', L); y -= 13; }); }
+      else if (b.t === 'gap') { y -= 8 * (b.h || 1); }
+    });
+    pages.push(cur);
+    const objs = [];
+    const add = (s) => { objs.push(s); return objs.length; };
+    add('<< /Type /Catalog /Pages 2 0 R >>');
+    add('PAGES');
+    add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    add('<< /Producer (egeerenler.com) /Title (Ege Erenler CV) /Author (Ege Erenler) >>');
+    const kids = [];
+    pages.forEach((ops) => {
+      const stream = ops.join('\n');
+      const c = add(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
+      kids.push(add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${c} 0 R >>`));
+    });
+    objs[1] = `<< /Type /Pages /Kids [${kids.map((k) => k + ' 0 R').join(' ')}] /Count ${kids.length} >>`;
+    let out = '%PDF-1.4\n%\xe2\xe3\xcf\xd3\n';
+    const offs = [];
+    objs.forEach((o, i) => { offs.push(out.length); out += `${i + 1} 0 obj\n${o}\nendobj\n`; });
+    const xref = out.length;
+    out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n` + offs.map((o) => String(o).padStart(10, '0') + ' 00000 n \n').join('');
+    out += `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R /Info 5 0 R >>\nstartxref\n${xref}\n%%EOF`;
+    const bytes = new Uint8Array(out.length);
+    for (let i = 0; i < out.length; i++) bytes[i] = out.charCodeAt(i) & 255;
+    return new Blob([bytes], { type: 'application/pdf' });
+  }
+
+  // ---------- the wheel ----------
+  groupFor(e) {
+    if (e.shiftKey) return 'convert';
+    if (e.metaKey || e.altKey) return 'tools';
+    if (e.ctrlKey) return 'projects';
+    return this.state.group;
+  }
+  sectorAt(x, y) {
+    const dx = x - this.state.cx, dy = y - this.state.cy;
+    if (Math.hypot(dx, dy) < 56 * Math.min(1, ((window.innerWidth || 1000) - 16) / 380)) return -1;
+    let deg = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+    deg = (deg + 360) % 360;
+    return Math.floor(deg / 60) % 6;
+  }
+  openAt(x, y, g) {
+    const w = window.innerWidth || 1000, h = window.innerHeight || 800, pad = 190 * Math.min(1, (w - 16) / 380) + 4;
+    const cx = Math.max(pad, Math.min(w - pad, x)), cy = Math.max(pad, Math.min(h - pad, y));
+    this.setState({ open: true, cx, cy, px: x, py: y, sel: -1, g: g || this.state.group });
+  }
+  close(run) {
+    const { sel, g } = this.state;
+    this.setState({ open: false, dragging: false, sel: -1 });
+    if (run && sel >= 0) this.items(g)[sel].run();
+  }
+  stopDemo() {
+    clearTimeout(this.demoTimer);
+    if (this.state.demo) this.setState({ demo: false, open: false, sel: -1 });
+    if (!this.state.used) this.setState({ used: true });
+    window.__eeWheelUsed = true;
+  }
+  // Plays once a few seconds after load so visitors see what the file can do.
+  playDemo() {
+    if (this.state.used || this.state.open || !this.root || window.__eeWheelUsed) return;
+    const r = this.root.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > (window.innerHeight || 800)) { this.demoTimer = setTimeout(() => this.playDemo(), 4000); return; }
+    const x = r.left + 30, y = r.top + 28;
+    this.openAt(x, y, 'actions');
+    this.setState({ demo: true, dragging: true, px: x, py: y });
+    const C = { x: this.state.cx, y: this.state.cy };
+    const steps = [['actions', 0], ['actions', 1], ['actions', 2], ['convert', 0], ['convert', 1], ['convert', 3], ['tools', 0], ['tools', 3], ['tools', 4]];
+    let i = 0;
+    const step = () => {
+      if (this.state.used || !this.state.demo) return;
+      if (i >= steps.length) {
+        this.setState({ open: false, demo: false, dragging: false, sel: -1, g: this.state.group });
+        window.__eeWheelSeen = (window.__eeWheelSeen || 0) + 1;
+        this.demoRuns = (this.demoRuns || 0) + 1;
+        if (this.demoRuns < 2 && window.__eeWheelSeen < 2) this.demoTimer = setTimeout(() => this.playDemo(), 15000);
+        return;
+      }
+      const [g, s] = steps[i];
+      const t = ((s * 60 + 30) - 90) * Math.PI / 180;
+      this.setState({ g, sel: s, px: C.x + 130 * Math.min(1, ((window.innerWidth || 1000) - 16) / 380) * Math.cos(t), py: C.y + 130 * Math.min(1, ((window.innerWidth || 1000) - 16) / 380) * Math.sin(t) });
+      i += 1;
+      this.demoTimer = setTimeout(step, 420);
+    };
+    this.demoTimer = setTimeout(step, 400);
+  }
+  componentDidMount() {
+    this.onMove = (e) => {
+      if (!this.start) return;
+      const moved = Math.hypot(e.clientX - this.start.x, e.clientY - this.start.y);
+      if (!this.state.open && moved > 6) this.openAt(this.start.x, this.start.y, this.groupFor(e));
+      if (this.state.open) this.setState({ px: e.clientX, py: e.clientY, dragging: true, g: this.groupFor(e), sel: this.sectorAt(e.clientX, e.clientY) });
+    };
+    this.onUp = () => {
+      clearTimeout(this.hold);
+      if (!this.start) return;
+      this.start = null;
+      if (this.state.open) this.close(true);
+    };
+    window.addEventListener('pointermove', this.onMove);
+    window.addEventListener('pointerup', this.onUp);
+    window.addEventListener('pointercancel', this.onUp);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) this.demoTimer = setTimeout(() => this.playDemo(), 2800);
+  }
+  componentWillUnmount() {
+    clearTimeout(this.demoTimer); clearTimeout(this.hold); clearTimeout(this.toastTimer);
+    window.removeEventListener('pointermove', this.onMove);
+    window.removeEventListener('pointerup', this.onUp);
+    window.removeEventListener('pointercancel', this.onUp);
+  }
+  renderVals() {
+    const p = this.props;
+    const ink = p.ink || '#121212', paper = p.paper || '#FFFFFF', card = p.card || '#FFFFFF';
+    const line = p.line || '#BDBBB5', accent = p.accent || '#FF6A2B', onAccent = p.onAccent || '#121212';
+    const g = this.state.open ? this.state.g : this.state.group;
+    const set = this.items(g);
+    const C = 190, r1 = 56, r2 = 186;
+    const pt = (r, a) => { const t = (a - 90) * Math.PI / 180; return [(C + r * Math.cos(t)).toFixed(2), (C + r * Math.sin(t)).toFixed(2)]; };
+    const wedges = set.map((it, i) => {
+      const a0 = i * 60 + 2, a1 = a0 + 56, mid = (a0 + a1) / 2;
+      const [x0, y0] = pt(r2, a0), [x1, y1] = pt(r2, a1), [x2, y2] = pt(r1, a1), [x3, y3] = pt(r1, a0);
+      const [lx, ly] = pt((r1 + r2) / 2 + 4, mid);
+      const on = this.state.sel === i;
+      return {
+        label: it.label, sub: it.sub, lx, ly, cur: on ? 'true' : 'false', icon: this.icon(it.icon, on ? onAccent : ink),
+        d: `M${x0} ${y0} A${r2} ${r2} 0 0 1 ${x1} ${y1} L${x2} ${y2} A${r1} ${r1} 0 0 0 ${x3} ${y3} Z`,
+        fill: on ? accent : card, stroke: on ? accent : line, text: on ? onAccent : ink
+      };
+    });
+    const chips = GROUPS.map((k) => {
+      const on = this.state.group === k;
+      return {
+        label: META[k].name, key: META[k].key, pressed: on ? 'true' : 'false',
+        bg: on ? ink : 'transparent', fg: on ? paper : ink, bd: on ? ink : line,
+        pick: () => { this.stopDemo(); this.setState({ group: k }); }
+      };
+    });
+    const sel = this.state.sel;
+    const subs = { actions: 'drag me · ⇧ convert · ⌘ crop', convert: 'drag me to convert', tools: 'drag me to crop or compress', projects: 'drag me to open a project' };
+    return {
+      ink, paper, card, line, accent, onAccent, font: p.font || 'inherit',
+      setRoot: this.setRoot,
+      open: this.state.open, openStr: this.state.open ? 'true' : 'false',
+      wx: this.state.cx - 190, wy: this.state.cy - 190, wscale: Math.min(1, ((window.innerWidth || 1000) - 16) / 380).toFixed(3),
+      ghost: this.state.open && this.state.dragging && !this.state.demo, gx: this.state.px, gy: this.state.py,
+      fileOpacity: this.state.open ? 0.35 : 1,
+      fileSub: subs[this.state.group],
+      pulse: this.state.used ? 'none' : 'ee-pulse 2.2s ease-out infinite',
+      wiggle: this.state.used ? 'none' : 'ee-wiggle 4s ease-in-out infinite',
+      ring: /^#[0-9a-f]{6}$/i.test(accent) ? accent + '88' : 'rgba(255,106,43,.5)',
+      showHint: !this.state.used,
+      demo: this.state.demo,
+      chips, wedges,
+      groupName: META[g].name, groupTag: META[g].tag,
+      centerTop: sel >= 0 ? 'Release to ' + set[sel].label.charAt(0).toLowerCase() + set[sel].label.slice(1) : 'Drop on an action',
+      centerSub: sel >= 0 ? set[sel].sub : 'centre to cancel',
+      hasToast: !!this.state.toast, toast: this.state.toast,
+      down: (e) => {
+        this.stopDemo();
+        this.start = { x: e.clientX, y: e.clientY };
+        if (e.pointerType === 'touch') {
+          clearTimeout(this.hold);
+          this.hold = setTimeout(() => { if (this.start) this.openAt(this.start.x, this.start.y); }, 320);
+        }
+      },
+      key: (e) => {
+        const k = e.key;
+        this.stopDemo();
+        if (!this.state.open) {
+          if (k === 'Enter' || k === ' ') {
+            e.preventDefault();
+            const r = this.root ? this.root.getBoundingClientRect() : { left: 200, top: 200 };
+            this.openAt(r.left + 30, r.top + 28);
+          }
+          return;
+        }
+        const i = GROUPS.indexOf(this.state.g);
+        if (k === 'Escape') { e.preventDefault(); this.close(false); }
+        else if (k === 'Tab') { e.preventDefault(); this.setState({ g: GROUPS[(i + (e.shiftKey ? 3 : 1)) % 4], sel: -1 }); }
+        else if (k >= '1' && k <= '4') { this.setState({ g: GROUPS[+k - 1], sel: -1 }); }
+        else if (k === 'ArrowRight' || k === 'ArrowDown') { e.preventDefault(); this.setState({ sel: (this.state.sel + 1 + 6) % 6 }); }
+        else if (k === 'ArrowLeft' || k === 'ArrowUp') { e.preventDefault(); this.setState({ sel: (this.state.sel - 1 + 6) % 6 }); }
+        else if (k === 'Enter' || k === ' ') { e.preventDefault(); this.close(true); }
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

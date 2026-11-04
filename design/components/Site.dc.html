@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>egeerenler.com, one site with three modes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+@keyframes ee-swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.ee-swap{animation:none !important}}
+</style>
+</helmet>
+<div style="width: 100%; min-height: 100vh">
+  <sc-if value="{{simple}}" hint-placeholder-val="{{ true }}">
+    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Main" startMode="simple" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{dark}}" hint-placeholder-val="{{ false }}">
+    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Night" startMode="dark" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+  </sc-if>
+  <sc-if value="{{art}}" hint-placeholder-val="{{ false }}">
+    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Main" startMode="art" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startMode":{"editor":"enum","options":["simple","dark","art"],"default":"simple"},"$preview":{"width":1440,"height":8800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: null };
+  }
+  componentDidMount() {
+    // Each page's Simple / Dark / Art switch tells the site which page to show.
+    this.onMode = (e) => { if (['simple', 'dark', 'art'].includes(e.detail)) this.setState({ mode: e.detail }); };
+    window.addEventListener('ee-mode', this.onMode);
+  }
+  componentWillUnmount() { window.removeEventListener('ee-mode', this.onMode); }
+  renderVals() {
+    const mode = this.state.mode || this.props.startMode || 'simple';
+    return { simple: mode === 'simple', dark: mode === 'dark', art: mode === 'art' };
+  }
+}
+</script>
+</body>
+</html>

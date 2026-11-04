@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Ege Erenler – Poster</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&family=Archivo:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+a{color:inherit}a:hover{opacity:.85}
+@keyframes ee-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.ee-run{animation:none !important}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(90px) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes fx-par{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fx-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fx-bar{display:none}
+@supports (animation-timeline: view()){
+.fx-art .fx-rise{animation:fx-rise linear both;animation-timeline:view();animation-range:entry 0px entry 320px}
+.fx-art h2{animation:fx-par linear both;animation-timeline:view();animation-range:entry 0px entry 260px}
+.fx-art .fx-bar{display:block;position:fixed;left:0;top:0;width:100%;height:3px;z-index:90;transform-origin:0 50%;animation:fx-bar linear both;animation-timeline:scroll(root)}
+}
+@media (prefers-reduced-motion: reduce){.fx-art .pj-card,.fx-art .sv-card,.fx-art .fx-rise,.fx-art h2,.fx-art .fx-bar{animation:none !important}}
+</style>
+</helmet>
+<div class="{{fxClass}}" style="min-height: 100vh; background-color: {{c.bg}}; background-image: linear-gradient({{c.grid}} 1px, transparent 1px), linear-gradient(90deg, {{c.grid}} 1px, transparent 1px); background-size: 28px 28px; color: {{c.ink}}; font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif; transition: background-color .4s, color .4s; overflow: hidden; position: relative">
+  <div class="fx-bar" aria-hidden="true" style="background: {{c.red}}"></div>
+  <sc-if value="{{art}}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 0">
+      <dc-import name="Shader" palette="sunset" hint-size="100%,100%"></dc-import>
+    </div>
+  </sc-if>
+  <div style="position: relative; z-index: 1">
+
+  <header style="position: relative">
+    <div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 22px 32px 0; box-sizing: border-box">
+      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; font: 700 13px 'Space Mono', monospace; text-transform: uppercase">
+        <span>Data / Software Engineer</span>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px">
+          <a href="#work" style="text-decoration: none">Work</a>
+          <a href="#hello" style="text-decoration: none">About</a>
+          <a href="#contact" style="text-decoration: none">Contact</a>
+          <div role="group" aria-label="Display mode" style="display: flex; gap: 6px">
+            <sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+              <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="min-height: 38px; padding: 0 14px; border: 2px solid {{c.ink}}; border-radius: 999px; cursor: pointer; font: 700 12px 'Space Mono', monospace; text-transform: uppercase; background: {{m.bg}}; color: {{m.fg}}; transform: rotate({{m.tilt}}deg)">{{m.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+      </nav>
+
+      <div id="top" style="position: relative; display: flex; align-items: center; justify-content: center; gap: 0; padding: 56px 0 8px">
+        <h1 aria-label="Portfolio" style="margin: 0; display: flex; align-items: center; justify-content: center; font-family: 'Anton', Impact, sans-serif; font-weight: 400; font-size: clamp(40px, 15vw, 236px); line-height: .9; letter-spacing: -.01em; text-transform: uppercase">
+          <span>Portf</span>
+          <span style="display: inline-block; width: .82em; aspect-ratio: 400 / 440; filter: drop-shadow(0 0 0 {{c.red}}) drop-shadow(5px 0 0 {{c.red}}) drop-shadow(-5px 0 0 {{c.red}}) drop-shadow(0 5px 0 {{c.red}}) drop-shadow(0 -5px 0 {{c.red}})">
+            <dc-import ink="{{c.faceInk}}" paper="{{c.facePaper}}" accent="{{c.red}}" natural="{{c.natural}}" hint-size="100%,100%" name="Face"></dc-import>
+          </span>
+          <span>lio</span>
+        </h1>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px; padding: 0 0 40px; font: 700 13px 'Space Mono', monospace; text-transform: uppercase">
+        <span>Ege Erenler</span>
+        <span style="font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; font-size: clamp(22px, 2.4vw, 32px); text-transform: none">data that keeps running, built in London</span>
+        <span>2026</span>
+      </div>
+      <div style="display: flex; justify-content: center; padding: 0 0 40px"><dc-import name="CvWheel" ink="{{c.ink}}" paper="{{c.bg}}" card="{{c.facePaper}}" line="{{c.muted}}" accent="{{c.red}}" onAccent="#FFFFFF" hint-size="460px,110px"></dc-import></div>
+    </div>
+  </header>
+
+  <div aria-hidden="true" style="background: {{c.ink}}; color: {{c.bg}}; clip-path: polygon(0 12%, 4% 0, 9% 10%, 15% 2%, 22% 12%, 30% 1%, 38% 11%, 46% 0, 54% 10%, 62% 2%, 70% 12%, 78% 0, 86% 10%, 93% 1%, 100% 9%, 100% 88%, 95% 100%, 88% 90%, 80% 99%, 72% 89%, 64% 100%, 56% 90%, 48% 99%, 40% 88%, 32% 100%, 24% 90%, 16% 99%, 8% 89%, 0 98%); padding: 30px 0; overflow: hidden">
+    <div class="ee-run" style="display: flex; width: max-content; animation: ee-marquee 28s linear infinite; font-family: 'Anton', Impact, sans-serif; font-size: 40px; text-transform: uppercase; white-space: nowrap">
+      <span style="padding-right: 40px">London Property Finder ✶ UK Energy Forecast ✶ London Pulse ✶ UK Housing Analytics ✶ Scoretime ✶ MediPulse AI ✶</span>
+      <span style="padding-right: 40px">London Property Finder ✶ UK Energy Forecast ✶ London Pulse ✶ UK Housing Analytics ✶ Scoretime ✶ MediPulse AI ✶</span>
+    </div>
+  </div>
+
+  <section class="fx-rise" id="hello" style="max-width: 1280px; margin: 0 auto; padding: 72px 32px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 40px">
+    <div>
+      <h2 style="margin: 0; font-family: 'Anton', Impact, sans-serif; font-weight: 400; font-size: 64px; line-height: .95; text-transform: uppercase">Hello</h2>
+      <p style="margin: 16px 0 0; font-size: 16px; line-height: 1.6">I’m Ege, a software and data engineer in London. I build pipelines, forecasts and apps that refresh themselves and stay live. Before London I wrote backend code in Istanbul.</p>
+    </div>
+    <div>
+      <h3 style="margin: 0 0 14px; font: 700 13px 'Space Mono', monospace; text-transform: uppercase">Skills</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{skills}}" as="s" hint-placeholder-count="10">
+          <span style="padding: 7px 12px; border: 2px solid {{c.ink}}; border-radius: 999px; font: 700 12px 'Space Mono', monospace; background: {{c.bg}}">{{s}}</span>
+        </sc-for>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin: 0 0 14px; font: 700 13px 'Space Mono', monospace; text-transform: uppercase">Experience</h3>
+      <sc-for list="{{jobs}}" as="j" hint-placeholder-count="3">
+        <div style="padding: 10px 0; border-top: 2px solid {{c.ink}}">
+          <div style="font-weight: 600; font-size: 16px">{{j.org}}</div>
+          <div style="font-size: 14px">{{j.role}}</div>
+          <div style="font: 400 12px 'Space Mono', monospace; color: {{c.muted}}">{{j.when}}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div>
+      <h3 style="margin: 0 0 14px; font: 700 13px 'Space Mono', monospace; text-transform: uppercase">Education</h3>
+      <sc-for list="{{edu}}" as="e" hint-placeholder-count="2">
+        <div style="padding: 10px 0; border-top: 2px solid {{c.ink}}">
+          <div style="font-weight: 600; font-size: 16px">{{e.title}}</div>
+          <div style="font-size: 14px">{{e.org}}</div>
+          <div style="font: 400 12px 'Space Mono', monospace; color: {{c.muted}}">{{e.when}}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <sc-if value="{{dark}}" hint-placeholder-val="{{ false }}">
+    <section class="fx-rise" aria-label="Profile and career as code" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 88px; box-sizing: border-box">
+      <h2 style="margin: 0 0 28px; font-family: 'Anton', Impact, sans-serif; font-weight: 400; font-size: clamp(56px, 8vw, 120px); line-height: .9; text-transform: uppercase">Source <span style="font-family: 'Instrument Serif', serif; font-style: italic; text-transform: none; color: #82AAFF">code</span></h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 28px; align-items: start">
+        <div style="transform: rotate(-.6deg); box-shadow: 10px 10px 0 {{c.red}}; border-radius: 16px">
+          <dc-import name="Editor" accent="#FF4A2E" hint-size="100%,520px"></dc-import>
+        </div>
+        <div style="transform: rotate(.5deg); box-shadow: -10px 10px 0 #2034E8; border-radius: 16px">
+          <dc-import name="GitLog" hint-size="100%,620px"></dc-import>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <section id="services" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px; box-sizing: border-box"><dc-import name="Services" ink="{{c.ink}}" muted="{{c.muted}}" card="{{c.card}}" cardInk="{{c.cardInk}}" line="{{c.ink}}" accent="{{c.red}}" onAccent="#FFFFFF" font="inherit" mono="'Space Mono', monospace" headFont="'Anton', Impact, sans-serif" headWeight="400" headCase="uppercase" headSize="clamp(64px, 9vw, 140px)" radius="6px" kicker="( what I do )" hint-size="100%,820px"></dc-import></section>
+
+  <section id="work" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px; box-sizing: border-box"><dc-import name="Projects" ink="{{c.ink}}" muted="{{c.muted}}" card="{{c.card}}" cardInk="{{c.cardInk}}" line="{{c.ink}}" accent="{{c.red}}" onAccent="#FFFFFF" font="inherit" mono="'Space Mono', monospace" headFont="'Anton', Impact, sans-serif" headWeight="400" headCase="uppercase" headSize="clamp(64px, 9vw, 140px)" radius="6px" kicker="( selected projects )" hot="{{c.red}}" titleFont="'Anton', Impact, sans-serif" titleWeight="400" titleCase="uppercase" btnRadius="6px" hint-size="100%,5200px"></dc-import></section>
+
+  <section class="fx-rise" aria-label="Where I am" style="max-width: 1280px; margin: 0 auto; padding: 0 32px 96px; box-sizing: border-box"><dc-import name="WorldMap" art="{{art}}" bg="{{c.mapBg}}" ink="{{c.mapInk}}" muted="{{c.muted}}" accent="{{c.red}}" mono="'Space Mono', monospace" hint-size="100%,640px"></dc-import></section>
+
+  <section class="fx-rise" id="contact" style="background: {{c.blue}}; color: #FFFFFF">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 88px 32px 40px; box-sizing: border-box">
+      <h2 style="margin: 0; font-family: 'Anton', Impact, sans-serif; font-weight: 400; font-size: clamp(72px, 13vw, 210px); line-height: .88; text-transform: uppercase">Let’s work<br><span style="font-family: 'Instrument Serif', serif; font-style: italic; text-transform: none">together.</span></h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px">
+        <a href="mailto:salih2000ege@gmail.com" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 999px; text-decoration: none; font: 700 14px 'Space Mono', monospace; background: #FFFFFF; color: #111111; transform: rotate(-2deg)">salih2000ege@gmail.com</a>
+        <a href="https://www.linkedin.com/in/ege-erenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 999px; text-decoration: none; font: 700 14px 'Space Mono', monospace; border: 2px solid #FFFFFF; transform: rotate(1.5deg)">LinkedIn ↗</a>
+        <a href="https://github.com/EgeErenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 999px; text-decoration: none; font: 700 14px 'Space Mono', monospace; border: 2px solid #FFFFFF; transform: rotate(-1deg)">GitHub ↗</a>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 80px; font: 700 12px 'Space Mono', monospace; text-transform: uppercase">
+        <span>© 2026 Ege Erenler</span><span>London, UK</span>
+      </div>
+    </div>
+  </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"linked":{"editor":"boolean","default":false},"startMode":{"editor":"enum","options":["simple","dark","art"],"default":"simple"},"$preview":{"width":1440,"height":8800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: null, hover: -1 };
+  }
+  renderVals() {
+    const mode = this.state.mode || this.props.startMode || 'simple';
+    const themes = {
+      simple: { bg: '#F1EFE8', grid: 'rgba(17,17,17,.07)', ink: '#111111', muted: '#55524A', card: '#FFFFFF', cardInk: '#111111', red: '#E2321A', blue: '#2034E8', tape: 'rgba(226,50,26,.75)', faceInk: '#111111', facePaper: '#F1EFE8', natural: false, mapBg: '#FFFFFF', mapInk: '#111111' },
+      dark: { bg: '#0B0E17', grid: 'rgba(130,170,255,.08)', ink: '#E4E8F5', muted: '#A9B0C6', card: '#111522', cardInk: '#E4E8F5', red: '#FF4A2E', blue: '#2034E8', tape: 'rgba(255,74,46,.8)', faceInk: '#E4E8F5', facePaper: '#0B0E17', natural: true, mapBg: '#111522', mapInk: '#E4E8F5' },
+      art: { bg: '#1A1AD9', grid: 'rgba(255,255,255,.10)', ink: '#FFFFFF', muted: '#D9DBFF', card: '#FFF6DA', cardInk: '#111111', red: '#FF3D8B', blue: '#111111', tape: 'rgba(255,214,58,.9)', faceInk: '#FFFFFF', facePaper: '#1A1AD9', natural: true, mapBg: '#1A1AD9', mapInk: '#FFFFFF' }
+    };
+    const c = themes[mode];
+    const tilts = [-2, 1.5, -1];
+    const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art']].map(([id, label], i) => ({
+      label, on: id === mode ? 'true' : 'false', tilt: tilts[i],
+      bg: id === mode ? c.ink : 'transparent', fg: id === mode ? c.bg : c.ink,
+      pick: () => { if (this.props.linked) window.dispatchEvent(new CustomEvent('ee-mode', { detail: id })); else this.setState({ mode: id }); }
+    }));
+    const list = [
+      ['Property', 'London Property Finder', '38,000', 'London streets scored every day', 'find the right street before the right home.', 'Live', 'https://egeerenler.com/london-property-finder/'],
+      ['ML', 'UK Energy Forecast', '3.17%', 'forecast error. NESO: 2.93%', 'racing the national grid’s own forecast.', 'Live', 'https://egeerenler.com/uk-energy-forecast/'],
+      ['Pipeline', 'London Pulse', '15 MIN', 'between snapshots', 'the city’s pulse, every quarter of an hour.', 'Live', 'https://egeerenler.com/london-pulse/'],
+      ['SQL', 'UK Housing Analytics', '−0.88', 'flats share vs price change', 'why the expensive centre of London fell.', 'Live', 'https://egeerenler.com/uk-housing-analytics/'],
+      ['App', 'Scoretime', '535,540', 'matches in its database', 'live scores for UK sports fans.', 'In dev', 'https://scoretime.app/'],
+      ['AI', 'MediPulse AI', 'LLM', 'triage assistant', 'how urgent are your symptoms?', 'Live', 'https://medipulse-ai.streamlit.app']
+    ];
+    const tilt = [-1.2, 0.8, -0.6, 1.1, -0.9, 0.7];
+    const projects = list.map(([kind, name, big, bigLabel, desc, status, url], i) => {
+      const on = this.state.hover === i;
+      return {
+        no: String(i + 1).padStart(2, '0'), kind, name, big, bigLabel, desc, status, url,
+        tilt: on ? 0 : tilt[i],
+        shadow: on ? c.red : c.ink,
+        numColor: on ? c.red : c.cardInk,
+        enter: () => this.setState({ hover: i }),
+        leave: () => this.setState({ hover: -1 })
+      };
+    });
+    return {
+      c, modes, projects, fxClass: mode === 'art' ? 'fx-art' : '', art: mode === 'art', dark: mode === 'dark',
+      skills: ['Python', 'SQL', 'FastAPI', 'dbt', 'DuckDB', 'MySQL', 'React Native', 'Azure', 'AWS', 'Docker', 'GitHub Actions', 'Power BI'],
+      jobs: [
+        { org: 'Sokian Ltd', role: 'Freelance Software and Data Developer', when: 'Sep 2024 – Aug 2025 · London' },
+        { org: 'Orion Innovation', role: 'Junior Software Engineer', when: 'Sep 2023 – Aug 2024 · Istanbul' },
+        { org: 'Mikrogrup', role: 'Software Engineer Intern', when: 'Feb 2023 – Aug 2023 · Istanbul' }
+      ],
+      edu: [
+        { title: 'MSc Data Science in Business', org: 'Regent’s University London', when: 'Sep 2025 – Oct 2026' },
+        { title: 'BSc Software Engineering', org: 'Bahçeşehir University', when: '2019 – 2024' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

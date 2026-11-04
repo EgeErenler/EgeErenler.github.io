@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Art mode liquid background</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div aria-hidden="true" style="position: relative; width: 100%; height: 100%; min-height: 240px; overflow: hidden; background: {{fallback}}">
+  <canvas ref="{{setCanvas}}" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block"></canvas>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"palette":{"editor":"enum","options":["ember","electric","sunset"],"default":"sunset"},"speed":{"editor":"range","min":0.2,"max":2,"step":0.1,"default":1},"$preview":{"width":800,"height":440}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.mouse = [0.5, 0.5];
+    this.smooth = [0.5, 0.5];
+    this.click = [0.5, 0.5, -10];
+    this.setCanvas = (el) => { this.canvas = el; if (el && !this.gl) this.start(); };
+  }
+  palettes() {
+    // base (deep), glow, second glow
+    return {
+      ember: [[0.05, 0.02, 0.03], [1.0, 0.45, 0.16], [0.62, 0.10, 0.42]],
+      electric: [[0.02, 0.03, 0.09], [0.22, 0.86, 0.96], [0.50, 0.30, 1.0]],
+      sunset: [[0.05, 0.02, 0.09], [1.0, 0.80, 0.18], [1.0, 0.24, 0.58]]
+    };
+  }
+  componentDidMount() { if (this.canvas && !this.gl) this.start(); }
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    clearTimeout(this.wait);
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('pointermove', this.onMove);
+    window.removeEventListener('pointerdown', this.onDown);
+  }
+  start() {
+    const cv = this.canvas;
+    const gl = cv.getContext('webgl', { antialias: false, alpha: false });
+    if (!gl) return;
+    this.gl = gl;
+    const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.0,1.0);}';
+    const fs = [
+      'precision highp float;',
+      'uniform vec2 r;uniform float t;uniform vec2 m;uniform vec3 k;uniform vec3 a;uniform vec3 b;uniform vec3 c;',
+      'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+      'float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.0-2.0*f);',
+      ' return mix(mix(h(i),h(i+vec2(1.0,0.0)),u.x),mix(h(i+vec2(0.0,1.0)),h(i+vec2(1.0,1.0)),u.x),u.y);}',
+      'float fbm(vec2 p){float v=0.0,s=0.5;for(int i=0;i<5;i++){v+=s*n(p);p=p*2.03+vec2(1.7,9.2);s*=0.5;}return v;}',
+      'void main(){',
+      ' float sc=min(r.x,r.y);',
+      ' vec2 p=(gl_FragCoord.xy-0.5*r)/sc;',
+      ' vec2 mp=(m-0.5)*r/sc;',
+      ' float md=length(p-mp);',
+      ' p+=(p-mp)*0.35*exp(-md*2.6);',
+      ' float tt=t*0.09;',
+      ' vec2 q=vec2(fbm(p*1.4+tt),fbm(p*1.4+vec2(5.2,1.3)-tt));',
+      ' vec2 w=vec2(fbm(p*1.4+3.2*q+vec2(1.7,9.2)+tt*1.4),fbm(p*1.4+3.2*q+vec2(8.3,2.8)-tt*1.1));',
+      ' float f=fbm(p*1.4+3.0*w);',
+      ' vec3 col=mix(a,b,smoothstep(0.35,0.95,f));',
+      ' col=mix(col,c,smoothstep(0.2,0.9,length(w)*0.75));',
+      ' col=mix(a,col,smoothstep(0.25,0.8,f+0.15));',
+      ' vec2 kp=(k.xy-0.5)*r/sc;float age=t-k.z;',
+      ' float rd=length(p-kp);',
+      ' float ring=exp(-pow((rd-age*0.85)*12.0,2.0))*exp(-age*1.2)*step(0.0,age);',
+      ' col+=ring*mix(b,vec3(1.0),0.5)*0.9;',
+      ' col+=exp(-md*5.0)*0.18*b;',
+      ' vec2 uv=gl_FragCoord.xy/r;',
+      ' col*=0.35+0.65*smoothstep(1.1,0.15,length(uv-0.5));',
+      ' col+=(h(gl_FragCoord.xy+fract(t))-0.5)*0.035;',
+      ' gl_FragColor=vec4(col,1.0);',
+      '}'
+    ].join('\n');
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs));
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { this.gl = null; return; }
+    gl.useProgram(prog);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(prog, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    const u = (name) => gl.getUniformLocation(prog, name);
+    const uR = u('r'), uT = u('t'), uM = u('m'), uK = u('k'), uA = u('a'), uB = u('b'), uC = u('c');
+    const t0 = performance.now();
+    const now = () => (performance.now() - t0) / 1000 * (this.props.speed ?? 1);
+    const toLocal = (e) => {
+      const rc = cv.getBoundingClientRect();
+      return [(e.clientX - rc.left) / (rc.width || 1), 1 - (e.clientY - rc.top) / (rc.height || 1)];
+    };
+    this.onMove = (e) => { this.mouse = toLocal(e); };
+    this.onDown = (e) => { const p = toLocal(e); this.click = [p[0], p[1], now()]; };
+    window.addEventListener('pointermove', this.onMove, { passive: true });
+    window.addEventListener('pointerdown', this.onDown, { passive: true });
+    this.onResize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
+      const w = Math.max(1, Math.round(cv.clientWidth * dpr)), h = Math.max(1, Math.round(cv.clientHeight * dpr));
+      if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+      gl.viewport(0, 0, cv.width, cv.height);
+    };
+    window.addEventListener('resize', this.onResize);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const frame = () => {
+      this.onResize();
+      const pal = this.palettes()[this.props.palette || 'sunset'] || this.palettes().sunset;
+      this.smooth[0] += (this.mouse[0] - this.smooth[0]) * 0.08;
+      this.smooth[1] += (this.mouse[1] - this.smooth[1]) * 0.08;
+      gl.uniform2f(uR, cv.width, cv.height);
+      gl.uniform1f(uT, reduce ? 6.0 : now() + (window.scrollY || 0) * 0.004);
+      gl.uniform2f(uM, this.smooth[0], this.smooth[1]);
+      gl.uniform3f(uK, this.click[0], this.click[1], this.click[2]);
+      gl.uniform3fv(uA, pal[0]); gl.uniform3fv(uB, pal[1]); gl.uniform3fv(uC, pal[2]);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      if (reduce) return;
+      if (document.hidden) this.wait = setTimeout(() => { this.raf = requestAnimationFrame(frame); }, 500);
+      else this.raf = requestAnimationFrame(frame);
+    };
+    this.raf = requestAnimationFrame(frame);
+  }
+  renderVals() {
+    const fb = {
+      ember: 'radial-gradient(120% 90% at 30% 20%, #ff7329 0%, #5a1440 40%, #0d0508 80%)',
+      electric: 'radial-gradient(120% 90% at 30% 20%, #38dbf5 0%, #3a1a7a 42%, #05060c 80%)',
+      sunset: 'radial-gradient(120% 90% at 30% 20%, #ffcc2e 0%, #ff3d94 38%, #0d0517 80%)'
+    };
+    return { setCanvas: this.setCanvas, fallback: fb[this.props.palette || 'sunset'] || fb.sunset };
+  }
+}
+</script>
+</body>
+</html>

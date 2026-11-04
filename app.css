@@ -1,0 +1,68 @@
+body{margin:0}
+body{margin:0}
+@keyframes ee-row{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes ee-caret{50%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.ee-anim{animation:none !important}}
+body{margin:0}
+@keyframes ee-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes ee-pulse{0%{box-shadow:0 0 0 0 var(--ring)}80%,100%{box-shadow:0 0 0 16px transparent}}
+@keyframes ee-wiggle{0%,82%,100%{transform:rotate(0)}86%{transform:rotate(-9deg)}90%{transform:rotate(7deg)}94%{transform:rotate(-4deg)}}
+@keyframes ee-nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(-5px)}}
+@keyframes ee-toast{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (prefers-reduced-motion: reduce){.ee-anim{animation:none !important}}
+.ee-chip{border:1px solid;border-radius:999px;padding:5px 11px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1}
+body{margin:0}
+@keyframes gl-blink{0%,100%{opacity:1}50%{opacity:.2}}
+@media (prefers-reduced-motion: reduce){.gl-anim{animation:none !important}}
+body{margin:0}
+.sv-card{transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s}
+.sv-card:hover{transform:translateY(-6px)}
+@media (prefers-reduced-motion: reduce){.sv-card{transition:none}.sv-card:hover{transform:none}}
+body{margin:0}
+.pj-card{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.pj-shot{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.pj-card:hover .pj-shot{transform:scale(1.025)}
+.pj-btn{transition:transform .2s, opacity .2s}
+.pj-btn:hover{transform:translateY(-2px)}
+@media (prefers-reduced-motion: reduce){.pj-card,.pj-shot,.pj-btn{transition:none}.pj-card:hover .pj-shot{transform:none}}
+body{margin:0}
+a{color:inherit}a:hover{opacity:.75}
+@keyframes fx-rise{from{opacity:0;transform:translateY(90px) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes fx-par{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fx-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fx-bar{display:none}
+@supports (animation-timeline: view()){
+.fx-art .fx-rise{animation:fx-rise linear both;animation-timeline:view();animation-range:entry 0px entry 320px}
+.fx-art h2{animation:fx-par linear both;animation-timeline:view();animation-range:entry 0px entry 260px}
+.fx-art .fx-bar{display:block;position:fixed;left:0;top:0;width:100%;height:3px;z-index:90;transform-origin:0 50%;animation:fx-bar linear both;animation-timeline:scroll(root)}
+}
+@media (prefers-reduced-motion: reduce){.fx-art .pj-card,.fx-art .sv-card,.fx-art .fx-rise,.fx-art h2,.fx-art .fx-bar{animation:none !important}}
+body{margin:0}
+a{color:inherit}a:hover{opacity:.85}
+@keyframes fx-rise{from{opacity:0;transform:translateY(90px) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes fx-par{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fx-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fx-bar{display:none}
+@supports (animation-timeline: view()){
+.fx-art .fx-rise{animation:fx-rise linear both;animation-timeline:view();animation-range:entry 0px entry 320px}
+.fx-art h2{animation:fx-par linear both;animation-timeline:view();animation-range:entry 0px entry 260px}
+.fx-art .fx-bar{display:block;position:fixed;left:0;top:0;width:100%;height:3px;z-index:90;transform-origin:0 50%;animation:fx-bar linear both;animation-timeline:scroll(root)}
+}
+@media (prefers-reduced-motion: reduce){.fx-art .pj-card,.fx-art .sv-card,.fx-art .fx-rise,.fx-art h2,.fx-art .fx-bar{animation:none !important}}
+body{margin:0}
+a{color:inherit}a:hover{opacity:.85}
+@keyframes ee-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.ee-run{animation:none !important}}
+@keyframes fx-rise{from{opacity:0;transform:translateY(90px) scale(.96);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes fx-par{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes fx-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.fx-bar{display:none}
+@supports (animation-timeline: view()){
+.fx-art .fx-rise{animation:fx-rise linear both;animation-timeline:view();animation-range:entry 0px entry 320px}
+.fx-art h2{animation:fx-par linear both;animation-timeline:view();animation-range:entry 0px entry 260px}
+.fx-art .fx-bar{display:block;position:fixed;left:0;top:0;width:100%;height:3px;z-index:90;transform-origin:0 50%;animation:fx-bar linear both;animation-timeline:scroll(root)}
+}
+@media (prefers-reduced-motion: reduce){.fx-art .pj-card,.fx-art .sv-card,.fx-art .fx-rise,.fx-art h2,.fx-art .fx-bar{animation:none !important}}
+body{margin:0}
+@keyframes ee-swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.ee-swap{animation:none !important}}

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Line portrait that follows the cursor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div ref="{{setRoot}}" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: transparent; color: {{ink}}">
+  <svg viewBox="0 0 400 440" role="img" aria-label="Line drawing of Ege that turns to follow the cursor" style="width: 100%; height: 100%; overflow: visible">
+    <g style="transform: {{body}}; transform-box: fill-box; transform-origin: center">
+      <path d="M62 440 C72 362 136 330 200 330 C264 330 328 362 338 440" fill="{{paper}}" stroke="{{ink}}" stroke-width="5" stroke-linecap="round"></path>
+      <path d="M168 334 L200 372 L232 334" fill="none" stroke="{{ink}}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+      <path d="M176 290 L176 336 L224 336 L224 290 Z" fill="{{skin}}" stroke="{{ink}}" stroke-width="5" stroke-linejoin="round"></path>
+    </g>
+    <g style="transform: {{earL}}; transform-box: fill-box; transform-origin: right center">
+      <ellipse cx="110" cy="214" rx="15" ry="25" fill="{{skin}}" stroke="{{ink}}" stroke-width="5"></ellipse>
+    </g>
+    <g style="transform: {{earR}}; transform-box: fill-box; transform-origin: left center">
+      <ellipse cx="290" cy="214" rx="15" ry="25" fill="{{skin}}" stroke="{{ink}}" stroke-width="5"></ellipse>
+    </g>
+    <g style="transform: {{head}}; transform-box: fill-box; transform-origin: center">
+      <ellipse cx="200" cy="200" rx="92" ry="112" fill="{{skin}}" stroke="{{ink}}" stroke-width="5"></ellipse>
+    </g>
+    <g style="transform: {{hair}}; transform-box: fill-box; transform-origin: center">
+      <path d="M110 176 C104 106 154 72 206 76 C262 80 300 112 292 176 C278 146 246 128 206 132 C168 136 136 152 110 176 Z" fill="{{hair}}" stroke="{{ink}}" stroke-width="4" stroke-linejoin="round"></path>
+    </g>
+    <g style="transform: {{brows}}; transform-box: fill-box; transform-origin: center">
+      <path d="M148 180 q20 -10 40 0 M212 180 q20 -10 40 0" fill="none" stroke="{{feat}}" stroke-width="6" stroke-linecap="round"></path>
+    </g>
+    <g style="transform: {{eyes}}; transform-box: fill-box; transform-origin: center">
+      <ellipse cx="168" cy="208" rx="7" ry="{{eyeRy}}" fill="{{feat}}"></ellipse>
+      <ellipse cx="232" cy="208" rx="7" ry="{{eyeRy}}" fill="{{feat}}"></ellipse>
+    </g>
+    <g style="transform: {{nose}}; transform-box: fill-box; transform-origin: center">
+      <path d="M201 214 q-10 26 5 31" fill="none" stroke="{{feat}}" stroke-width="5" stroke-linecap="round"></path>
+    </g>
+    <g style="transform: {{mouth}}; transform-box: fill-box; transform-origin: center">
+      <path d="M176 264 q24 18 48 0" fill="none" stroke="{{accent}}" stroke-width="6" stroke-linecap="round"></path>
+    </g>
+  </svg>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"natural":{"editor":"boolean","default":false},"ink":{"editor":"color","default":"#121212"},"paper":{"editor":"color","default":"#ECEBE7"},"accent":{"editor":"color","default":"#121212"},"$preview":{"width":400,"height":440}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { x: 0, y: 0, blink: false };
+    this.setRoot = (el) => { this.root = el; };
+    this.target = { x: 0, y: 0 };
+    this.cur = { x: 0, y: 0 };
+    this.lastInput = 0;
+  }
+  componentDidMount() {
+    const clamp = (v) => Math.max(-1, Math.min(1, v));
+    this.onMove = (e) => {
+      // Look at the visitor's cursor from where the face sits on the page, not from the window centre.
+      const r = this.root && this.root.getBoundingClientRect();
+      if (r && r.width) {
+        const cx = r.left + r.width / 2, cy = r.top + r.height * 0.45;
+        const reach = Math.max(260, r.width * 1.2);
+        this.target = { x: clamp((e.clientX - cx) / reach), y: clamp((e.clientY - cy) / reach) };
+      } else {
+        const w = window.innerWidth || 1, h = window.innerHeight || 1;
+        this.target = { x: clamp((e.clientX / w) * 2 - 1), y: clamp((e.clientY / h) * 2 - 1) };
+      }
+      this.lastInput = performance.now();
+    };
+    this.onTilt = (e) => {
+      if (e.gamma == null || e.beta == null) return;
+      this.target = { x: clamp(e.gamma / 30), y: clamp((e.beta - 45) / 30) };
+      this.lastInput = performance.now();
+    };
+    window.addEventListener('pointermove', this.onMove, { passive: true });
+    window.addEventListener('deviceorientation', this.onTilt);
+    // Phones: the face follows the finger, and tilting the phone turns it.
+    this.onTouch = (e) => { const t = e.touches && e.touches[0]; if (t) this.onMove({ clientX: t.clientX, clientY: t.clientY }); };
+    window.addEventListener('touchstart', this.onTouch, { passive: true });
+    window.addEventListener('touchmove', this.onTouch, { passive: true });
+    // iPhone asks once for motion access, on the visitor's first tap.
+    this.askTilt = () => {
+      const D = window.DeviceOrientationEvent;
+      if (D && typeof D.requestPermission === 'function') D.requestPermission().catch(() => {});
+      window.removeEventListener('pointerdown', this.askTilt);
+    };
+    window.addEventListener('pointerdown', this.askTilt);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tick = (now) => {
+      if (!reduce && now - this.lastInput > 2500) {
+        this.target = { x: Math.sin(now / 1700) * 0.55, y: Math.sin(now / 2600) * 0.25 };
+      }
+      const k = reduce ? 1 : 0.1;
+      this.cur.x += (this.target.x - this.cur.x) * k;
+      this.cur.y += (this.target.y - this.cur.y) * k;
+      if (Math.abs(this.cur.x - this.state.x) > 0.002 || Math.abs(this.cur.y - this.state.y) > 0.002) {
+        this.setState({ x: this.cur.x, y: this.cur.y });
+      }
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+    if (!reduce) {
+      const blink = () => {
+        this.setState({ blink: true });
+        this.blinkOff = setTimeout(() => this.setState({ blink: false }), 130);
+        this.blinkNext = setTimeout(blink, 2800 + Math.random() * 3200);
+      };
+      this.blinkNext = setTimeout(blink, 2200);
+    }
+  }
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    clearTimeout(this.blinkOff);
+    clearTimeout(this.blinkNext);
+    window.removeEventListener('pointermove', this.onMove);
+    window.removeEventListener('deviceorientation', this.onTilt);
+    window.removeEventListener('touchstart', this.onTouch);
+    window.removeEventListener('touchmove', this.onTouch);
+    window.removeEventListener('pointerdown', this.askTilt);
+  }
+  renderVals() {
+    const x = this.state.x, y = this.state.y;
+    const f = (v) => v.toFixed(2);
+    const tr = (dx, dy) => `translate(${f(x * dx)}px, ${f(y * dy)}px)`;
+    return {
+      ink: this.props.ink ?? '#121212',
+      paper: this.props.paper ?? '#ECEBE7',
+      accent: this.props.accent ?? '#121212',
+      // On dark grounds the outline turns light, but skin and hair keep natural tones.
+      skin: this.props.natural ? '#EFE6DA' : (this.props.paper ?? '#ECEBE7'),
+      hair: this.props.natural ? '#1B1A1E' : (this.props.ink ?? '#121212'),
+      feat: this.props.natural ? '#1B1A1E' : (this.props.ink ?? '#121212'),
+      eyeRy: this.state.blink ? 1.2 : 7,
+      body: tr(-5, 2),
+      head: `translate(${f(x * 6)}px, ${f(y * 4)}px) rotate(${f(x * 3)}deg)`,
+      hair: `translate(${f(x * 11)}px, ${f(y * 6)}px) rotate(${f(x * 3)}deg)`,
+      earL: `translate(${f(x * -9)}px, ${f(y * 3)}px) scaleX(${(1 + x * 0.45).toFixed(3)})`,
+      earR: `translate(${f(x * -9)}px, ${f(y * 3)}px) scaleX(${(1 - x * 0.45).toFixed(3)})`,
+      brows: tr(24, 13),
+      eyes: tr(27, 15),
+      nose: tr(34, 17),
+      mouth: tr(24, 15)
+    };
+  }
+}
+</script>
+</body>
+</html>

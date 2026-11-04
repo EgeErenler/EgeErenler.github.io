@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>What I do</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.sv-card{transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s}
+.sv-card:hover{transform:translateY(-6px)}
+@media (prefers-reduced-motion: reduce){.sv-card{transition:none}.sv-card:hover{transform:none}}
+</style>
+</helmet>
+<div style="color: {{ink}}; font-family: {{font}}">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 40px; margin-bottom: 36px">
+    <div>
+      <p style="margin: 0 0 14px; font: 500 13px {{mono}}; color: {{muted}}">{{kicker}}</p>
+      <h2 style="margin: 0; font-family: {{headFont}}; font-weight: {{headWeight}}; font-size: {{headSize}}; line-height: .92; letter-spacing: {{headTrack}}; text-transform: {{headCase}}">What I do</h2>
+    </div>
+    <p style="max-width: 460px; margin: 0; font-size: 17px; line-height: 1.55; color: {{muted}}">I work across the full path from raw data to a finished product. These are the three areas I bring to a team.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: {{gap}}">
+    <sc-for list="{{items}}" as="s" hint-placeholder-count="3">
+      <article class="sv-card" style="display: flex; flex-direction: column; gap: 22px; padding: 30px; border-radius: {{radius}}; background: {{card}}; color: {{cardInk}}; border: 1px solid {{line}}; box-shadow: {{shadow}}; backdrop-filter: {{blur}}; -webkit-backdrop-filter: {{blur}}">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <span style="font: 500 13px {{mono}}; color: {{cardMuted}}">{{s.no}}</span>
+          <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: {{accent}}; color: {{onAccent}}"><img src="{{s.icon}}" alt="" width="22" height="22"></span>
+        </div>
+        <div>
+          <h3 style="margin: 0 0 10px; font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1">{{s.title}}</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.55; color: {{cardMuted}}">{{s.text}}</p>
+        </div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{s.tools}}" as="t" hint-placeholder-count="4">
+            <li style="padding: 6px 11px; border-radius: 999px; border: 1px solid {{chipLine}}; font: 500 12px {{mono}}">{{t}}</li>
+          </sc-for>
+        </ul>
+        <pre style="margin: auto 0 0; padding: 16px 18px; border-radius: 12px; background: {{codeBg}}; color: {{codeInk}}; font: 500 13px/1.6 {{mono}}; overflow-x: auto; white-space: pre"><span style="color: {{codeAccent}}">{{s.lead}}</span>{{s.code}}</pre>
+      </article>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ink":{"editor":"color","default":"#121212"},"muted":{"editor":"color","default":"#5C5B57"},"card":{"editor":"color","default":"#FFFFFF"},"cardInk":{"editor":"color","default":"#121212"},"line":{"editor":"color","default":"rgba(18,18,18,.12)"},"accent":{"editor":"color","default":"#121212"},"onAccent":{"editor":"color","default":"#FFFFFF"},"font":{"editor":"text","default":"inherit"},"mono":{"editor":"text","default":"ui-monospace, monospace"},"headFont":{"editor":"text","default":"inherit"},"headWeight":{"editor":"text","default":"900"},"headCase":{"editor":"text","default":"uppercase"},"headSize":{"editor":"text","default":"clamp(48px, 7vw, 112px)"},"radius":{"editor":"text","default":"20px"},"kicker":{"editor":"text","default":"( what I do )"},"blur":{"editor":"text","default":"none"},"$preview":{"width":1280,"height":760}}'>
+const parse = (c) => {
+  if (!c) return [0, 0, 0, 1];
+  if (c[0] === '#') { const h = c.length === 4 ? c.slice(1).split('').map((x) => x + x).join('') : c.slice(1, 7); return [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16)).concat(1); }
+  const m = c.match(/[\d.]+/g) || []; return [+m[0] || 0, +m[1] || 0, +m[2] || 0, m[3] == null ? 1 : +m[3]];
+};
+const rgba = (c, a) => { const v = parse(c); return `rgba(${v[0]},${v[1]},${v[2]},${a})`; };
+const icon = (d, color) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`);
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const ink = p.ink || '#121212', cardInk = p.cardInk || ink, card = p.card || '#FFFFFF', on = p.onAccent || '#FFFFFF';
+    const solid = parse(card)[3] > 0.6 && card !== 'transparent';
+    const cardMuted = solid ? rgba(cardInk, 0.68) : (p.muted || '#5C5B57');
+    const items = [
+      { no: '01', title: 'Data analysis and BI', icon: icon('M4 20V10M10 20V4M16 20v-7M22 20H2', on), text: 'I clean, query and model data, then present it so a business can act on it.', tools: ['SQL', 'Python', 'dbt', 'Power BI'], lead: 'SELECT ', code: 'day, SUM(sales)\nFROM orders\nGROUP BY day;' },
+      { no: '02', title: 'Software engineering', icon: icon('M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16', on), text: 'I build APIs, data pipelines and databases, test them and deploy them to the cloud.', tools: ['Python', 'FastAPI', 'Docker', 'Azure'], lead: 'def ', code: 'save(record):\n    db.insert("payments", record)' },
+      { no: '03', title: 'AI and app products', icon: icon('M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5z', on), text: 'I take ideas to working apps, including LLM tools and mobile apps.', tools: ['LLM APIs', 'Streamlit', 'React Native', 'Expo'], lead: 'reply = ', code: 'client.chat.create(\n    messages=history)' }
+    ];
+    return {
+      items, ink, muted: p.muted || '#5C5B57', card, cardInk, cardMuted,
+      line: p.line || 'rgba(18,18,18,.12)', chipLine: rgba(cardInk, 0.2),
+      accent: p.accent || '#121212', onAccent: on,
+      codeBg: rgba(cardInk, 0.06), codeInk: cardInk, codeAccent: solid ? (p.accent || '#121212') : (p.accent || '#121212'),
+      font: p.font || 'inherit', mono: p.mono || 'ui-monospace, monospace',
+      headFont: p.headFont || 'inherit', headWeight: p.headWeight || '900', headCase: p.headCase || 'uppercase',
+      headSize: p.headSize || 'clamp(48px, 7vw, 112px)', headTrack: p.headCase === 'none' ? '-.03em' : '-.04em',
+      radius: p.radius || '20px', gap: '20px', kicker: p.kicker || '( what I do )',
+      blur: p.blur || 'none', shadow: solid ? '0 30px 60px -40px rgba(0,0,0,.35)' : 'none'
+    };
+  }
+}
+</script>
+</body>
+</html>

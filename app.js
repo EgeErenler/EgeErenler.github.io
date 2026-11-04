@@ -872,6 +872,8 @@ class Component extends DCLogic {
     if (r.bottom < 0 || r.top > (window.innerHeight || 800)) { this.demoTimer = setTimeout(() => this.playDemo(), 4000); return; }
     const x = r.left + 30, y = r.top + 28;
     this.openAt(x, y, 'actions');
+    // Remember where the wheel sits relative to the CV file, so it scrolls with the file.
+    this.demoOff = { x: this.state.cx - r.left, y: this.state.cy - r.top };
     this.setState({ demo: true, dragging: true, px: x, py: y });
     const C = { x: this.state.cx, y: this.state.cy };
     const steps = [['actions', 0], ['actions', 1], ['actions', 2], ['convert', 0], ['convert', 1], ['convert', 3], ['tools', 0], ['tools', 3], ['tools', 4]];
@@ -910,6 +912,21 @@ class Component extends DCLogic {
       if (!moved) { this.openSticky(); return; }
       if (this.state.open) this.close(true);
     };
+    // The self-playing demo stays pinned to the CV file while the page scrolls.
+    this.onScrollW = () => {
+      if (!this.state.demo || !this.root || !this.demoOff) return;
+      const r = this.root.getBoundingClientRect();
+      if (r.bottom < -120 || r.top > (window.innerHeight || 800) + 120) {
+        clearTimeout(this.demoTimer);
+        this.setState({ open: false, demo: false, dragging: false, sel: -1, g: this.state.group });
+        return;
+      }
+      const cx = r.left + this.demoOff.x, cy = r.top + this.demoOff.y;
+      const dx = cx - this.state.cx, dy = cy - this.state.cy;
+      if (dx || dy) this.setState({ cx, cy, px: this.state.px + dx, py: this.state.py + dy });
+    };
+    window.addEventListener('scroll', this.onScrollW, { passive: true });
+    window.addEventListener('resize', this.onScrollW);
     window.addEventListener('pointermove', this.onMove);
     window.addEventListener('pointerup', this.onUp);
     window.addEventListener('pointercancel', this.onUp);
@@ -918,6 +935,8 @@ class Component extends DCLogic {
   }
   componentWillUnmount() {
     clearTimeout(this.demoTimer); clearTimeout(this.hold); clearTimeout(this.toastTimer);
+    window.removeEventListener('scroll', this.onScrollW);
+    window.removeEventListener('resize', this.onScrollW);
     window.removeEventListener('pointermove', this.onMove);
     window.removeEventListener('pointerup', this.onUp);
     window.removeEventListener('pointercancel', this.onUp);
@@ -1069,7 +1088,7 @@ class Component extends DCLogic {
   ` : null}
 
   ${($v.demo) ? html`
-    <div aria-hidden="true" style="position: fixed; left: ${$v.gx}px; top: ${$v.gy}px; z-index: 52; pointer-events: none; transition: left .25s ease, top .25s ease">
+    <div aria-hidden="true" style="position: fixed; left: ${$v.gx}px; top: ${$v.gy}px; z-index: 52; pointer-events: none">
       <svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 2l16 9-7 2-3 7z" fill=${$v.ink} stroke=${$v.paper} stroke-width="1.5" stroke-linejoin="round"></path></svg>
     </div>
   ` : null}

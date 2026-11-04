@@ -1,0 +1,18 @@
+Copyright (c) 2026 Ege Erenler. All rights reserved.
+
+This repository holds the website egeerenler.com: its design, layout, code,
+text, the line portrait, the logos, images and the CV (cv/Ege_Erenler_CV.pdf).
+
+You may view the website and read this repository. You may not copy, modify,
+publish, distribute or reuse any part of it, in whole or in part, without
+written permission from Ege Erenler.
+
+To ask for permission, email salih2000ege@gmail.com.
+
+Third-party parts keep their own licences and are not covered by the notice
+above:
+
+- vendor/preact.mjs: Preact, MIT licence, copyright (c) 2015-present Jason Miller.
+- vendor/htm.mjs: htm, Apache License 2.0, by Jason Miller.
+- The coastline data in app.js comes from Natural Earth (naturalearthdata.com),
+  which is in the public domain.

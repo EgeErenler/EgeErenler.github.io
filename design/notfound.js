@@ -31,7 +31,7 @@ function NotFound() {
         </div>
       </main>
       <footer style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px ${mono}; color: #E4DACB">
-        <span>© 2026 Ege Erenler</span><span>( London, UK )</span>
+        <span>© 2026 Ege Erenler. All rights reserved.</span><span>( London, UK )</span>
       </footer>
     </div>
   </div>`;

@@ -1828,7 +1828,7 @@ class Component extends DCLogic {
         <a href="https://github.com/EgeErenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; text-decoration: none; font-weight: 600; border: 1px solid ${$v.c?.ink}">GitHub ↗</a>
       </div>
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 96px; padding-top: 20px; border-top: 1px solid ${$v.c?.line}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: ${$v.c?.muted}">
-        <span>© 2026 Ege Erenler</span>
+        <span>© 2026 Ege Erenler. All rights reserved.</span>
         <span>( London, UK )</span>
       </div>
     </div>
@@ -2008,7 +2008,7 @@ class Component extends DCLogic {
       </div>
     </div>
     <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 40px; font: 500 12px 'Geist Mono', monospace; color: ${$v.c?.muted}">
-      <span>© 2026 Ege Erenler</span><span>London, UK</span>
+      <span>© 2026 Ege Erenler. All rights reserved.</span><span>London, UK</span>
     </div>
   </section>
   </div>
@@ -2191,7 +2191,7 @@ class Component extends DCLogic {
         <a href="https://github.com/EgeErenler" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 52px; padding: 0 24px; border-radius: 999px; text-decoration: none; font: 700 14px 'Space Mono', monospace; border: 2px solid #FFFFFF; transform: rotate(-1deg)">GitHub ↗</a>
       </div>
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 80px; font: 700 12px 'Space Mono', monospace; text-transform: uppercase">
-        <span>© 2026 Ege Erenler</span><span>London, UK</span>
+        <span>© 2026 Ege Erenler. All rights reserved.</span><span>London, UK</span>
       </div>
     </div>
   </section>
@@ -2292,7 +2292,7 @@ function NotFound() {
         </div>
       </main>
       <footer style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px ${mono}; color: #E4DACB">
-        <span>© 2026 Ege Erenler</span><span>( London, UK )</span>
+        <span>© 2026 Ege Erenler. All rights reserved.</span><span>( London, UK )</span>
       </footer>
     </div>
   </div>`;

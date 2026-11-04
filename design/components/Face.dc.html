@@ -80,7 +80,8 @@ class Component extends DCLogic {
     };
     this.onTilt = (e) => {
       if (e.gamma == null || e.beta == null) return;
-      this.target = { x: clamp(e.gamma / 25), y: clamp((e.beta - 45) / 25) };
+      // Turn against the tilt, so the face keeps looking at the person holding the phone.
+      this.target = { x: clamp(-e.gamma / 25), y: clamp(-(e.beta - 45) / 25) };
       this.lastInput = this.lastTilt = performance.now();
       window.__eeTiltOk = true;
       if (this.state.askTilt) this.setState({ askTilt: false });

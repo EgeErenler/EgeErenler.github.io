@@ -23,4 +23,5 @@ npm install
 npm run build
 ```
 
-3. Commit and push. GitHub Pages serves the site from this repository.
+3. Update the `?v=` number after `app.js` and `app.css` in `index.html` and `404.html`, so phones load the new files.
+4. Commit and push. GitHub Pages serves the site from this repository.

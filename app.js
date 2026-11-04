@@ -1872,9 +1872,9 @@ class Component extends DCLogic {
 
   <header style="position: relative; overflow: hidden">
     <div style="position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 20px 32px 0; box-sizing: border-box">
-      <nav class="ee-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid ${$v.c?.line}; border-radius: 20px; background: ${$v.c?.card}; backdrop-filter: ${$v.c?.blur}; -webkit-backdrop-filter: ${$v.c?.blur}">
+      <nav class="ee-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px">
         <a href="#top" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 15px">
-          <${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.hot} size="56px" />
+          <${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.hot} size="72px" />
         </a>
         <div class="ee-links" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
           <a href="#work" style="text-decoration: none">Work</a>
@@ -2173,6 +2173,11 @@ class Component extends DCLogic {
       if (!link) { link = document.createElement('link'); link.rel = 'icon'; link.type = 'image/svg+xml'; link.setAttribute('data-mode-icon', ''); document.head.appendChild(link); }
       document.querySelectorAll('link[rel="icon"]:not([data-mode-icon])').forEach((l) => l.remove());
       link.href = href;
+      // Some phone browsers darken pages on their own; say which scheme each mode really is so they leave it alone.
+      let cs = document.querySelector('meta[name="color-scheme"]');
+      if (!cs) { cs = document.createElement('meta'); cs.name = 'color-scheme'; document.head.appendChild(cs); }
+      cs.content = mode === 'simple' ? 'only light' : 'only dark';
+      document.documentElement.style.colorScheme = mode === 'simple' ? 'only light' : 'only dark';
       let meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.content = T[0];
     } catch (e) {}

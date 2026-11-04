@@ -34,7 +34,7 @@ class Component extends DCLogic {
   }
   // The tab icon follows the mode: the EE mark in each mode's colours.
   setIcon(mode) {
-    const T = { simple: ['#ECEBE7', '#121212', '#FF6A2B'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#FF6A2B'];
+    const T = { simple: ['#ECEBE7', '#121212', '#8C8A84'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#8C8A84'];
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${T[0]}"/><g transform="translate(50 50) scale(.74) translate(-50 -50)" fill="none" stroke-width="10" stroke-linecap="square"><path stroke="${T[1]}" d="M12 22h30M12 50h22M12 78h30M17 22v56M58 22h30M58 78h30M63 22v56"/><path stroke="${T[2]}" d="M58 50h22"/></g></svg>`;
     try {
       const href = 'data:image/svg+xml,' + encodeURIComponent(svg);

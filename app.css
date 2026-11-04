@@ -1,8 +1,7 @@
 body{margin:0}
-@keyframes st-spin{to{transform:rotate(360deg)}}
-.st-ring{transform-box:view-box;transform-origin:50px 50px;animation:st-spin 28s linear infinite}
-.st-link:hover .st-ring{animation-duration:6s}
-@media (prefers-reduced-motion: reduce){.st-ring{animation:none}}
+.st-link svg{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+a:hover .st-link svg{transform:rotate(-8deg) scale(1.04)}
+@media (prefers-reduced-motion: reduce){.st-link svg{transition:none}}
 body{margin:0}
 body{margin:0}
 @keyframes ee-row{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}

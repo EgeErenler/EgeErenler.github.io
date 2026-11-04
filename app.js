@@ -29,19 +29,23 @@ class Component extends DCLogic {
       ink: this.props.ink || '#121212',
       accent: this.props.accent || '#FF6A2B',
       size: this.props.size || '64px',
-      pid: this.pid,
-      href: '#' + this.pid
+      topId: this.pid + '-t', botId: this.pid + '-b',
+      topHref: '#' + this.pid + '-t', botHref: '#' + this.pid + '-b'
     };
   }
 }
 
   Component.__tpl = (html, $v, C) => html`<span class="st-link" style="display: inline-flex; width: ${$v.size}; height: ${$v.size}; color: ${$v.ink}">
   <svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="Ege Erenler, London">
-    <defs><path id=${$v.pid} d="M50 50m-34 0a34 34 0 1 1 68 0a34 34 0 1 1 -68 0"></path></defs>
+    <defs>
+      <path id=${$v.topId} d="M17 50 A33 33 0 0 1 83 50"></path>
+      <path id=${$v.botId} d="M9 50 A41 41 0 0 0 91 50"></path>
+    </defs>
     <circle cx="50" cy="50" r="46" fill="none" stroke=${$v.ink} stroke-width="3"></circle>
-    <g class="st-ring">
-      <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10" font-weight="700" fill=${$v.ink}><textPath href=${$v.href} textLength="212" lengthAdjust="spacing">EGE ERENLER · LONDON ·</textPath></text>
-    </g>
+    <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10.5" font-weight="700" letter-spacing="1.2" fill=${$v.ink}><textPath href=${$v.topHref} startOffset="50%" text-anchor="middle">EGE ERENLER</textPath></text>
+    <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10.5" font-weight="700" letter-spacing="1.6" fill=${$v.ink}><textPath href=${$v.botHref} startOffset="50%" text-anchor="middle">LONDON</textPath></text>
+    <circle cx="12.5" cy="50" r="1.8" fill=${$v.ink}></circle>
+    <circle cx="87.5" cy="50" r="1.8" fill=${$v.ink}></circle>
     <text x="50" y="58" text-anchor="middle" font-family="'Inter Tight', Helvetica, Arial, sans-serif" font-weight="900" font-size="26" letter-spacing="-2" fill=${$v.ink}>ee</text>
     <circle cx="65" cy="55" r="3.5" fill=${$v.accent}></circle>
   </svg>
@@ -1589,9 +1593,9 @@ class Component extends DCLogic {
   renderVals() {
     const mode = this.state.mode || this.props.startMode || 'simple';
     const themes = {
-      simple: { bg: '#ECEBE7', ink: '#121212', muted: '#5C5B57', line: 'rgba(18,18,18,.14)', accent: '#121212', onAccent: '#ECEBE7', accentText: '#5C5B57', pattern: 'none', faceBg: '#ECEBE7', mapBlur: 'none', natural: false, rowBg: 'transparent' },
-      dark: { bg: '#0B0E17', ink: '#E4E8F5', muted: '#98A0B8', line: 'rgba(228,232,245,.12)', accent: '#82AAFF', onAccent: '#0B0E17', accentText: '#82AAFF', pattern: 'radial-gradient(rgba(228,232,245,.07) 1px, transparent 1px)', faceBg: '#0B0E17', mapBlur: 'none', natural: true, rowBg: 'transparent' },
-      art: { bg: '#08070A', ink: '#FFF8EE', muted: '#E4DACB', line: 'rgba(255,248,238,.22)', accent: '#FF7A35', onAccent: '#08070A', accentText: '#FFB37A', pattern: 'none', faceBg: '#1A0E10', mapBlur: 'none', natural: true, rowBg: 'rgba(8,7,10,.42)' }
+      simple: { bg: '#ECEBE7', ink: '#121212', muted: '#5C5B57', line: 'rgba(18,18,18,.14)', accent: '#121212', onAccent: '#ECEBE7', accentText: '#5C5B57', pattern: 'none', faceBg: '#ECEBE7', mapBlur: 'none', stampDot: '#8C8A84', natural: false, rowBg: 'transparent' },
+      dark: { bg: '#0B0E17', ink: '#E4E8F5', muted: '#98A0B8', line: 'rgba(228,232,245,.12)', accent: '#82AAFF', onAccent: '#0B0E17', accentText: '#82AAFF', pattern: 'radial-gradient(rgba(228,232,245,.07) 1px, transparent 1px)', faceBg: '#0B0E17', mapBlur: 'none', stampDot: '#82AAFF', natural: true, rowBg: 'transparent' },
+      art: { bg: '#08070A', ink: '#FFF8EE', muted: '#E4DACB', line: 'rgba(255,248,238,.22)', accent: '#FF7A35', onAccent: '#08070A', accentText: '#FFB37A', pattern: 'none', faceBg: '#1A0E10', mapBlur: 'none', stampDot: '#FF7A35', natural: true, rowBg: 'rgba(8,7,10,.42)' }
     };
     const c = themes[mode];
     const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art']].map(([id, label]) => ({
@@ -1646,7 +1650,7 @@ class Component extends DCLogic {
   <header style="position: relative; overflow: hidden; border-bottom: 1px solid ${$v.c?.line}">
     <div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 24px 40px 0; box-sizing: border-box">
       <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px">
-        <a href="#top" aria-label="Ege Erenler, back to top" style="display: inline-flex; text-decoration: none"><${C.Stamp} ink=${$v.c?.ink} accent="#FF6A2B" size="72px" /></a>
+        <a href="#top" aria-label="Ege Erenler, back to top" style="display: inline-flex; text-decoration: none"><${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.stampDot} size="72px" /></a>
         <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
           <a href="#work" style="text-decoration: none">work ↗</a>
           <a href="#career" style="text-decoration: none">career ↗</a>
@@ -2117,7 +2121,7 @@ class Component extends DCLogic {
   }
   // The tab icon follows the mode: the EE mark in each mode's colours.
   setIcon(mode) {
-    const T = { simple: ['#ECEBE7', '#121212', '#FF6A2B'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#FF6A2B'];
+    const T = { simple: ['#ECEBE7', '#121212', '#8C8A84'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#8C8A84'];
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${T[0]}"/><g transform="translate(50 50) scale(.74) translate(-50 -50)" fill="none" stroke-width="10" stroke-linecap="square"><path stroke="${T[1]}" d="M12 22h30M12 50h22M12 78h30M17 22v56M58 22h30M58 78h30M63 22v56"/><path stroke="${T[2]}" d="M58 50h22"/></g></svg>`;
     try {
       const href = 'data:image/svg+xml,' + encodeURIComponent(svg);

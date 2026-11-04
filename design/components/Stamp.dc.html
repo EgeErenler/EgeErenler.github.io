@@ -11,19 +11,22 @@
 <helmet>
 <style>
 body{margin:0}
-@keyframes st-spin{to{transform:rotate(360deg)}}
-.st-ring{transform-box:view-box;transform-origin:50px 50px;animation:st-spin 28s linear infinite}
-.st-link:hover .st-ring{animation-duration:6s}
-@media (prefers-reduced-motion: reduce){.st-ring{animation:none}}
+.st-link svg{transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+a:hover .st-link svg{transform:rotate(-8deg) scale(1.04)}
+@media (prefers-reduced-motion: reduce){.st-link svg{transition:none}}
 </style>
 </helmet>
 <span class="st-link" style="display: inline-flex; width: {{size}}; height: {{size}}; color: {{ink}}">
   <svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="Ege Erenler, London">
-    <defs><path id="{{pid}}" d="M50 50m-34 0a34 34 0 1 1 68 0a34 34 0 1 1 -68 0"></path></defs>
+    <defs>
+      <path id="{{topId}}" d="M17 50 A33 33 0 0 1 83 50"></path>
+      <path id="{{botId}}" d="M9 50 A41 41 0 0 0 91 50"></path>
+    </defs>
     <circle cx="50" cy="50" r="46" fill="none" stroke="{{ink}}" stroke-width="3"></circle>
-    <g class="st-ring">
-      <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10" font-weight="700" fill="{{ink}}"><textPath href="{{href}}" textLength="212" lengthAdjust="spacing">EGE ERENLER · LONDON ·</textPath></text>
-    </g>
+    <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="{{ink}}"><textPath href="{{topHref}}" startOffset="50%" text-anchor="middle">EGE ERENLER</textPath></text>
+    <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10.5" font-weight="700" letter-spacing="1.6" fill="{{ink}}"><textPath href="{{botHref}}" startOffset="50%" text-anchor="middle">LONDON</textPath></text>
+    <circle cx="12.5" cy="50" r="1.8" fill="{{ink}}"></circle>
+    <circle cx="87.5" cy="50" r="1.8" fill="{{ink}}"></circle>
     <text x="50" y="58" text-anchor="middle" font-family="'Inter Tight', Helvetica, Arial, sans-serif" font-weight="900" font-size="26" letter-spacing="-2" fill="{{ink}}">ee</text>
     <circle cx="65" cy="55" r="3.5" fill="{{accent}}"></circle>
   </svg>
@@ -42,8 +45,8 @@ class Component extends DCLogic {
       ink: this.props.ink || '#121212',
       accent: this.props.accent || '#FF6A2B',
       size: this.props.size || '64px',
-      pid: this.pid,
-      href: '#' + this.pid
+      topId: this.pid + '-t', botId: this.pid + '-b',
+      topHref: '#' + this.pid + '-t', botHref: '#' + this.pid + '-b'
     };
   }
 }

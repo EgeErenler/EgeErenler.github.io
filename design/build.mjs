@@ -5,7 +5,7 @@ import { parseDocument } from 'htmlparser2';
 
 const SRC = process.argv[2];   // folder with the .dc.html files
 const OUT = process.argv[3];   // site folder
-const NAMES = ['Face', 'Shader', 'Editor', 'GitLog', 'CvWheel', 'WorldMap', 'Services', 'Projects', 'Main', 'Night', 'Poster', 'Site'];
+const NAMES = ['Stamp', 'Face', 'Shader', 'Editor', 'GitLog', 'CvWheel', 'WorldMap', 'Services', 'Projects', 'Main', 'Night', 'Poster', 'Site'];
 const VOID = new Set(['br', 'img', 'input', 'meta', 'hr', 'link', 'source', 'area', 'col', 'wbr']);
 
 const escStatic = (s) => s.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');

@@ -1,4 +1,9 @@
 body{margin:0}
+@keyframes st-spin{to{transform:rotate(360deg)}}
+.st-ring{transform-box:view-box;transform-origin:50px 50px;animation:st-spin 28s linear infinite}
+.st-link:hover .st-ring{animation-duration:6s}
+@media (prefers-reduced-motion: reduce){.st-ring{animation:none}}
+body{margin:0}
 body{margin:0}
 @keyframes ee-row{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes ee-caret{50%{opacity:0}}

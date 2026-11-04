@@ -32,9 +32,24 @@ class Component extends DCLogic {
     super(props);
     this.state = { mode: null };
   }
+  // The tab icon follows the mode: the EE mark in each mode's colours.
+  setIcon(mode) {
+    const T = { simple: ['#ECEBE7', '#121212', '#FF6A2B'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#FF6A2B'];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${T[0]}"/><g transform="translate(50 50) scale(.74) translate(-50 -50)" fill="none" stroke-width="10" stroke-linecap="square"><path stroke="${T[1]}" d="M12 22h30M12 50h22M12 78h30M17 22v56M58 22h30M58 78h30M63 22v56"/><path stroke="${T[2]}" d="M58 50h22"/></g></svg>`;
+    try {
+      const href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+      let link = document.querySelector('link[rel="icon"][data-mode-icon]');
+      if (!link) { link = document.createElement('link'); link.rel = 'icon'; link.type = 'image/svg+xml'; link.setAttribute('data-mode-icon', ''); document.head.appendChild(link); }
+      document.querySelectorAll('link[rel="icon"]:not([data-mode-icon])').forEach((l) => l.remove());
+      link.href = href;
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = T[0];
+    } catch (e) {}
+  }
   componentDidMount() {
+    this.setIcon(this.state.mode || this.props.startMode || 'simple');
     // Each page's Simple / Dark / Art switch tells the site which page to show.
-    this.onMode = (e) => { if (['simple', 'dark', 'art'].includes(e.detail)) this.setState({ mode: e.detail }); };
+    this.onMode = (e) => { if (['simple', 'dark', 'art'].includes(e.detail)) { this.setState({ mode: e.detail }); this.setIcon(e.detail); } };
     window.addEventListener('ee-mode', this.onMode);
   }
   componentWillUnmount() { window.removeEventListener('ee-mode', this.onMode); }

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Round seal logo</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=IBM+Plex+Mono:wght@600;700&display=swap">
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+@keyframes st-spin{to{transform:rotate(360deg)}}
+.st-ring{transform-box:view-box;transform-origin:50px 50px;animation:st-spin 28s linear infinite}
+.st-link:hover .st-ring{animation-duration:6s}
+@media (prefers-reduced-motion: reduce){.st-ring{animation:none}}
+</style>
+</helmet>
+<span class="st-link" style="display: inline-flex; width: {{size}}; height: {{size}}; color: {{ink}}">
+  <svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="Ege Erenler, London">
+    <defs><path id="{{pid}}" d="M50 50m-34 0a34 34 0 1 1 68 0a34 34 0 1 1 -68 0"></path></defs>
+    <circle cx="50" cy="50" r="46" fill="none" stroke="{{ink}}" stroke-width="3"></circle>
+    <g class="st-ring">
+      <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10" font-weight="700" fill="{{ink}}"><textPath href="{{href}}" textLength="212" lengthAdjust="spacing">EGE ERENLER · LONDON ·</textPath></text>
+    </g>
+    <text x="50" y="58" text-anchor="middle" font-family="'Inter Tight', Helvetica, Arial, sans-serif" font-weight="900" font-size="26" letter-spacing="-2" fill="{{ink}}">ee</text>
+    <circle cx="65" cy="55" r="3.5" fill="{{accent}}"></circle>
+  </svg>
+</span>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ink":{"editor":"color","default":"#121212"},"accent":{"editor":"color","default":"#FF6A2B"},"size":{"editor":"text","default":"64px"},"$preview":{"width":200,"height":200}}'>
+let STAMP_N = 0;
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    STAMP_N += 1;
+    this.pid = 'st-ring-' + STAMP_N;
+  }
+  renderVals() {
+    return {
+      ink: this.props.ink || '#121212',
+      accent: this.props.accent || '#FF6A2B',
+      size: this.props.size || '64px',
+      pid: this.pid,
+      href: '#' + this.pid
+    };
+  }
+}
+</script>
+</body>
+</html>

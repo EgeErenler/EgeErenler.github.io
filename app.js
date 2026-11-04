@@ -14,6 +14,44 @@ class DCBase extends PC {
 }
 const __unmount = PC.prototype.componentWillUnmount;
 
+C.Stamp = (() => {
+  const DCLogic = DCBase;
+
+let STAMP_N = 0;
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    STAMP_N += 1;
+    this.pid = 'st-ring-' + STAMP_N;
+  }
+  renderVals() {
+    return {
+      ink: this.props.ink || '#121212',
+      accent: this.props.accent || '#FF6A2B',
+      size: this.props.size || '64px',
+      pid: this.pid,
+      href: '#' + this.pid
+    };
+  }
+}
+
+  Component.__tpl = (html, $v, C) => html`<span class="st-link" style="display: inline-flex; width: ${$v.size}; height: ${$v.size}; color: ${$v.ink}">
+  <svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="Ege Erenler, London">
+    <defs><path id=${$v.pid} d="M50 50m-34 0a34 34 0 1 1 68 0a34 34 0 1 1 -68 0"></path></defs>
+    <circle cx="50" cy="50" r="46" fill="none" stroke=${$v.ink} stroke-width="3"></circle>
+    <g class="st-ring">
+      <text font-family="'IBM Plex Mono', Menlo, monospace" font-size="10" font-weight="700" fill=${$v.ink}><textPath href=${$v.href} textLength="212" lengthAdjust="spacing">EGE ERENLER · LONDON ·</textPath></text>
+    </g>
+    <text x="50" y="58" text-anchor="middle" font-family="'Inter Tight', Helvetica, Arial, sans-serif" font-weight="900" font-size="26" letter-spacing="-2" fill=${$v.ink}>ee</text>
+    <circle cx="65" cy="55" r="3.5" fill=${$v.accent}></circle>
+  </svg>
+</span>`;
+  Component.defaultProps = {"ink":"#121212","accent":"#FF6A2B","size":"64px"};
+  const off = Component.prototype.componentWillUnmount;
+  Component.prototype.componentWillUnmount = function () { this.__alive = false; if (off) off.call(this); };
+  return Component;
+})();
+
 C.Face = (() => {
   const DCLogic = DCBase;
 
@@ -1608,7 +1646,7 @@ class Component extends DCLogic {
   <header style="position: relative; overflow: hidden; border-bottom: 1px solid ${$v.c?.line}">
     <div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 24px 40px 0; box-sizing: border-box">
       <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px">
-        <a href="#top" style="text-decoration: none; font-weight: 500">(EGE_ERENLER)</a>
+        <a href="#top" aria-label="Ege Erenler, back to top" style="display: inline-flex; text-decoration: none"><${C.Stamp} ink=${$v.c?.ink} accent="#FF6A2B" size="72px" /></a>
         <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
           <a href="#work" style="text-decoration: none">work ↗</a>
           <a href="#career" style="text-decoration: none">career ↗</a>
@@ -1789,7 +1827,7 @@ class Component extends DCLogic {
     <div style="position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 20px 32px 0; box-sizing: border-box">
       <nav aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid ${$v.c?.line}; border-radius: 20px; background: ${$v.c?.card}; backdrop-filter: ${$v.c?.blur}; -webkit-backdrop-filter: ${$v.c?.blur}">
         <a href="#top" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 15px">
-          <span style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: ${$v.c?.ink}; color: ${$v.c?.bg}; font-size: 13px">ee</span>Ege Erenler
+          <${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.hot} size="56px" />
         </a>
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
           <a href="#work" style="text-decoration: none">Work</a>
@@ -2077,9 +2115,24 @@ class Component extends DCLogic {
     super(props);
     this.state = { mode: null };
   }
+  // The tab icon follows the mode: the EE mark in each mode's colours.
+  setIcon(mode) {
+    const T = { simple: ['#ECEBE7', '#121212', '#FF6A2B'], dark: ['#0B0E17', '#E4E8F5', '#82AAFF'], art: ['#08070A', '#FFF8EE', '#FF7A35'] }[mode] || ['#ECEBE7', '#121212', '#FF6A2B'];
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="${T[0]}"/><g transform="translate(50 50) scale(.74) translate(-50 -50)" fill="none" stroke-width="10" stroke-linecap="square"><path stroke="${T[1]}" d="M12 22h30M12 50h22M12 78h30M17 22v56M58 22h30M58 78h30M63 22v56"/><path stroke="${T[2]}" d="M58 50h22"/></g></svg>`;
+    try {
+      const href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+      let link = document.querySelector('link[rel="icon"][data-mode-icon]');
+      if (!link) { link = document.createElement('link'); link.rel = 'icon'; link.type = 'image/svg+xml'; link.setAttribute('data-mode-icon', ''); document.head.appendChild(link); }
+      document.querySelectorAll('link[rel="icon"]:not([data-mode-icon])').forEach((l) => l.remove());
+      link.href = href;
+      let meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = T[0];
+    } catch (e) {}
+  }
   componentDidMount() {
+    this.setIcon(this.state.mode || this.props.startMode || 'simple');
     // Each page's Simple / Dark / Art switch tells the site which page to show.
-    this.onMode = (e) => { if (['simple', 'dark', 'art'].includes(e.detail)) this.setState({ mode: e.detail }); };
+    this.onMode = (e) => { if (['simple', 'dark', 'art'].includes(e.detail)) { this.setState({ mode: e.detail }); this.setIcon(e.detail); } };
     window.addEventListener('ee-mode', this.onMode);
   }
   componentWillUnmount() { window.removeEventListener('ee-mode', this.onMode); }

@@ -62,7 +62,7 @@ C.Face = (() => {
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { x: 0, y: 0, blink: false };
+    this.state = { x: 0, y: 0, blink: false, askTilt: false };
     this.setRoot = (el) => { this.root = el; };
     this.target = { x: 0, y: 0 };
     this.cur = { x: 0, y: 0 };
@@ -87,6 +87,8 @@ class Component extends DCLogic {
       if (e.gamma == null || e.beta == null) return;
       this.target = { x: clamp(e.gamma / 25), y: clamp((e.beta - 45) / 25) };
       this.lastInput = this.lastTilt = performance.now();
+      window.__eeTiltOk = true;
+      if (this.state.askTilt) this.setState({ askTilt: false });
     };
     window.addEventListener('pointermove', this.onMove, { passive: true });
     window.addEventListener('deviceorientation', this.onTilt);
@@ -100,12 +102,16 @@ class Component extends DCLogic {
       const D = window.DeviceOrientationEvent;
       if (D && typeof D.requestPermission === 'function' && !window.__eeTiltAsked) {
         window.__eeTiltAsked = true;
-        D.requestPermission().catch(() => {});
+        D.requestPermission().then((r) => { if (r === 'granted') { window.__eeTiltOk = true; this.setState({ askTilt: false }); } }).catch(() => {});
       }
       window.removeEventListener('touchend', this.askTilt);
       window.removeEventListener('click', this.askTilt);
     };
     window.addEventListener('touchend', this.askTilt, { passive: true });
+    // Phones that need permission (iPhone, in Safari, Chrome and other browsers) get a button that asks for it.
+    const touch = window.matchMedia && window.matchMedia('(hover: none)').matches;
+    const D0 = window.DeviceOrientationEvent;
+    if (touch && D0 && typeof D0.requestPermission === 'function' && !window.__eeTiltOk) this.setState({ askTilt: true });
     window.addEventListener('click', this.askTilt);
     // While the page scrolls, the face glances down and sideways with it, so phones without motion access still see it react.
     this.lastY = window.scrollY || 0;
@@ -164,6 +170,16 @@ class Component extends DCLogic {
       hair: this.props.natural ? '#1B1A1E' : (this.props.ink ?? '#121212'),
       feat: this.props.natural ? '#1B1A1E' : (this.props.ink ?? '#121212'),
       eyeRy: this.state.blink ? 1.2 : 7,
+      askTilt: this.state.askTilt,
+      enableTilt: () => {
+        const D = window.DeviceOrientationEvent;
+        if (!D || typeof D.requestPermission !== 'function') { this.setState({ askTilt: false }); return; }
+        D.requestPermission().then((r) => {
+          window.__eeTiltAsked = true;
+          if (r === 'granted') { window.__eeTiltOk = true; this.setState({ askTilt: false }); }
+          else this.setState({ askTilt: false });
+        }).catch(() => this.setState({ askTilt: false }));
+      },
       body: tr(-5, 2),
       head: `translate(${f(x * 6)}px, ${f(y * 4)}px) rotate(${f(x * 3)}deg)`,
       hair: `translate(${f(x * 11)}px, ${f(y * 6)}px) rotate(${f(x * 3)}deg)`,
@@ -177,7 +193,7 @@ class Component extends DCLogic {
   }
 }
 
-  Component.__tpl = (html, $v, C) => html`<div ref=${$v.setRoot} style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: transparent; color: ${$v.ink}">
+  Component.__tpl = (html, $v, C) => html`<div ref=${$v.setRoot} style="position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: transparent; color: ${$v.ink}">
   <svg viewBox="0 0 400 440" role="img" aria-label="Line drawing of Ege that turns to follow the cursor" style="width: 100%; height: 100%; overflow: visible">
     <g style="transform: ${$v.body}; transform-box: fill-box; transform-origin: center">
       <path d="M62 440 C72 362 136 330 200 330 C264 330 328 362 338 440" fill=${$v.paper} stroke=${$v.ink} stroke-width="5" stroke-linecap="round"></path>
@@ -210,6 +226,12 @@ class Component extends DCLogic {
       <path d="M176 264 q24 18 48 0" fill="none" stroke=${$v.accent} stroke-width="6" stroke-linecap="round"></path>
     </g>
   </svg>
+  ${($v.askTilt) ? html`
+    <button type="button" onClick=${$v.enableTilt} style="position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid ${$v.ink}; background: ${$v.paper}; color: ${$v.ink}; font-family: inherit; font-size: 13px; font-weight: 600; line-height: 1; white-space: nowrap; cursor: pointer">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2" transform="rotate(-14 12 12)"></rect><path d="M11 18h2"></path></svg>
+      Tilt your phone, I will follow
+    </button>
+  ` : null}
 </div>`;
   Component.defaultProps = {"natural":false,"ink":"#121212","paper":"#ECEBE7","accent":"#121212"};
   const off = Component.prototype.componentWillUnmount;

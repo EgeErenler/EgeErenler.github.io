@@ -23,6 +23,9 @@ a{color:inherit}a:hover{opacity:.85}
 .fx-art .fx-bar{display:block;position:fixed;left:0;top:0;width:100%;height:3px;z-index:90;transform-origin:0 50%;animation:fx-bar linear both;animation-timeline:scroll(root)}
 }
 @media (prefers-reduced-motion: reduce){.fx-art .pj-card,.fx-art .sv-card,.fx-art .fx-rise,.fx-art h2,.fx-art .fx-bar{animation:none !important}}
+.ee-nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px}
+.ee-links{margin-left:auto}
+@media (max-width: 720px){.ee-links{order:3;width:100%;margin-left:0}.ee-modes{margin-left:auto}}
 </style>
 </helmet>
 <div class="{{fxClass}}" style="position: relative; min-height: 100vh; background: {{c.bg}}; background-image: {{c.pattern}}; background-size: 24px 24px; color: {{c.ink}}; font-family: 'Geist', 'Helvetica Neue', Arial, sans-serif; transition: background-color .4s, color .4s">
@@ -36,20 +39,21 @@ a{color:inherit}a:hover{opacity:.85}
 
   <header style="position: relative; overflow: hidden">
     <div style="position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 20px 32px 0; box-sizing: border-box">
-      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid {{c.line}}; border-radius: 20px; background: {{c.card}}; backdrop-filter: {{c.blur}}; -webkit-backdrop-filter: {{c.blur}}">
+      <nav class="ee-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid {{c.line}}; border-radius: 20px; background: {{c.card}}; backdrop-filter: {{c.blur}}; -webkit-backdrop-filter: {{c.blur}}">
         <a href="#top" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 15px">
           <dc-import name="Stamp" ink="{{c.ink}}" accent="{{c.hot}}" size="56px" hint-size="56px,56px"></dc-import>
         </a>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
+        <div class="ee-links" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
           <a href="#work" style="text-decoration: none">Work</a>
           <a href="#career" style="text-decoration: none">Career</a>
           <a href="#contact" style="text-decoration: none">Contact</a>
-          <div role="group" aria-label="Display mode" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: {{c.bg}}; border: 1px solid {{c.line}}">
+          
+        </div>
+          <div class="ee-modes" role="group" aria-label="Display mode" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: {{c.bg}}; border: 1px solid {{c.line}}">
             <sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
               <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer; font: 500 13px 'Geist', sans-serif; background: {{m.bg}}; color: {{m.fg}}; box-shadow: {{m.glow}}; transition: all .3s">{{m.label}}</button>
             </sc-for>
           </div>
-        </div>
       </nav>
 
       <div id="top" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 32px; align-items: center; padding: 80px 0 72px">
@@ -143,7 +147,7 @@ class Component extends DCLogic {
       art: { bg: '#05060A', card: 'rgba(10,12,20,.55)', cardSolid: '#0E1018', ink: '#F7F8FC', muted: '#C9CEDC', line: 'rgba(243,244,250,.22)', accent: '#9B7BFF', onAccent: '#05060A', glow: '0 0 60px rgba(120,95,255,.35)', hot: '#5EE0F5', pattern: 'none', blur: 'blur(18px) saturate(140%)', natural: true }
     };
     const c = themes[mode];
-    const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art mode']].map(([id, label]) => ({
+    const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art']].map(([id, label]) => ({
       label, on: id === mode ? 'true' : 'false',
       bg: id === mode ? (id === 'art' ? 'linear-gradient(90deg,#ffcf3a,#ff4fa8,#7b5cff)' : c.ink) : 'transparent',
       fg: id === mode ? (id === 'art' ? '#0B0612' : c.bg) : c.ink,

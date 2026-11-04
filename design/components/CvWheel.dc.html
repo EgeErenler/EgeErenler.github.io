@@ -46,6 +46,9 @@ body{margin:0}
     </sc-for>
   </div>
 
+  <sc-if value="{{sticky}}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{tapPick}}" aria-hidden="true" style="position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,.35); -webkit-tap-highlight-color: transparent"></div>
+  </sc-if>
   <sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
     <div role="menu" aria-label="{{groupName}}" style="position: fixed; left: {{wx}}px; top: {{wy}}px; width: 380px; height: 380px; z-index: 50; pointer-events: none; font-family: {{font}}">
       <div style="transform: scale({{wscale}}); transform-origin: 50% 50%"><div class="ee-anim" style="position: relative; width: 380px; height: 380px; animation: ee-pop .18s cubic-bezier(.2,.9,.3,1.2) both">
@@ -65,6 +68,7 @@ body{margin:0}
         <div style="position: absolute; left: 190px; top: 190px; width: 92px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; color: {{ink}}">
           <span style="font-size: 8.5px; font-weight: 700; letter-spacing: .1em; color: {{accent}}">{{groupTag}}</span>
           <span style="font-size: 11px; font-weight: 700; line-height: 1.15">{{centerTop}}</span>
+          <span style="font-size: 9px; line-height: 1.1; opacity: .7">{{centerSub}}</span>
         </div>
       </div>
     </div>
@@ -404,9 +408,14 @@ class Component extends DCLogic {
     const cx = Math.max(pad, Math.min(w - pad, x)), cy = Math.max(pad, Math.min(h - pad, y));
     this.setState({ open: true, cx, cy, px: x, py: y, sel: -1, g: g || this.state.group });
   }
+  openSticky() {
+    const w = window.innerWidth || 1000, h = window.innerHeight || 800;
+    this.stickyAt = performance.now();
+    this.setState({ open: true, sticky: true, dragging: false, cx: w / 2, cy: h / 2, sel: -1, g: this.state.open ? this.state.g : this.state.group });
+  }
   close(run) {
     const { sel, g } = this.state;
-    this.setState({ open: false, dragging: false, sel: -1 });
+    this.setState({ open: false, sticky: false, dragging: false, sel: -1 });
     if (run && sel >= 0) this.items(g)[sel].run();
   }
   stopDemo() {
@@ -447,13 +456,17 @@ class Component extends DCLogic {
     this.onMove = (e) => {
       if (!this.start) return;
       const moved = Math.hypot(e.clientX - this.start.x, e.clientY - this.start.y);
+      if (moved > 6) this.start.moved = true;
       if (!this.state.open && moved > 6) this.openAt(this.start.x, this.start.y, this.groupFor(e));
       if (this.state.open) this.setState({ px: e.clientX, py: e.clientY, dragging: true, g: this.groupFor(e), sel: this.sectorAt(e.clientX, e.clientY) });
     };
     this.onUp = () => {
       clearTimeout(this.hold);
       if (!this.start) return;
+      const moved = this.start.moved;
       this.start = null;
+      // A tap (no drag) opens the wheel in the middle of the screen and keeps it open: tap a petal to run it.
+      if (!moved) { this.openSticky(); return; }
       if (this.state.open) this.close(true);
     };
     window.addEventListener('pointermove', this.onMove);
@@ -496,7 +509,7 @@ class Component extends DCLogic {
       };
     });
     const sel = this.state.sel;
-    const subs = { actions: 'drag me · ⇧ convert · ⌘ crop', convert: 'drag me to convert', tools: 'drag me to crop or compress', projects: 'drag me to open a project' };
+    const subs = { actions: 'drag or tap me · ⇧ convert · ⌘ crop', convert: 'drag me to convert', tools: 'drag me to crop or compress', projects: 'drag me to open a project' };
     return {
       ink, paper, card, line, accent, onAccent, font: p.font || 'inherit',
       setRoot: this.setRoot,
@@ -512,8 +525,20 @@ class Component extends DCLogic {
       demo: this.state.demo,
       chips, wedges,
       groupName: META[g].name, groupTag: META[g].tag,
-      centerTop: sel >= 0 ? 'Release to ' + set[sel].label.charAt(0).toLowerCase() + set[sel].label.slice(1) : 'Drop on an action',
-      centerSub: sel >= 0 ? set[sel].sub : 'centre to cancel',
+      centerTop: sel >= 0 ? (this.state.sticky ? set[sel].label : 'Release to ' + set[sel].label.charAt(0).toLowerCase() + set[sel].label.slice(1)) : (this.state.sticky ? 'Tap a petal' : 'Drop on an action'),
+      centerSub: sel >= 0 ? set[sel].sub : (this.state.sticky ? 'tap here for more' : 'centre to cancel'),
+      sticky: this.state.open && !!this.state.sticky,
+      tapPick: (e) => {
+        // The same tap that opened the wheel also lands here as a click on phones: ignore it.
+        if (performance.now() - (this.stickyAt || 0) < 450) return;
+        const i = this.sectorAt(e.clientX, e.clientY);
+        const d = Math.hypot(e.clientX - this.state.cx, e.clientY - this.state.cy);
+        const outer = 186 * Math.min(1, ((window.innerWidth || 1000) - 16) / 380);
+        if (d > outer + 10) { this.close(false); return; }
+        if (i < 0) { const k = GROUPS.indexOf(this.state.g); this.setState({ g: GROUPS[(k + 1) % 4], sel: -1 }); return; }
+        this.setState({ sel: i });
+        setTimeout(() => this.close(true), 140);
+      },
       hasToast: !!this.state.toast, toast: this.state.toast,
       down: (e) => {
         this.stopDemo();

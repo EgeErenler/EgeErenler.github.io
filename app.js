@@ -85,8 +85,8 @@ class Component extends DCLogic {
     };
     this.onTilt = (e) => {
       if (e.gamma == null || e.beta == null) return;
-      this.target = { x: clamp(e.gamma / 30), y: clamp((e.beta - 45) / 30) };
-      this.lastInput = performance.now();
+      this.target = { x: clamp(e.gamma / 25), y: clamp((e.beta - 45) / 25) };
+      this.lastInput = this.lastTilt = performance.now();
     };
     window.addEventListener('pointermove', this.onMove, { passive: true });
     window.addEventListener('deviceorientation', this.onTilt);
@@ -94,13 +94,28 @@ class Component extends DCLogic {
     this.onTouch = (e) => { const t = e.touches && e.touches[0]; if (t) this.onMove({ clientX: t.clientX, clientY: t.clientY }); };
     window.addEventListener('touchstart', this.onTouch, { passive: true });
     window.addEventListener('touchmove', this.onTouch, { passive: true });
-    // iPhone asks once for motion access, on the visitor's first tap.
+    // iPhone only gives motion data after the visitor allows it, and Safari only shows that prompt
+    // from a real tap (touchend or click), so ask on the first one.
     this.askTilt = () => {
       const D = window.DeviceOrientationEvent;
-      if (D && typeof D.requestPermission === 'function') D.requestPermission().catch(() => {});
-      window.removeEventListener('pointerdown', this.askTilt);
+      if (D && typeof D.requestPermission === 'function' && !window.__eeTiltAsked) {
+        window.__eeTiltAsked = true;
+        D.requestPermission().catch(() => {});
+      }
+      window.removeEventListener('touchend', this.askTilt);
+      window.removeEventListener('click', this.askTilt);
     };
-    window.addEventListener('pointerdown', this.askTilt);
+    window.addEventListener('touchend', this.askTilt, { passive: true });
+    window.addEventListener('click', this.askTilt);
+    // While the page scrolls, the face glances down and sideways with it, so phones without motion access still see it react.
+    this.lastY = window.scrollY || 0;
+    this.onScroll = () => {
+      const y = window.scrollY || 0, dy = y - this.lastY; this.lastY = y;
+      if (performance.now() - (this.lastTilt || 0) < 1500) return;
+      this.target = { x: clamp(Math.sin(y / 260) * 0.7), y: clamp(dy / 18) };
+      this.lastInput = performance.now();
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const tick = (now) => {
       if (!reduce && now - this.lastInput > 2500) {
@@ -132,7 +147,9 @@ class Component extends DCLogic {
     window.removeEventListener('deviceorientation', this.onTilt);
     window.removeEventListener('touchstart', this.onTouch);
     window.removeEventListener('touchmove', this.onTouch);
-    window.removeEventListener('pointerdown', this.askTilt);
+    window.removeEventListener('touchend', this.askTilt);
+    window.removeEventListener('click', this.askTilt);
+    window.removeEventListener('scroll', this.onScroll);
   }
   renderVals() {
     const x = this.state.x, y = this.state.y;
@@ -832,9 +849,14 @@ class Component extends DCLogic {
     const cx = Math.max(pad, Math.min(w - pad, x)), cy = Math.max(pad, Math.min(h - pad, y));
     this.setState({ open: true, cx, cy, px: x, py: y, sel: -1, g: g || this.state.group });
   }
+  openSticky() {
+    const w = window.innerWidth || 1000, h = window.innerHeight || 800;
+    this.stickyAt = performance.now();
+    this.setState({ open: true, sticky: true, dragging: false, cx: w / 2, cy: h / 2, sel: -1, g: this.state.open ? this.state.g : this.state.group });
+  }
   close(run) {
     const { sel, g } = this.state;
-    this.setState({ open: false, dragging: false, sel: -1 });
+    this.setState({ open: false, sticky: false, dragging: false, sel: -1 });
     if (run && sel >= 0) this.items(g)[sel].run();
   }
   stopDemo() {
@@ -875,13 +897,17 @@ class Component extends DCLogic {
     this.onMove = (e) => {
       if (!this.start) return;
       const moved = Math.hypot(e.clientX - this.start.x, e.clientY - this.start.y);
+      if (moved > 6) this.start.moved = true;
       if (!this.state.open && moved > 6) this.openAt(this.start.x, this.start.y, this.groupFor(e));
       if (this.state.open) this.setState({ px: e.clientX, py: e.clientY, dragging: true, g: this.groupFor(e), sel: this.sectorAt(e.clientX, e.clientY) });
     };
     this.onUp = () => {
       clearTimeout(this.hold);
       if (!this.start) return;
+      const moved = this.start.moved;
       this.start = null;
+      // A tap (no drag) opens the wheel in the middle of the screen and keeps it open: tap a petal to run it.
+      if (!moved) { this.openSticky(); return; }
       if (this.state.open) this.close(true);
     };
     window.addEventListener('pointermove', this.onMove);
@@ -924,7 +950,7 @@ class Component extends DCLogic {
       };
     });
     const sel = this.state.sel;
-    const subs = { actions: 'drag me · ⇧ convert · ⌘ crop', convert: 'drag me to convert', tools: 'drag me to crop or compress', projects: 'drag me to open a project' };
+    const subs = { actions: 'drag or tap me · ⇧ convert · ⌘ crop', convert: 'drag me to convert', tools: 'drag me to crop or compress', projects: 'drag me to open a project' };
     return {
       ink, paper, card, line, accent, onAccent, font: p.font || 'inherit',
       setRoot: this.setRoot,
@@ -940,8 +966,20 @@ class Component extends DCLogic {
       demo: this.state.demo,
       chips, wedges,
       groupName: META[g].name, groupTag: META[g].tag,
-      centerTop: sel >= 0 ? 'Release to ' + set[sel].label.charAt(0).toLowerCase() + set[sel].label.slice(1) : 'Drop on an action',
-      centerSub: sel >= 0 ? set[sel].sub : 'centre to cancel',
+      centerTop: sel >= 0 ? (this.state.sticky ? set[sel].label : 'Release to ' + set[sel].label.charAt(0).toLowerCase() + set[sel].label.slice(1)) : (this.state.sticky ? 'Tap a petal' : 'Drop on an action'),
+      centerSub: sel >= 0 ? set[sel].sub : (this.state.sticky ? 'tap here for more' : 'centre to cancel'),
+      sticky: this.state.open && !!this.state.sticky,
+      tapPick: (e) => {
+        // The same tap that opened the wheel also lands here as a click on phones: ignore it.
+        if (performance.now() - (this.stickyAt || 0) < 450) return;
+        const i = this.sectorAt(e.clientX, e.clientY);
+        const d = Math.hypot(e.clientX - this.state.cx, e.clientY - this.state.cy);
+        const outer = 186 * Math.min(1, ((window.innerWidth || 1000) - 16) / 380);
+        if (d > outer + 10) { this.close(false); return; }
+        if (i < 0) { const k = GROUPS.indexOf(this.state.g); this.setState({ g: GROUPS[(k + 1) % 4], sel: -1 }); return; }
+        this.setState({ sel: i });
+        setTimeout(() => this.close(true), 140);
+      },
       hasToast: !!this.state.toast, toast: this.state.toast,
       down: (e) => {
         this.stopDemo();
@@ -1001,6 +1039,9 @@ class Component extends DCLogic {
     `)}
   </div>
 
+  ${($v.sticky) ? html`
+    <div onClick=${$v.tapPick} aria-hidden="true" style="position: fixed; inset: 0; z-index: 49; background: rgba(0,0,0,.35); -webkit-tap-highlight-color: transparent"></div>
+  ` : null}
   ${($v.open) ? html`
     <div role="menu" aria-label=${$v.groupName} style="position: fixed; left: ${$v.wx}px; top: ${$v.wy}px; width: 380px; height: 380px; z-index: 50; pointer-events: none; font-family: ${$v.font}">
       <div style="transform: scale(${$v.wscale}); transform-origin: 50% 50%"><div class="ee-anim" style="position: relative; width: 380px; height: 380px; animation: ee-pop .18s cubic-bezier(.2,.9,.3,1.2) both">
@@ -1020,6 +1061,7 @@ class Component extends DCLogic {
         <div style="position: absolute; left: 190px; top: 190px; width: 92px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; color: ${$v.ink}">
           <span style="font-size: 8.5px; font-weight: 700; letter-spacing: .1em; color: ${$v.accent}">${$v.groupTag}</span>
           <span style="font-size: 11px; font-weight: 700; line-height: 1.15">${$v.centerTop}</span>
+          <span style="font-size: 9px; line-height: 1.1; opacity: .7">${$v.centerSub}</span>
         </div>
       </div>
     </div>
@@ -1649,18 +1691,19 @@ class Component extends DCLogic {
 
   <header style="position: relative; overflow: hidden; border-bottom: 1px solid ${$v.c?.line}">
     <div style="position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 24px 40px 0; box-sizing: border-box">
-      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px">
+      <nav class="ee-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 13px">
         <a href="#top" aria-label="Ege Erenler, back to top" style="display: inline-flex; text-decoration: none"><${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.stampDot} size="72px" /></a>
-        <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
+        <div class="ee-links" style="display: flex; flex-wrap: wrap; gap: 24px; align-items: center">
           <a href="#work" style="text-decoration: none">work ↗</a>
           <a href="#career" style="text-decoration: none">career ↗</a>
           <a href="#contact" style="text-decoration: none">contact ↗</a>
-          <div role="group" aria-label="Display mode" style="display: flex; gap: 2px; padding: 3px; border: 1px solid ${$v.c?.line}; border-radius: 999px">
+          
+        </div>
+          <div class="ee-modes" role="group" aria-label="Display mode" style="display: flex; gap: 2px; padding: 3px; border: 1px solid ${$v.c?.line}; border-radius: 999px">
             ${($v.modes || []).map((m) => html`
               <button type="button" onClick=${m?.pick} aria-pressed=${m?.on} style="min-height: 34px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer; font: 500 12px 'IBM Plex Mono', monospace; background: ${m?.bg}; color: ${m?.fg}">${m?.label}</button>
             `)}
           </div>
-        </div>
       </nav>
 
       <div id="top" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px 40px; align-items: end; padding: 72px 0 48px">
@@ -1766,7 +1809,7 @@ class Component extends DCLogic {
       art: { bg: '#05060A', card: 'rgba(10,12,20,.55)', cardSolid: '#0E1018', ink: '#F7F8FC', muted: '#C9CEDC', line: 'rgba(243,244,250,.22)', accent: '#9B7BFF', onAccent: '#05060A', glow: '0 0 60px rgba(120,95,255,.35)', hot: '#5EE0F5', pattern: 'none', blur: 'blur(18px) saturate(140%)', natural: true }
     };
     const c = themes[mode];
-    const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art mode']].map(([id, label]) => ({
+    const modes = [['simple', 'Simple'], ['dark', 'Dark'], ['art', 'Art']].map(([id, label]) => ({
       label, on: id === mode ? 'true' : 'false',
       bg: id === mode ? (id === 'art' ? 'linear-gradient(90deg,#ffcf3a,#ff4fa8,#7b5cff)' : c.ink) : 'transparent',
       fg: id === mode ? (id === 'art' ? '#0B0612' : c.bg) : c.ink,
@@ -1829,20 +1872,21 @@ class Component extends DCLogic {
 
   <header style="position: relative; overflow: hidden">
     <div style="position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 20px 32px 0; box-sizing: border-box">
-      <nav aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid ${$v.c?.line}; border-radius: 20px; background: ${$v.c?.card}; backdrop-filter: ${$v.c?.blur}; -webkit-backdrop-filter: ${$v.c?.blur}">
+      <nav class="ee-nav" aria-label="Main" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 10px 10px 16px; border: 1px solid ${$v.c?.line}; border-radius: 20px; background: ${$v.c?.card}; backdrop-filter: ${$v.c?.blur}; -webkit-backdrop-filter: ${$v.c?.blur}">
         <a href="#top" style="display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: 'Unbounded', sans-serif; font-weight: 800; font-size: 15px">
           <${C.Stamp} ink=${$v.c?.ink} accent=${$v.c?.hot} size="56px" />
         </a>
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
+        <div class="ee-links" style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 14px">
           <a href="#work" style="text-decoration: none">Work</a>
           <a href="#career" style="text-decoration: none">Career</a>
           <a href="#contact" style="text-decoration: none">Contact</a>
-          <div role="group" aria-label="Display mode" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: ${$v.c?.bg}; border: 1px solid ${$v.c?.line}">
+          
+        </div>
+          <div class="ee-modes" role="group" aria-label="Display mode" style="display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: ${$v.c?.bg}; border: 1px solid ${$v.c?.line}">
             ${($v.modes || []).map((m) => html`
               <button type="button" onClick=${m?.pick} aria-pressed=${m?.on} style="min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px; cursor: pointer; font: 500 13px 'Geist', sans-serif; background: ${m?.bg}; color: ${m?.fg}; box-shadow: ${m?.glow}; transition: all .3s">${m?.label}</button>
             `)}
           </div>
-        </div>
       </nav>
 
       <div id="top" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 32px; align-items: center; padding: 80px 0 72px">
@@ -2148,13 +2192,13 @@ class Component extends DCLogic {
 
   Component.__tpl = (html, $v, C) => html`<div style="width: 100%; min-height: 100vh">
   ${($v.simple) ? html`
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><${C.Main} startMode="simple" linked=${true} /></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Main} startMode="simple" linked=${true} /></div>
   ` : null}
   ${($v.dark) ? html`
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><${C.Night} startMode="dark" linked=${true} /></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Night} startMode="dark" linked=${true} /></div>
   ` : null}
   ${($v.art) ? html`
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><${C.Main} startMode="art" linked=${true} /></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><${C.Main} startMode="art" linked=${true} /></div>
   ` : null}
 </div>`;
   Component.defaultProps = {"startMode":"simple"};

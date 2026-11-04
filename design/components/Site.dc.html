@@ -10,19 +10,19 @@
 <helmet>
 <style>
 body{margin:0}
-@keyframes ee-swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes ee-swap{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){.ee-swap{animation:none !important}}
 </style>
 </helmet>
 <div style="width: 100%; min-height: 100vh">
   <sc-if value="{{simple}}" hint-placeholder-val="{{ true }}">
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Main" startMode="simple" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><dc-import name="Main" startMode="simple" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
   </sc-if>
   <sc-if value="{{dark}}" hint-placeholder-val="{{ false }}">
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Night" startMode="dark" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><dc-import name="Night" startMode="dark" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
   </sc-if>
   <sc-if value="{{art}}" hint-placeholder-val="{{ false }}">
-    <div class="ee-swap" style="animation: ee-swap .45s ease both"><dc-import name="Main" startMode="art" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
+    <div class="ee-swap" style="animation: ee-swap .45s ease"><dc-import name="Main" startMode="art" linked="{{ true }}" hint-size="100%,8800px"></dc-import></div>
   </sc-if>
 </div>
 </x-dc>

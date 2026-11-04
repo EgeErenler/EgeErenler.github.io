@@ -74,8 +74,8 @@ class Component extends DCLogic {
     };
     this.onTilt = (e) => {
       if (e.gamma == null || e.beta == null) return;
-      this.target = { x: clamp(e.gamma / 30), y: clamp((e.beta - 45) / 30) };
-      this.lastInput = performance.now();
+      this.target = { x: clamp(e.gamma / 25), y: clamp((e.beta - 45) / 25) };
+      this.lastInput = this.lastTilt = performance.now();
     };
     window.addEventListener('pointermove', this.onMove, { passive: true });
     window.addEventListener('deviceorientation', this.onTilt);
@@ -83,13 +83,28 @@ class Component extends DCLogic {
     this.onTouch = (e) => { const t = e.touches && e.touches[0]; if (t) this.onMove({ clientX: t.clientX, clientY: t.clientY }); };
     window.addEventListener('touchstart', this.onTouch, { passive: true });
     window.addEventListener('touchmove', this.onTouch, { passive: true });
-    // iPhone asks once for motion access, on the visitor's first tap.
+    // iPhone only gives motion data after the visitor allows it, and Safari only shows that prompt
+    // from a real tap (touchend or click), so ask on the first one.
     this.askTilt = () => {
       const D = window.DeviceOrientationEvent;
-      if (D && typeof D.requestPermission === 'function') D.requestPermission().catch(() => {});
-      window.removeEventListener('pointerdown', this.askTilt);
+      if (D && typeof D.requestPermission === 'function' && !window.__eeTiltAsked) {
+        window.__eeTiltAsked = true;
+        D.requestPermission().catch(() => {});
+      }
+      window.removeEventListener('touchend', this.askTilt);
+      window.removeEventListener('click', this.askTilt);
     };
-    window.addEventListener('pointerdown', this.askTilt);
+    window.addEventListener('touchend', this.askTilt, { passive: true });
+    window.addEventListener('click', this.askTilt);
+    // While the page scrolls, the face glances down and sideways with it, so phones without motion access still see it react.
+    this.lastY = window.scrollY || 0;
+    this.onScroll = () => {
+      const y = window.scrollY || 0, dy = y - this.lastY; this.lastY = y;
+      if (performance.now() - (this.lastTilt || 0) < 1500) return;
+      this.target = { x: clamp(Math.sin(y / 260) * 0.7), y: clamp(dy / 18) };
+      this.lastInput = performance.now();
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const tick = (now) => {
       if (!reduce && now - this.lastInput > 2500) {
@@ -121,7 +136,9 @@ class Component extends DCLogic {
     window.removeEventListener('deviceorientation', this.onTilt);
     window.removeEventListener('touchstart', this.onTouch);
     window.removeEventListener('touchmove', this.onTouch);
-    window.removeEventListener('pointerdown', this.askTilt);
+    window.removeEventListener('touchend', this.askTilt);
+    window.removeEventListener('click', this.askTilt);
+    window.removeEventListener('scroll', this.onScroll);
   }
   renderVals() {
     const x = this.state.x, y = this.state.y;

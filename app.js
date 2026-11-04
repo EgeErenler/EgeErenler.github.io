@@ -86,7 +86,13 @@ class Component extends DCLogic {
     this.onTilt = (e) => {
       if (e.gamma == null || e.beta == null) return;
       // Turn against the tilt, so the face keeps looking at the person holding the phone.
-      this.target = { x: clamp(-e.gamma / 25), y: clamp(-(e.beta - 45) / 25) };
+      // Tilt is measured against the device in portrait; turn it to match how the screen is held (tablets are often landscape).
+      const ang = (window.screen && window.screen.orientation && window.screen.orientation.angle) || window.orientation || 0;
+      let lr = e.gamma, fb = e.beta;
+      if (ang === 90) { lr = e.beta; fb = -e.gamma; }
+      else if (ang === -90 || ang === 270) { lr = -e.beta; fb = e.gamma; }
+      else if (ang === 180 || ang === -180) { lr = -e.gamma; fb = -e.beta; }
+      this.target = { x: clamp(-lr / 25), y: clamp(-(fb - 45) / 25) };
       this.lastInput = this.lastTilt = performance.now();
       window.__eeTiltOk = true;
       if (this.state.askTilt) this.setState({ askTilt: false });
